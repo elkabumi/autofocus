@@ -1,0 +1,18 @@
+db:birdflys_inventori
+user:birdflys_inven
+pas:1nv3nt0ry
+
+
+
+db:sozosand_inventorymbs
+user:sozosand_invento
+
+
+config cpanel
+Login Details
+Username: birdflys
+Password: sh03s123
+Control Panel URL: http://180.235.151.73:2082/
+
+
+
