@@ -55,7 +55,7 @@ class Render
 		$this->block['side_menu'] = '';
 		if($pos_menu == 1)
 		{
-			if($ci->access->menubar)$this->block['side_menu'] = $ci->access->menubar.'<br />';
+			if($ci->access->menubar)$this->block['side_menu'] = $ci->access->menubar;
 		}
 		else $this->block['top_menu'] = $ci->access->menubar;
 		$this->block['logged'] = $ci->session->userdata('logged');
