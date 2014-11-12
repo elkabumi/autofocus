@@ -505,7 +505,7 @@ br { clear: left; }
 	font-weight:bold;
 	
 	width: 70px;
-	background: #D31145;
+	background: #1CBB9B;
 	padding: 10px 20px;
 	line-height: 18px !important;
 	line-height: 16px;
@@ -513,14 +513,14 @@ br { clear: left; }
 	border-radius:3px;
 	margin: 1px;
 	cursor:pointer;
-	border:1px solid #D31145;
+	border:1px solid #1CBB9B;
 	color:#fff;
 	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.3);
 }
 
 .form_area .command_bar input:active
 {
-background: #D31145;
+background: #0E9E81;
 }
 .command_table{
 	/* border:#5C9847 solid 1px; 
@@ -543,7 +543,7 @@ background: #D31145;
 	font-weight:bold;
 	
 	width: 70px;
-	background:#D31145;
+	background:#1CBB9B;
 	
 	line-height: 18px !important;
 	line-height: 16px;
@@ -552,13 +552,13 @@ background: #D31145;
 	margin: 1px;
 	margin-right:-2px;
 	cursor:pointer;
-	border:1px solid #D31145;
+	border:1px solid #1CBB9B;
 	color:#fff;
 	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 .command_table input:active
 {
-background: #D31145;
+background: #0E9E81;
 }
 .table_in_form .command_table input
 {
@@ -568,7 +568,7 @@ background: #D31145;
 	text-align: center;
 	font-size: 11px;
 	font-weight: bold;
-	background: #D31145;
+	background: #1CBB9B;
 	padding: 0px 5px;
 	line-height: 18px !important;
 	line-height: 16px;
@@ -576,7 +576,7 @@ background: #D31145;
 	margin: 1px;
 	margin-right:-2px;
 	cursor:pointer;
-	border:1px solid #878894;
+	border:1px solid #1CBB9B;
 }
 .table_in_form  .command_bar input
 {
@@ -600,7 +600,7 @@ background: #D31145;
 	font-weight:bold;
 	
 	width: 70px;
-	background: #D31145;
+	background: #1CBB9B;
 	padding: 10px 20px;
 	line-height: 18px !important;
 	line-height: 16px;
@@ -609,7 +609,7 @@ background: #D31145;
 	margin: 1px;
 	margin-right:-2px;
 	cursor:pointer;
-	border:1px solid #D31145;
+	border:1px solid #1CBB9B;
 	color:#fff;
 	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.2);
 }
@@ -631,7 +631,7 @@ background: #D31145;
 	font-weight:bold;
 	
 	width: 70px;
-	background: #D31145;
+	background: #1CBB9B;
 	padding: 10px 20px;
 	line-height: 18px !important;
 	line-height: 16px;
@@ -640,13 +640,13 @@ background: #D31145;
 	margin: 1px;
 	margin-right:-2px;
 	cursor:pointer;
-	border:1px solid #D31145;
+	border:1px solid #1CBB9B;
 	color:#fff;
 	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 .command_transient input:active
 {
-background: #D31145;
+background: #0E9E81;
 }
 .lookup_table
 {	
@@ -666,7 +666,7 @@ background: #D31145;
 	font-weight:bold;
 	
 	width: 70px;
-	background: #D31145;
+	background: #1CBB9B;
 	padding: 10px ;
 	line-height: 18px !important;
 	line-height: 16px;
@@ -675,13 +675,13 @@ background: #D31145;
 	margin: 1px;
 	margin-right:-2px;
 	cursor:pointer;
-	border:1px solid #D31145;
+	border:1px solid #1CBB9B;
 	color:#fff;
 	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 .lookup_table #panel input:active
 {
-background: #D31145;
+background: #0E9E81;
 }
 .dialog{
 width:100%;
@@ -873,7 +873,7 @@ td.label {
 /* iconic buttons */
 .iconic_base { width: 12px; height: 12px; vertical-align: middle; display:inline-block; cursor: pointer;}
 
-.iconic_search { width: 24px; border-radius:2px; height: 24px;background: url('images/search2.png') #D31145 center no-repeat;vertical-align: middle;margin-left: 1px;cursor: pointer;}
+.iconic_search { width: 24px; border-radius:2px; height: 24px;background: url('images/search2.png') #1CBB9B center no-repeat;vertical-align: middle;margin-left: 1px;cursor: pointer;}
 .iconic_window { width: 16px; height: 16px;background: url('images/window.png') center no-repeat;  margin-left: 2px;cursor: pointer;   }
 .iconic_calendar { background: url('images/calendar.png') top left no-repeat; }
 .com_desc{vertical-align: middle;margin-left: 1px;}
