@@ -29,8 +29,9 @@ class product extends CI_Controller{
 			$data['row_id']					= '';
 			$data['product_code']			= '';
 			$data['product_name']			= '';
-			$data['product_price']			= '';
+			//$data['product_price']			= '';
 			$data['product_category_id']	= '';
+			$data['insurance_id']			= '';
 			$data['product_description']	= '';
 			$data['product_price']			= '';
 			$data['product_date']			= date('d/m/Y');
@@ -45,8 +46,8 @@ class product extends CI_Controller{
 
 		$this->load->helper('form');
 		$this->render->add_form('app/product/form', $data);
-		$this->render->build('PO Material');
-		$this->render->show('PO Material');
+		$this->render->build('Item');
+		$this->render->show('Item');
 		//$this->access->generate_log_view($id);
 	}
 	
@@ -72,7 +73,12 @@ class product extends CI_Controller{
 		if($this->form_validation->run() == FALSE) send_json_validate();
 		
 		$data['product_code'] 				= $this->input->post('i_code');
+		//$data['product_price'] 				= $this->input->post('i_price');
 		$data['product_name'] 				= $this->input->post('i_name');
+		$data['product_category_id'] 		= $this->input->post('i_category_id');
+		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
+		$data['product_qty'] 				= '';
+		$data['product_price_type_id'] 		= '';
 		$data['product_category_id'] 		= $this->input->post('i_category_id');
 		$data['product_description'] 		= $this->input->post('i_description');
 		$data['product_date'] 				= $this->input->post('i_date');

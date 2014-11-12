@@ -579,6 +579,29 @@ class Dtc
 		}
 		else send_json_error_feedback();
 	}
+	
+	# lookup data insurance
+	
+	function insurance_control()
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->insurance_control(get_datatables_control());
+		send_json($data); 
+	}
+	
+	function insurance_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
 
+		$result = $ci->dtc_model->insurance_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['insurance_id'], $result['insurance_name'], $result['insurance_name']);
+		}
+		else send_json_error_feedback();
+	}
 }
 

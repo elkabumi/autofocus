@@ -18,6 +18,16 @@ $(function(){
 	});
 	
 	
+	createLookUp({
+		table_id		: "#lookup_table_insurance",
+		table_width		: 400,
+		listSource 		: "lookup/insurance_table_control",
+		dataSource		: "lookup/insurance_lookup_id",
+		column_id 		: 0,
+		component_id	: "#lookup_insurance",
+		filter_by		: [{id : "p1", label : "Nama"}]
+	});
+	
 	createDatePicker();
 });
 
@@ -28,29 +38,34 @@ $(function(){
 <div class="form_area_frame">
 <table  width="100%" cellpadding="4" class="form_layout">
 	<tr>
-     <td width="196" >Material Code</td>
+     <td width="196" >Item Code</td>
        <td width="651"><input name="i_code" type="text" id="i_code" value="<?=$product_code ?>" />
      
 	 <input type="hidden" name="row_id" value="<?=$row_id?>" /></td>
    </tr>
    
     <tr>
-     <td>Material Name</td>
+     <td>Item Name</td>
        <td><input name="i_name" type="text" id="i_name" value="<?=$product_name ?>" size="70" /></td>
      </tr>
+   
      <tr>
-     <td>Material Type</td>
+     <td>Item Type</td>
         <td><span class="lookup" id="lookup_product_category">
 				<input type="hidden" name="i_category_id" class="com_id" value="<?=$product_category_id?>" /><input type="text" class="com_input" />
                 <div class="iconic_base iconic_search com_popup"></div>
 				</span>	
        </td>
      </tr>
-   
-   <tr>
-    <td>Create Price</td>
-       <td><input name="i_price" type="text" id="i_price" value="<?=$product_price ?>" class="date_input" size="10"/></td>
+          <tr>
+     <td>Insurance naem</td>
+        <td><span class="lookup" id="lookup_insurance">
+				<input type="hidden" name="i_insurance_id" class="com_id" value="<?=$insurance_id?>" /><input type="text" class="com_input" />
+                <div class="iconic_base iconic_search com_popup"></div>
+				</span>	
+       </td>
      </tr>
+ <tr>
      <td>Create Date</td>
        <td><input name="i_date" type="text" id="i_date" value="<?=$product_date ?>" class="date_input" size="10"/></td>
      </tr>
@@ -93,4 +108,21 @@ $(function(){
 		<input type="button" id="cancel" value="Cancel" />
 	</div>	
 </div>
-
+<div id="">
+	<table id="lookup_table_insurance" cellpadding="0" cellspacing="0" border="0" class="display" > 
+		<thead>
+			<tr>
+			<th>ID</th>
+				<th>Nama</th>
+            
+			</tr> 
+		</thead> 
+		<tbody> 	
+		</tbody>
+	</table>
+	<div id="panel">
+		<input type="button" id="choose" value="Pilih Data"/>
+		<input type="button" id="refresh" value="Refresh"/>
+		<input type="button" id="cancel" value="Cancel" />
+	</div>	
+</div>

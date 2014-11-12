@@ -281,6 +281,18 @@ class Lookup extends CI_Controller
 		$this->load->library('dtc');
 		$this->dtc->site_get($id);
 	}
+	# lookup data insurance
+	function insurance_table_control()
+	{
+		$this->load->library('dtc');
+		$this->dtc->insurance_control();
+	}
+	
+	function insurance_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->insurance_get();
+	}
 	
 
 }
