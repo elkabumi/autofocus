@@ -31,7 +31,6 @@ class product extends CI_Controller{
 			$data['product_name']			= '';
 			//$data['product_price']			= '';
 			$data['product_category_id']	= '';
-			$data['insurance_id']			= '';
 			$data['product_description']	= '';
 			$data['product_price']			= '';
 			$data['product_date']			= date('d/m/Y');
@@ -76,9 +75,7 @@ class product extends CI_Controller{
 		//$data['product_price'] 				= $this->input->post('i_price');
 		$data['product_name'] 				= $this->input->post('i_name');
 		$data['product_category_id'] 		= $this->input->post('i_category_id');
-		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
 		$data['product_qty'] 				= '';
-		$data['product_price_type_id'] 		= '';
 		$data['product_category_id'] 		= $this->input->post('i_category_id');
 		$data['product_description'] 		= $this->input->post('i_description');
 		$data['product_date'] 				= $this->input->post('i_date');
