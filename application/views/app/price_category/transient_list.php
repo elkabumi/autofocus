@@ -16,7 +16,7 @@ $(function(){
 	<thead>
 		<tr>
 			
-			<th>price category name</th>
+			<th>Price Sub Category Name</th>
             <th>Additional Information</th>
 		</tr> 
 	</thead> 

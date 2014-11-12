@@ -23,7 +23,7 @@ class price_category_model extends CI_Model
 		
 		$columns['insurance_name'] 			= 'insurance_name';
 		$columns['product_item_name'] 			= 'product_item_name';
-		$columns['product_item_desc']	= 'product_item_desc';
+
 		
 		
 		$sort_column_index = $params['sort_column'];
@@ -31,7 +31,6 @@ class price_category_model extends CI_Model
 		
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'product_item_name';
-		$order_by_column[] = 'product_item_desc';;
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -71,8 +70,9 @@ class price_category_model extends CI_Model
 			
 			$data[] = array(
 				$row['product_item_id'], 
-				$row['insurance_name'],
+				
 				$row['product_item_name'],
+				$row['insurance_name'],
 				$row['product_item_desc'],
 
 			); 

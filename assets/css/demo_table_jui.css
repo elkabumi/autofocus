@@ -403,13 +403,13 @@ td.details {
 }
 
 table.display tr.even.row_selected td {
-	background-color:#D8861F;
+	background-color:#0E9E81;
 	color:#FFF;
 	font-weight:bold;
 }
 
 table.display tr.odd.row_selected td {
-	background-color:#D8861F;
+	background-color:#0E9E81;
 	color:#FFF;
 	font-weight:bold;
 }

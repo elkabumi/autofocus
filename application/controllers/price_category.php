@@ -16,8 +16,8 @@ class price_category extends CI_Controller{
 	function index(){
 		
 		$this->render->add_view('app/price_category/list');
-		$this->render->build('price_category');
-		$this->render->show('price_category');
+		$this->render->build('Price category');
+		$this->render->show('Price_category');
 	}
 	
 	function table_controller(){

@@ -11,7 +11,7 @@ $(function(){
 <table cellpadding="2" class="form_layout">
 	<tr>
   
-     <td width="222" req="req" >Price category name
+     <td width="222" req="req" >Price sub category name
      </td>
      <td width="633" >
     <input name="i_ist_name" type="text" id="i_ist_name" value="<?=$transient_ist_name ?>" />

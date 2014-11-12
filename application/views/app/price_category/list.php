@@ -9,10 +9,9 @@ $(function(){
 		column_id	: 0,
 		
 		filter_by 	: [ 
-		{id : "insurance_name", label : "Insurance Code"}, 
-		{id : "insurance_addres", label : "Insurance Name"},
-		{id : "insurance_phone", label : "Insurance Type"},
-		{id : "insurance_date", label : "Create Date"}],
+	
+		{id : "product_item_name", label : "product price name"},
+		{id : "insurance_name", label : "Insurance name"}],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
 	otable.fnSetColumnVis(0, false, false);
@@ -23,8 +22,9 @@ $(function(){
 	<thead>
 		<tr>
 			<th>ID</th>
+           
             <th>Prioce category name</th>
-            <th>---</th>
+             <th>insurance name</th>
 			<th>description</th>
 		</tr> 
 	</thead> 
@@ -33,6 +33,8 @@ $(function(){
 </table>
 <div id="panel" class="command_table">
 	<input type="button" id="edit" value="add"/>
+    
+	<input type="button" id="edit" value="edit"/>
 	<input type="button" id="delete" value="Inactive"/>
     <input type="button" id="active" value="active"/>
 	<input type="button" id="refresh" value="Refresh"/>
