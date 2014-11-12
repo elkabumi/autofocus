@@ -1,7 +1,7 @@
 <?php
 
-$config['app_name']		= 'Inventori';
-$config['app_client']		= 'Inventori';
+$config['app_name']		= 'Autofocus';
+$config['app_client']		= 'Autofocus';
 
 $config['is_production']	= false;
 $config['is_debugging']		= false;
