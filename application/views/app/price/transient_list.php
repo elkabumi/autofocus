@@ -2,9 +2,9 @@
 $(function(){
 	createTableFormTransient({
 		id 				: "#transient_contact",
-		listSource 		: "insurance/detail_list_loader/<?=$row_id?>",
-		formSource 		: "insurance/detail_form/<?=$row_id?>",
-		controlTarget	: "insurance/detail_form_action"
+		listSource 		: "price/detail_list_loader/<?=$row_id?>",
+		formSource 		: "price/detail_form/<?=$row_id?>",
+		controlTarget	: "price/detail_form_action"
 	
 	});
 	
@@ -14,11 +14,16 @@ $(function(){
 <form id="tform">
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="transient_contact"> 
 	<thead>
-		<tr>
-			
-			<th>Price Category Name</th>
-            <th>Additional Information</th>
-		</tr> 
+    <tr>
+     <th>Item Name</th>
+    <?php foreach($detail as $item): ?>
+		
+			<th><?=$item['product_type_name']." (".$item['pst_name'].") "?></th>
+      
+		
+         <?
+	 endforeach; ?>
+     </tr> 
 	</thead> 
 	<tbody> 	
 	</tbody>

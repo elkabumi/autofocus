@@ -1,22 +1,22 @@
 <script type="text/javascript">	
 $(function(){
 	createTableFormTransient({
-		id 				: "#transient_contact",
-		listSource 		: "price_category/detail_list_loader/<?=$row_id?>",
-		formSource 		: "price_category/detail_form/<?=$row_id?>",
-		controlTarget	: "price_category/detail_form_action"
+		id 				: "#transient_contact2",
+		listSource 		: "insurance/detail_list_loader2/<?=$row_id?>",
+		formSource 		: "insurance/detail_form2/<?=$row_id?>",
+		controlTarget	: "insurance/detail_form_action2"
 	
 	});
 	
 });
 </script>
 <div>
-<form id="tform">
-<table cellpadding="0" cellspacing="0" border="0" class="display" id="transient_contact"> 
+<form id="">
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="transient_contact2"> 
 	<thead>
 		<tr>
 			
-			<th>Price Sub Category Name</th>
+					<th>Price Sub Category Name</th>
             <th>Additional Information</th>
 		</tr> 
 	</thead> 

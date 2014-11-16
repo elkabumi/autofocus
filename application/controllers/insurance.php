@@ -60,6 +60,11 @@ class insurance extends CI_Controller{
 		$this->render->add_view('app/insurance/transient_list');
 		$this->render->build('product type');
 		
+	
+		
+		$this->render->add_view('app/insurance/transient_list2');
+		$this->render->build('product type');
+		
 		$this->render->add_form('app/insurance/form_save', $data);
 		$this->render->build('Insurance');
 		
@@ -112,20 +117,25 @@ class insurance extends CI_Controller{
 		$data['created_by_id']				= $this->access->info['employee_id'];	
 		
 		
-		$list_product_item_name		= $this->input->post('transient_product_item_name');
-		$list_product_item_desc	= $this->input->post('transient_product_item_desc');
+		$list_product_type_name		= $this->input->post('transient_product_type_name');
+		$list_product_type_desc	= $this->input->post('transient_product_type_desc');
+		
+		$list_pst_name		= $this->input->post('transient_pst_name');
+		$list_pst_description	= $this->input->post('transient_pst_description');
 		
 		
 		
 
+
+
 		$items = array();
-		if($list_product_item_name){
-		foreach($list_product_item_name as $key => $value)
+		if($list_product_type_name){
+		foreach($list_product_type_name as $key => $value)
 		{
 			
 			$items[] = array(				
-				'product_item_name'  => $list_product_item_name[$key],
-				'product_item_desc'  => $list_product_item_desc[$key]
+				'product_type_name'  => $list_product_type_name[$key],
+				'product_type_desc'  => $list_product_type_desc[$key]
 
 			);
 			
@@ -134,7 +144,21 @@ class insurance extends CI_Controller{
 		}
 		}
 
-		
+		$item2 = array();
+		if($list_pst_name){
+		foreach($list_pst_name as $key => $value)
+		{
+			
+			$item2[] = array(				
+				'pst_name'  => $list_pst_name[$key],
+				'pst_description'  => $list_pst_description[$key]
+
+			);
+			
+			
+			
+		}
+		}
 
 
 		
@@ -146,12 +170,12 @@ class insurance extends CI_Controller{
 			$data['insurance_active_status'] 	= 1;
 			$data['inactive_by_id'] 			= 0;
 			$data['insurance_date'] 				= date("Y-m-d");
-			$error = $this->insurance_model->create($data, $items);
+			$error = $this->insurance_model->create($data, $items,$item2);
 			send_json_action($error, "Data telah ditambah", "Data gagal ditambah", $this->insurance_model->insert_id);
 		}
 		else // id disebutkan, lakukan proses UPDATE
 		{
-			$error = $this->insurance_model->update($id, $data, $items);
+			$error = $this->insurance_model->update($id, $data, $items,$item2);
 			send_json_action($error, "Data telah direvisi", "Data gagal direvisi", $id);
 		}		
 	}
@@ -168,8 +192,8 @@ class insurance extends CI_Controller{
 		foreach($data as $key => $value) 
 		{	
 		$data[$key] = array(
-				form_transient_pair('transient_product_item_name', $value['product_item_name']),
-				form_transient_pair('transient_product_item_desc', $value['product_item_desc']),
+				form_transient_pair('transient_product_type_name', $value['product_type_name']),
+				form_transient_pair('transient_product_type_desc', $value['product_type_desc']),
 				
 		);
 		
@@ -181,6 +205,29 @@ class insurance extends CI_Controller{
 	
 	
 	
+	function detail_list_loader2($row_id=0)
+	{
+		if($row_id == 0)
+		
+		send_json(make_datatables_list(null)); 
+				
+		$data = $this->insurance_model->detail_list_loader2($row_id);
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		$data[$key] = array(
+				form_transient_pair('transient_pst_name', $value['pst_name']),
+				form_transient_pair('transient_pst_description', $value['pst_description']),
+				
+		);
+		
+		
+	
+		}		
+		send_json(make_datatables_list($data)); 
+	}
+	
+	
 	function detail_form($transaction_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
 	{		
 		$this->load->library('render');
@@ -189,13 +236,13 @@ class insurance extends CI_Controller{
 					
 			// TRANSIENT CREATE - isi form dengan nilai default / kosong
 			$data['index']			= '';
-			$data['transaction_product_item_name'] 	= '';
-			$data['transaction_product_item_desc'] 	= '';
+			$data['transaction_product_type_name'] 	= '';
+			$data['transaction_product_type_desc'] 	= '';
 		} else {
 			
 			$data['index']			= $index;
-			$data['transaction_product_item_name'] 	= array_shift($this->input->post('transient_product_item_name'));
-			$data['transaction_product_item_desc'] = array_shift($this->input->post('transient_product_item_desc'));
+			$data['transaction_product_type_name'] 	= array_shift($this->input->post('transient_product_type_name'));
+			$data['transaction_product_type_desc'] = array_shift($this->input->post('transient_product_type_desc'));
 		}		
 		
 		$this->load->helper('form');
@@ -204,11 +251,36 @@ class insurance extends CI_Controller{
 		$this->render->add_form('app/insurance/transient_form', $data);
 		$this->render->show_buffer();
 	}
+	
+	function detail_form2($transaction_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
+	{		
+		$this->load->library('render');
+		$index = $this->input->post('transient_index');
+		if (strlen(trim($index)) == 0) {
+					
+			// TRANSIENT CREATE - isi form dengan nilai default / kosong
+			$data['index']			= '';
+			$data['transient_pst_name'] 	= '';
+			$data['transient_pst_description'] 	= '';
+		} else {
+			
+			$data['index']			= $index;
+			$data['transient_ist_name'] 	= array_shift($this->input->post('transient_pst_name'));
+			$data['transient_ist_description'] = array_shift($this->input->post('transient_pst_description'));
+		}		
+		
+		$this->load->helper('form');
+		
+	
+		$this->render->add_form('app/insurance/transient_form2', $data);
+		$this->render->show_buffer();
+	}
+	
 	function detail_form_action()
 	{		
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('i_product_item_name', 'Material', 'trim|max_length[100]');
-		$this->form_validation->set_rules('i_product_item_desc','Description', 'trim|required');
+		$this->form_validation->set_rules('i_product_type_name', 'Material', 'trim|max_length[100]');
+		$this->form_validation->set_rules('i_product_type_desc','Description', 'trim|required');
 	
 		$index = $this->input->post('i_index');		
 		// cek data berdasarkan kriteria
@@ -217,21 +289,45 @@ class insurance extends CI_Controller{
 		
 		$no 		= $this->input->post('i_index');
 		
-		$product_item_desc	= $this->input->post('i_product_item_desc');
-			$product_item_name	= $this->input->post('i_product_item_name');
+		$product_type_desc	= $this->input->post('i_product_type_desc');
+			$product_type_name	= $this->input->post('i_product_type_name');
 		
 		
 
 		$data = array(
 	
-				form_transient_pair('transient_product_item_name', $product_item_name, $product_item_name),
-				form_transient_pair('transient_product_item_desc', $product_item_desc,$product_item_desc)
+				form_transient_pair('transient_product_type_name', $product_type_name, $product_type_name),
+				form_transient_pair('transient_product_type_desc', $product_type_desc,$product_type_desc)
 		);
 		 
 		send_json_transient($index, $data);
 	}
 	
+function detail_form_action2()
+	{		
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('i_ist_name', 'Material', 'trim|max_length[100]');
+	
+		$index = $this->input->post('i_index');		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+	
+		
+		$no 		= $this->input->post('i_index');
+		
+		$i_pst_name	= $this->input->post('i_pst_name');
+		$i_pst_description	= $this->input->post('i_pst_description');
+		
+		
 
+		$data = array(
+	
+				form_transient_pair('transient_pst_name', $i_pst_name, $i_pst_name),
+				form_transient_pair('transient_pst_description', $i_pst_description,$i_pst_description)
+		);
+		 
+		send_json_transient($index, $data);
+	}
 	
 	
 	

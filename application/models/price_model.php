@@ -1,5 +1,5 @@
 <?php
-class price_category_model extends CI_Model 
+class price_model extends CI_Model 
 {
 	var $trans_type = 5;
 	var $insert_id = NULL;
@@ -9,7 +9,7 @@ class price_category_model extends CI_Model
 		//parent::Model();
 		//$this->sek_id = $this->access->sek_id;
 	}
-	function list_controller()
+function list_controller()
 	{		
 		$where = '';
 		$params 	= get_datatables_control();
@@ -22,15 +22,18 @@ class price_category_model extends CI_Model
 		// daftar kolom yang valid
 		
 		$columns['insurance_name'] 			= 'insurance_name';
-		$columns['product_item_name'] 			= 'product_item_name';
-
+		$columns['insurance_addres'] 			= 'insurance_addres';
+		$columns['insurance_phone']	= 'insurance_phone';
+		$columns['insurance_date']			= 'insurance_date';
 		
 		
 		$sort_column_index = $params['sort_column'];
 		$sort_dir = $params['sort_dir'];
 		
+		$order_by_column[] = 'insurance_id';
 		$order_by_column[] = 'insurance_name';
-		$order_by_column[] = 'product_item_name';
+		$order_by_column[] = 'insurance_addres';
+		$order_by_column[] = 'insurance_phone';
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -45,9 +48,12 @@ class price_category_model extends CI_Model
 		};	
 
 		$sql = "
-		select a.* ,b.*
-		from insurances a 
-		JOIN product_types b ON a.insurance_id = b.insurance_id
+		select a.* , c.employee_name as created_name, d.employee_name as inactive_name
+		from insurances a
+		
+		left join employees c on a.created_by_id = c.employee_id
+		left join employees d on a.inactive_by_id = d.employee_id
+		$where  $order_by
 			
 			";
 
@@ -64,17 +70,33 @@ class price_category_model extends CI_Model
 			
 			$row = format_html($row);
 			
-			
+			$status = "Created by ".$row['created_name'];	
+			$insurance_date = format_new_date($row['insurance_date']);
+			$active = show_checkbox_status($row['insurance_active_status']);
 				
-		
+			if($row['insurance_active_status'] == 0){
+				
+				
+				$div1 = "<span class='inactive'>";
+				$div2 = "</div>";
+				$row['insurance_id'] = $row['insurance_id'];
+				$row['insurance_name'] = $div1.$row['insurance_name'].$div2;
+				$row['insurance_addres'] = $div1.$row['insurance_addres'].$div2;
+				$row['insurance_phone '] = $div1.$row['insurance_phone'].$div2;
+				$product_date = $div1.$insurance_date.$div2;
+				$active	=$div1.$active.$div2;
+				$status = $div1."Inactive by ".$row['inactive_name'].$div2;	
+			
+			}
 			
 			$data[] = array(
-				$row['product_item_id'], 
-				
-				$row['product_item_name'],
+				$row['insurance_id'], 
 				$row['insurance_name'],
-				$row['product_item_desc'],
-
+				$row['insurance_addres'],
+				$row['insurance_phone'],
+				$insurance_date,
+				$active,
+				$status
 			); 
 		}
 		
@@ -84,10 +106,10 @@ class price_category_model extends CI_Model
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*', 1);
-		$this->db->from('product_types a');
-		$this->db->join('insurances b','b.insurance_id = a.insurance_id');
-		$this->db->where('product_item_id', $id);
+		$this->db->select('*', 1);
+		$this->db->from('insurances ');
+
+		$this->db->where('insurance_id', $id);
 		
 		$query = $this->db->get(); debug();// parameter limit harus 1
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
@@ -152,16 +174,40 @@ class price_category_model extends CI_Model
 		return $this->db->trans_status();
 	}
 	
-	
+	function get_kolom_price($id){
+		
+				$sql = "SELECT b.*,c.*
+						from insurances a
+						JOIN product_types b ON a.insurance_id 	 = b.insurance_id 	
+						JOIN product_sub_type c ON a.insurance_id 	 = c.insurance_id 	
+
+				where a.insurance_id  = $id
+				
+				";
+
+		$query = $this->db->query($sql);
+		 if ($query->num_rows() == 0)
+            return array();
+
+        $data = $query->result_array();
+
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
+	}
 	
 	function detail_list_loader($id)
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*', 1);
-		$this->db->from('product_item_sub_type a');
-		$this->db->where('a.product_item_id', $id);
-		$query = $this->db->get();
+	
+		$this->db->select('a.*, b.*, c.*', 1);
+		$this->db->from('insurances a');
+		$this->db->join('product_types b','b.insurance_id = a.insurance_id');
+		$this->db->join('product_sub_type c','c.insurance_id = a.insurance_id');
+		$this->db->where('a.insurance_id', $id);
+		$query = $this->db->get(); debug();
 		
 		debug();
 	

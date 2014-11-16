@@ -294,5 +294,29 @@ class Lookup extends CI_Controller
 		$this->dtc->insurance_get();
 	}
 	
-
+	 #lookup data product type aktif
+	function active_product_type_table_control($cat_id = 0)
+	{
+		$this->load->library('dtc');
+		$this->dtc->active_product_type_control($cat_id);
+	}
+	
+	function active_product_type_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->active_product_type_get();
+	}
+	
+		 #lookup data product type aktif
+	function active_product_sub_type_table_control($cat_id = 0)
+	{
+		$this->load->library('dtc');
+		$this->dtc->active_product_sub_type_control($cat_id);
+	}
+	
+	function active_product_sub_type_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->active_product_sub_type_get();
+	}
 }

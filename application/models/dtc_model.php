@@ -2048,6 +2048,195 @@ class Dtc_model extends CI_Model
 	}
 	
 	
+	
+	
+	## Data active product type
+	function active_product_type_control($param, $cat_id = 0)
+	{
+		// map parameter ke variable biasa agar mudah digunakan
+		$limit 		= $param['limit'];
+		$offset	 	= $param['offset'];
+		$category 	= $param['category'];
+		$keyword 	= $param['keyword'];
+		$where = '';
+		# order define columns start
+		$sort_column_index				= $param['sort_column'];
+		$sort_dir						= $param['sort_dir'];
+		
+		$order_by_column[] = 'product_type_id';
+		$order_by_column[] = 'insurance_name';
+		$order_by_column[] = 'product_type_name';
+	
+		
+		
+		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
+		# order define column end
+		
+		
+		$column['p1']			= 'insurance_name';
+		$column['p3']			= 'product_type_name';
+	
+		$this->db->start_cache();
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
+		if (array_key_exists($category, $column) && strlen($keyword) > 0) 
+		{
+			
+				$where = " and ".$column[$category]." like '%$keyword%'";
+			
+			
+		}
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
+		
+		if($cat_id){
+			$where .= "and a.insurance_id = '$cat_id'";
+		}
+		
+		$sql = "
+		select a.*, b.insurance_name
+		from product_types a
+		join  insurances b on b.insurance_id = a.insurance_id
+		where product_type_id > 0
+		$where  $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
+		
+		$sql = $sql.$limit;
+		
+		$query = $this->db->query($sql);
+		
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			
+			
+			$row = format_html($row);
+			
+			$data[] = array(
+				$row['product_type_id'], 
+				$row['product_type_name'],
+				$row['insurance_name']			
+			); 
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($param, $data, $total);
+	}
+	
+	function active_product_type_get($id, $mode)
+	{
+		if (empty($id) || !$id || !$mode) return NULL;
+		
+		$result = NULL;
+		
+		if ($mode == 1){
+			
+			$query = $this->db->get_where('product_types', array('product_type_id' => $id), 1);
+		}else{
+			$query = $this->db->get_where('product_types', array('product_type_name' => $id), 1);
+		}
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
+	
+	## Data active product sub type
+	function active_product_sub_type_control($param, $cat_id = 0)
+	{
+		// map parameter ke variable biasa agar mudah digunakan
+		$limit 		= $param['limit'];
+		$offset	 	= $param['offset'];
+		$category 	= $param['category'];
+		$keyword 	= $param['keyword'];
+		$where = '';
+		# order define columns start
+		$sort_column_index				= $param['sort_column'];
+		$sort_dir						= $param['sort_dir'];
+		
+		$order_by_column[] = 'pst_id';
+		$order_by_column[] = 'insurance_name';
+		$order_by_column[] = 'pst_name';
+	
+		
+		
+		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
+		# order define column end
+		
+		
+		$column['p1']			= 'insurance_name';
+		$column['p3']			= 'pst_name';
+	
+		$this->db->start_cache();
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
+		if (array_key_exists($category, $column) && strlen($keyword) > 0) 
+		{
+			
+				$where = " and ".$column[$category]." like '%$keyword%'";
+			
+			
+		}
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
+		
+		if($cat_id){
+			$where .= "and a.insurance_id = '$cat_id'";
+		}
+		
+		$sql = "
+		select a.*, b.insurance_name
+		from product_sub_type a
+		join  insurances b on b.insurance_id = a.insurance_id
+		where pst_id > 0
+		$where  $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
+		
+		$sql = $sql.$limit;
+		
+		$query = $this->db->query($sql);
+		
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			
+			
+			$row = format_html($row);
+			
+			$data[] = array(
+				$row['pst_id'], 
+				$row['pst_name'],
+				$row['insurance_name']			
+			); 
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($param, $data, $total);
+	}
+	
+	function active_product_sub_type_get($id, $mode)
+	{
+		if (empty($id) || !$id || !$mode) return NULL;
+		
+		$result = NULL;
+		
+		if ($mode == 1){
+			
+			$query = $this->db->get_where('product_sub_type', array('pst_id' => $id), 1);
+		}else{
+			$query = $this->db->get_where('product_sub_type', array('pst_name' => $id), 1);
+		}
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
 }
 
 #

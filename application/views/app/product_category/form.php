@@ -7,7 +7,7 @@ $(function(){
 <div class="form_area_frame">
 <table  width="100%" cellpadding="4" class="form_layout">
 	<tr>
-		<td width="217"  req="req">Name</td>
+		<td width="217"  req="req">Item Category Name</td>
 	    <td width="647"><input type="hidden" name="row_id" value="<?=$row_id?>" />	      <input type="text" name="i_name" size="30" value="<?=$i_name?>" /></td>
 	  </tr>
 	<tr>

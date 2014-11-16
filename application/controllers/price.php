@@ -3,25 +3,25 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
 
-class price_category extends CI_Controller{
+class price extends CI_Controller{
 	function __construct(){
 		parent::__construct();
 		$this->load->library('render');
-		$this->load->model('price_category_model');
+		$this->load->model('price_model');
 		$this->load->library('access');
-		$this->access->set_module('master.price_category');
+		$this->access->set_module('master.price');
 		$this->access->user_page();
 	}
 	
 	function index(){
 		
-		$this->render->add_view('app/price_category/list');
-		$this->render->build('Price category');
-		$this->render->show('Price_category');
+		$this->render->add_view('app/price/list');
+		$this->render->build('Price');
+		$this->render->show('Price');
 	}
 	
 	function table_controller(){
-		$data = $this->price_category_model->list_controller();
+		$data = $this->price_model->list_controller();
 		send_json($data);
 	}
 	
@@ -29,28 +29,26 @@ class price_category extends CI_Controller{
 	function form($id = 0)
 	{
 		$data = array();
-			$result = $this->price_category_model->read_id($id);
+			$result = $this->price_model->read_id($id);
 			if($result){
 				$data = $result;
 				$data['row_id'] = $id;
-				
-		
 			
-			}
-	
+		}
+		$data['detail'] = $this->price_model->get_kolom_price($id);
 		
 		$this->load->helper('form');
 			
-		$this->render->add_form('app/price_category/form', $data);
-		$this->render->build('Price category');
+		$this->render->add_form('app/price/form', $data);
+		$this->render->build('Price ');
 		
-		$this->render->add_view('app/price_category/transient_list');
-		$this->render->build('Price category item');
+		$this->render->add_view('app/price/transient_list',$data);
+		$this->render->build('Price');
 		
-		$this->render->add_form('app/price_category/form_save', $data);
-		$this->render->build('Price category');
+		$this->render->add_form('app/price/form_save', $data);
+		$this->render->build('Price');
 		
-		$this->render->show('Price category');
+		$this->render->show('Price');
 	}
 	function form_action($is_delete = 0) // jika 0, berarti insert atau update, bila 1 berarti delete
 	{
@@ -59,16 +57,16 @@ class price_category extends CI_Controller{
 		// bila operasinya DELETE -----------------------------------------------------------------------------------------		
 		if($is_delete)
 		{
-			$this->load->model('price_category_model');
+			$this->load->model('price_model');
 			$id = $this->input->post('row_id');
 			
-			$check_used = $this->price_category_model->check_price_category($id);
+			$check_used = $this->price_model->check_price($id);
 			$fail = "PO Received tidak dapat dinonaktifkan karena ada Reservasi";
 			if($check_used){
 				$is_process_error = FALSE;
 				
 			} else {
-				$is_process_error = $this->price_category_model->delete($id);
+				$is_process_error = $this->price_model->delete($id);
 			}
 			
 			send_json_action($is_process_error, "Data telah dihapus", $fail);
@@ -107,7 +105,7 @@ class price_category extends CI_Controller{
 	
 		
 
-			$error = $this->price_category_model->update($id, $items);
+			$error = $this->price_model->update($id, $items);
 			send_json_action($error, "Data telah direvisi", "Data gagal direvisi", $id);
 		
 	}
@@ -116,16 +114,21 @@ class price_category extends CI_Controller{
 	function detail_list_loader($row_id=0)
 	{
 		if($row_id == 0)
+	
+		
+		
+		
+		
 		
 		send_json(make_datatables_list(null)); 
 				
-		$data = $this->price_category_model->detail_list_loader($row_id);
+		$data = $this->price_model->detail_list_loader($row_id);
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
 		$data[$key] = array(
-				form_transient_pair('transient_ist_name', $value['ist_name']),
-				form_transient_pair('transient_ist_description', $value['ist_description']),
+				form_transient_pair('transient_ist_name', $value['pst_name']),
+				form_transient_pair('transient_ist_description', $value['pst_description']),
 				
 		);
 		
@@ -146,6 +149,8 @@ class price_category extends CI_Controller{
 			// TRANSIENT CREATE - isi form dengan nilai default / kosong
 			$data['index']			= '';
 			$data['transient_ist_name'] 	= '';
+			$data['product_category_id'] 	= '';
+			
 			$data['transient_ist_description'] 	= '';
 		} else {
 			
@@ -157,7 +162,7 @@ class price_category extends CI_Controller{
 		$this->load->helper('form');
 		
 	
-		$this->render->add_form('app/price_category/transient_form', $data);
+		$this->render->add_form('app/price/transient_form', $data);
 		$this->render->show_buffer();
 	}
 	function detail_form_action()
@@ -193,7 +198,7 @@ class price_category extends CI_Controller{
 	function active(){
 		$id = $this->input->post('row_id');
 		
-		$is_proses_error = $this->price_category_model->active($id);
+		$is_proses_error = $this->price_model->active($id);
 			
 		send_json_action($is_proses_error, "Data telah diaktifkan");
 	}

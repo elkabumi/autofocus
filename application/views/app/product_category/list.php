@@ -23,7 +23,7 @@ $(function(){
 	<thead>
 		<tr>
 			<th width="10%">ID</th>
-			<th width="20%">Name</th>
+			<th width="20%">Item Category Name</th>
 			<th width="20%">Description</th>
           	<th>Create Date</th>
             <th width="20%">Active Status</th>

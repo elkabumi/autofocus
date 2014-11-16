@@ -116,6 +116,27 @@ class product_model extends CI_Model{
 		$this->db->trans_start();
 		$this->db->insert('products', $data);
 		$id = $this->db->insert_id();
+		$insurance_id = $data['insurance_id'];
+		
+		
+		$this->db->select('a.insurance_id, b.product_type_id, c.pst_id', 1);
+		$this->db->from('insurances a');
+		$this->db->join('product_types b','b.insurance_id = a.insurance_id');
+		$this->db->join('product_sub_type c','c.insurance_id = a.insurance_id');
+		$this->db->where('a.insurance_id', $insurance_id);
+		$query = $this->db->get(); debug();
+		
+		foreach($query->result_array() as $row)
+		{
+			$item['product_type_id'] = $row['product_type_id'];
+			$item['pst_id'] = $row['pst_id'];
+			$item['product_id'] =$id ;
+			$item['product_price'] = 0 ;
+			$this->db->insert('product_prices', $item);
+		}
+		
+		
+		
 		$this->access->log_insert($id, "produk [".$data['product_name']."]");
 		$this->db->trans_complete();
 		return $this->db->trans_status();

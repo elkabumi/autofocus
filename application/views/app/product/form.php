@@ -16,7 +16,15 @@ $(function(){
 		component_id	: "#lookup_product_category",
 		filter_by		: [{id : "p1", label : "Nama"}]
 	});
-	
+	createLookUp({
+		table_id		: "#lookup_table_insurance",
+		table_width		: 400,
+		listSource 		: "lookup/insurance_table_control",
+		dataSource		: "lookup/insurance_lookup_id",
+		column_id 		: 0,
+		component_id	: "#lookup_insurance",
+		filter_by		: [{id : "p1", label : "Nama"}]
+	});
 	
 	createDatePicker();
 });
@@ -40,14 +48,21 @@ $(function(){
      </tr>
    
      <tr>
-     <td>Item Type</td>
+     <td>Item Category</td>
         <td><span class="lookup" id="lookup_product_category">
 				<input type="hidden" name="i_category_id" class="com_id" value="<?=$product_category_id?>" /><input type="text" class="com_input" />
                 <div class="iconic_base iconic_search com_popup"></div>
 				</span>	
        </td>
      </tr>
-
+	<tr>
+     <td width="196" >Insurance name</td>
+        <td><span class="lookup" id="lookup_insurance">
+				<input type="hidden" name="i_insurance_id" id="i_insurance_id" class="com_id" value="<?=$insurance_id?>" /><input type="text" class="com_input" />
+                <div class="iconic_base iconic_search com_popup"></div>
+				</span>	
+      <input type="hidden" name="row_id" value="<?=$row_id?>" /></td>
+   </tr>
  <tr>
      <td>Create Date</td>
        <td><input name="i_date" type="text" id="i_date" value="<?=$product_date ?>" class="date_input" size="10"/></td>
@@ -75,6 +90,24 @@ $(function(){
 
 <div id="">
 	<table id="lookup_table_product_category" cellpadding="0" cellspacing="0" border="0" class="display" > 
+		<thead>
+			<tr>
+			<th>ID</th>
+				<th>Nama</th>
+            
+			</tr> 
+		</thead> 
+		<tbody> 	
+		</tbody>
+	</table>
+	<div id="panel">
+		<input type="button" id="choose" value="Pilih Data"/>
+		<input type="button" id="refresh" value="Refresh"/>
+		<input type="button" id="cancel" value="Cancel" />
+	</div>	
+</div>
+<div id="">
+	<table id="lookup_table_insurance" cellpadding="0" cellspacing="0" border="0" class="display" > 
 		<thead>
 			<tr>
 			<th>ID</th>

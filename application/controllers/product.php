@@ -29,7 +29,7 @@ class product extends CI_Controller{
 			$data['row_id']					= '';
 			$data['product_code']			= '';
 			$data['product_name']			= '';
-			//$data['product_price']			= '';
+			$data['insurance_id'] 			= '';
 			$data['product_category_id']	= '';
 			$data['product_description']	= '';
 			$data['product_price']			= '';
@@ -62,9 +62,9 @@ class product extends CI_Controller{
 		
 		$this->load->library('form_validation');
 		
-		$this->form_validation->set_rules('i_code','Material Code', 'trim|required|max_length[15]');
-		$this->form_validation->set_rules('i_name','Material Name', 'trim|required|max_length[200]');
-		$this->form_validation->set_rules('i_category_id','Material Type', 'trim|required');
+		$this->form_validation->set_rules('i_code','Item Code', 'trim|required|max_length[15]');
+		$this->form_validation->set_rules('i_name','Item Name', 'trim|required|max_length[200]');
+		$this->form_validation->set_rules('i_category_id','Item Category', 'trim|required');
 		$this->form_validation->set_rules('i_date','Create Date', 'trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_description','Description', 'trim|max_length[100]');
 	
@@ -72,6 +72,7 @@ class product extends CI_Controller{
 		if($this->form_validation->run() == FALSE) send_json_validate();
 		
 		$data['product_code'] 				= $this->input->post('i_code');
+		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
 		//$data['product_price'] 				= $this->input->post('i_price');
 		$data['product_name'] 				= $this->input->post('i_name');
 		$data['product_category_id'] 		= $this->input->post('i_category_id');

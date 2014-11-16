@@ -1556,6 +1556,8 @@ function createTableFormTransient(args) {
 	return otable;
 }
 
+
+
 function createTableMovable(args) {
 	var params = {
 		id 		: "#actionArray",

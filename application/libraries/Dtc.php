@@ -603,5 +603,53 @@ class Dtc
 		}
 		else send_json_error_feedback();
 	}
+	
+	# lookup data active product
+	function active_product_type_control($cat_id = 0)
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->active_product_type_control(get_datatables_control(), $cat_id);
+		send_json($data); 
+	}
+	
+	function active_product_type_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->active_product_type_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['product_type_id'], $result['product_type_name'], $result['product_type_name']);
+		}
+		else send_json_error_feedback();
+	}
+	
+	
+	# lookup data active sub product
+	function active_product_sub_type_control($cat_id = 0)
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->active_product_sub_type_control(get_datatables_control(), $cat_id);
+		send_json($data); 
+	}
+	
+	function active_product_sub_type_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->active_product_sub_type_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['pst_id'], $result['pst_name'], $result['pst_name']);
+		}
+		else send_json_error_feedback();
+	}
+	
 }
 

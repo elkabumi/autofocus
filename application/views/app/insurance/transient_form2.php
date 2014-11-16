@@ -14,13 +14,13 @@ $(function(){
      <td width="222" req="req" >Price sub category name
      </td>
      <td width="633" >
-    <input name="i_ist_name" type="text" id="i_ist_name" value="<?=$transient_ist_name ?>" />
+    <input name="i_pst_name" type="text" id="i_pst_name" value="<?=$transient_pst_name ?>" />
    <input type="hidden" name="i_index" value="<?=$index?>" />
       </td>
     </tr>
 	<tr>  
 	  <td width="222" valign="top">Description</td>
-	  <td width="633" valign="top"><textarea name="i_ist_description" id="i_ist_description" cols="45" rows="3"><?=$transient_ist_name?>
+	  <td width="633" valign="top"><textarea name="i_pst_description" id="i_pst_description" cols="45" rows="3"><?=$transient_pst_name?>
     </textarea></td>
 	  </tr>
 </table>

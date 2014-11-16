@@ -126,7 +126,7 @@ class insurance_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data, $items)
+	function create($data, $items,$item2)
 	{
 		$this->db->trans_start();
 		$this->db->insert('insurances', $data);
@@ -141,16 +141,22 @@ class insurance_model extends CI_Model
 			$index++;
 		}
 		
-		$this->insert_id = $id;
+		$index2 = 0;
+		foreach($item2 as $row2)
+		{			
+			$row2['insurance_id'] = $id;
+			$this->db->insert('product_sub_type', $row2);
+			$index2++;
+		}
 		
-		//create transaction
+		$this->insert_id = $id;//create transaction
 	//	$this->insert_transaction($id, $data);
 		
 		$this->access->log_insert($id, 'PO Received');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}// end of function 
-	function update($id, $data, $items)
+	function update($id, $data, $items,$item2)
 	{
 		$this->db->trans_start();
 		$this->db->where('insurance_id', $id); // data yg mana yang akan di update
@@ -167,6 +173,16 @@ class insurance_model extends CI_Model
 			$index++;
 		}
 		
+		$this->db->where('insurance_id', $id);
+		$this->db->delete('product_sub_type');
+		$index = 0;
+		$index2 = 0;
+		foreach($item2 as $row2)
+		{			
+			$row2['insurance_id'] = $id;
+			$this->db->insert('product_sub_type', $row2);
+			$index2++;
+		}
 		$this->access->log_update($id, 'PO Received');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
@@ -313,6 +329,25 @@ class insurance_model extends CI_Model
 		$this->db->from('insurances a');
 		$this->db->join('product_types b','b.insurance_id = a.insurance_id');
 	
+		$this->db->where('a.insurance_id', $id);
+		$query = $this->db->get();
+		
+		debug();
+	
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	
+	
+	function detail_list_loader2($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('a.*', 1);
+		$this->db->from('product_sub_type a');
 		$this->db->where('a.insurance_id', $id);
 		$query = $this->db->get();
 		
