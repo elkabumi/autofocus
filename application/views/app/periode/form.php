@@ -13,30 +13,30 @@ $(function(){
 <form id="id_form_nya">
 <div class="form_area">
 <div class="form_area_frame">
-<table class="form_layout">
+<table width="100%" cellpadding="4" class="form_layout">
 	<tr>
-     <td width="10%">Kode</td>
-     <td>
+     <td width="196">Kode</td>
+     <td width="651">
        <input type="hidden" name="row_id" value="<?=$row_id?>" />
        <input name="period_code" type="text" id="textfield7" readonly="readonly" class="required" value="<?=$period_code?>" size="4" maxlength="4" /></td>
      </tr>
    <tr>
-     <td>Bulan</td>
-     <td>
+     <td width="196">Bulan</td>
+     <td width="651">
        <?=form_dropdown('period_month', $bulan, $period_month)?>
      </td>
      </tr>
    <tr>
-     <td>Tahun</td>
-     <td><input name="period_year" type="text" class="required" value="<?=$period_year?>" size="4" /></td>
+     <td width="196">Tahun</td>
+     <td width="651"><input name="period_year" type="text" class="required" value="<?=$period_year?>" size="4" /></td>
      </tr>
      <tr>
-     <td>Status</td>
-     <td><p>
+     <td width="196">Status</td>
+     <td width="651"><p>
        <label style="margin-left:20%;">
          <input type="radio" name="period_closed" value="1" id="period_closed1" <?php if($period_closed == 1){?> checked="checked"<?php } ?> />
          Aktif</label>
-       <br />
+     </br>
        <label style="margin-left:20%;">
          <input type="radio" name="period_closed" value="0" id="period_closed2" <?php if($period_closed == 0){?> checked="checked"<?php } ?> />
          Tidak Aktif</label>
@@ -44,8 +44,8 @@ $(function(){
      </p></td>
      </tr>
    <tr>
-     <td>Keterangan</td>
-     <td><textarea name="period_description"><?=$period_description?></textarea></td>
+     <td width="196">Keterangan</td>
+     <td width="651"><textarea name="period_description"><?=$period_description?></textarea></td>
      </tr>   
 </table>
 </div>
