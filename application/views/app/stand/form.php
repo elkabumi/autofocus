@@ -25,40 +25,39 @@ $(function(){
 <form id="id_form_nya">
 <div class="form_area">
 <div class="form_area_frame">
-<table class="form_layout">
+<table  width="100%" cellpadding="4" class="form_layout">
 	<tr>
-     <td >Kode<input name="i_code" type="text" id="i_code" value="<?=$stand_code ?>" />
-     
-	 <input type="hidden" name="row_id" value="<?=$row_id?>" /></td>
+     <td width="196">Kode</td>
+     <td width="651"><input name="i_code" type="text" id="i_code" value="<?=$stand_code ?>" />
+     <input type="hidden" name="row_id" value="<?=$row_id?>" /></td>
    </tr>
    
     <tr>
-     <td>Nama
-       <input name="i_name" type="text" id="i_name" value="<?=$stand_name ?>" size="10"/></td>
+     <td width="196">Nama</td>
+     <td width="651"><input name="i_name" type="text" id="i_name" value="<?=$stand_name ?>" size="10"/></td>
      </tr>
      <tr>
-     <td>Leader
-        <span class="lookup" id="lookup_employee">
+     <td req= "req">Leader</td>
+        <td><span class="lookup" id="lookup_employee">
 				<input type="hidden" name="i_leader" class="com_id" value="<?=$stand_leader?>" />
-                <div class="iconic_base iconic_search com_popup"></div>
 				<input type="text" class="com_input" name="i_employee_name"/>
-				
+				<div class="iconic_base iconic_search com_popup"></div>
 				</span>	
        </td>
      </tr>
  <tr>
    <tr>
-     <td>Telepon
-       <input name="i_phone" type="text" id="i_phone" value="<?=$stand_phone ?>" size="10"/></td>
+     <td width="196">Telepon</td>
+     <td width="651"><input name="i_phone" type="text" id="i_phone" value="<?=$stand_phone ?>" size="10"/></td>
      </tr>
    
    
-     <td width="70" valign="top">Alamat
-       <textarea name="i_address" id="i_address" cols="45" rows="5"><?= $stand_address ?></textarea></td>
+     <td width="196">Alamat</td>
+     <td width="651"><textarea name="i_address" id="i_address" cols="45" rows="5"><?= $stand_address ?></textarea></td>
      </tr>
   <tr>
-    <td width="70" valign="top">Keterangan
-      <textarea name="i_description" id="i_description" cols="45" rows="5"><?= $stand_description ?></textarea></td>
+    <td width="196">Keterangan</td>
+    <td width="651"><textarea name="i_description" id="i_description" cols="45" rows="5"><?= $stand_description ?></textarea></td>
     </tr>
 
 </table>
