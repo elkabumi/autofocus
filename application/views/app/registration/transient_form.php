@@ -1,25 +1,25 @@
 <script type="text/javascript">	
 $(function(){
 	createLookUp({
-		table_id		: "#lookup_table_active_product",
-		listSource 		: "lookup/active_product_table_control/1/" + $('input[name="i_stand_id"]').val(),
-		dataSource		: "lookup/active_product_lookup_id",
-		component_id	: "#lookup_active_product",
-		filter_by		: [{id : "p1", label : "Kategori Produk"}, {id : "p2", label : "Nama Produk"}, {id : "p3", label : "Tipe Produk"}],
-		onSelect		: load_product_stock
+		table_id		: "#lookup_table_product_price",
+		listSource 		: "lookup/product_price_table_control/" + $('input[name="i_insurance_id"]').val(),
+		dataSource		: "lookup/product_price_lookup_id",
+		component_id	: "#lookup_product_price",
+		filter_by		: [{id : "p1", label : "Jenis Perbaikan"}],
+		onSelect		: load_product_price
 	});
 	
-	function load_product_stock(id){
+	function load_product_price(id){
 	
 		if(id == ""){
 			return;
 		}
 		
-		var data ='product_stock_id='+id; 
+		var data ='product_price_id='+id; 
 		
 		$.ajax({
 			type: 'POST',
-			url: '<?=site_url('registration/load_product_stock')?>',
+			url: '<?=site_url('registration/load_product_price')?>',
 			data: data,
 			dataType: 'json',
 			success: function(data){					
@@ -47,12 +47,15 @@ $(function(){
 </script>
 <form class="subform_area">
 <div class="form_area_frame">
-<table class="form_layout">
+<table width="100%" cellpadding="4" class="form_layout">
 	<tr>
-		<td width="150" req="req">Produk
-	 <span class="lookup" id="lookup_active_product">
-        <input type="hidden" name="i_product_stock_id" class="com_id" value="<?=$product_stock_id?>" />
-         <div class="iconic_base iconic_search com_popup" style="margin-top:5px !important"></div>
+		<td width="199" req="req">Produk
+	 </td>
+		<td width="10" req="req">:</td>
+		<td width="704" req="req"><span class="lookup" id="lookup_product_price">
+        <input type="hidden" name="i_product_price_id" class="com_id" value="<?=$product_price_id?>" />
+         <div class="iconic_base iconic_search com_popup"></div>
+         <span class="com_desc"></span>
         <input type="text" class="com_input" size="6" name="module" />
         <input type="hidden" name="i_index" value="<?=$index?>" />
         <input type="hidden" name="i_product_id" value="" />
@@ -61,17 +64,23 @@ $(function(){
        </span></td>
 	</tr>
     <tr>
-     <td width="70" >Harga<input name="i_transaction_detail_price" type="text" id="i_transaction_detail_price" value="<?=$transaction_detail_price ?>" readonly="readonly" />
+     <td width="199" >Harga
      </td>
-   </tr>
+     <td width="10" >:</td>
+     <td width="704" ><input name="i_transaction_detail_price" type="text" id="i_transaction_detail_price" value="<?=$transaction_detail_price ?>" readonly="readonly" /></td>
+    </tr>
     <tr>
-     <td width="70" >Jumlah<input name="i_transaction_detail_qty" type="text" id="i_transaction_detail_qty" value="<?=$transaction_detail_qty ?>" />
+     <td width="199" >Jumlah
      </td>
-   </tr>
+     <td width="10" >:</td>
+     <td width="704" ><input name="i_transaction_detail_qty" type="text" id="i_transaction_detail_qty" value="<?=$transaction_detail_qty ?>" /></td>
+    </tr>
     <tr>
-     <td width="70" >Total<input name="i_transaction_detail_total_price" type="text" id="i_transaction_detail_total_price" value="<?=$transaction_detail_total_price ?>" readonly="readonly" />
+     <td width="199" >Total
      </td>
-   </tr>
+     <td width="10" >:</td>
+     <td width="704" ><input name="i_transaction_detail_total_price" type="text" id="i_transaction_detail_total_price" value="<?=$transaction_detail_total_price ?>" readonly="readonly" /></td>
+    </tr>
 	
 </table>
 </div>
@@ -82,17 +91,14 @@ $(function(){
 </div>
 </form>
 <div>
-	<table  id="lookup_table_active_product" cellpadding="0" cellspacing="0" border="0" class="display" > 
+	<table  id="lookup_table_product_price" cellpadding="0" cellspacing="0" border="0" class="display" > 
 		<thead>
 			<tr>
 				<th width="10%">ID</th>
-				<th>Nama Cabang</th>
-                <th>Kategori</th>
-                <th>Kode Produk</th>
-                <th>Nama Produk</th>
-                <th>Tipe Produk</th>
-                <th>Stok</th>
-				<th>Harga</th>
+				<th>Jenis Perbaikan</th>
+                <th>Tipe</th>
+                <th>Sub Tipe</th>
+                <th>Harga</th>
            
 			</tr> 
 		</thead> 

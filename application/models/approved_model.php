@@ -1,7 +1,7 @@
 <?php
-class Registration_model extends CI_Model 
+class Approved_model extends CI_Model 
 {
-	var $trans_type = 2;
+	var $trans_type = 5;
 	var $insert_id = NULL;
 	
 	function __construct()
@@ -9,9 +9,9 @@ class Registration_model extends CI_Model
 		//parent::Model();
 		//$this->sek_id = $this->access->sek_id;
 	}
-	
 	function list_controller()
 	{		
+		$where = '';
 		$params 	= get_datatables_control();
 		$limit 		= $params['limit'];
 		$offset 	= $params['offset'];
@@ -20,69 +20,89 @@ class Registration_model extends CI_Model
 		
 		// map value dari combobox ke table
 		// daftar kolom yang valid
-		$columns['code'] = 'product_cat_code';
-		$columns['name'] = 'product_cat_name';
-		$columns['note'] = 'product_cat_description';
 		
-		$sort_column_index	= $params['sort_column'];
-		$sort_dir		= $params['sort_dir'];
+		$columns['code'] 			= 'transaction_code';
+		$columns['nopol'] 			= 'car_nopol';
+		$columns['customer_name']	= 'customer_name';
+		$columns['insurance_name'] 	= 'insurance_name';
+		$columns['claim_no'] 		= 'claim_no';
 		
-		$order_by_column[] = 'product_cat_id';
-		$order_by_column[] = 'product_cat_code';
-		$order_by_column[] = 'product_cat_name';
-		$order_by_column[] = 'product_cat_description';
 		
-		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
+		$sort_column_index = $params['sort_column'];
+		$sort_dir = $params['sort_dir'];
 		
-		$this->db->start_cache();			
+		$order_by_column[] = 'transaction_id';
+		$order_by_column[] = 'transaction_code';
+		$order_by_column[] = 'transaction_date';
+		$order_by_column[] = 'car_nopol';
+		$order_by_column[] = 'customer_name';
+		$order_by_column[] = 'insurance_name';
+		$order_by_column[] = 'claim_no';
+		$order_by_column[] = 'status_transaction_id';
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
-			$this->db->like($columns[$category], $keyword);
+			
+				$where = " where ".$columns[$category]." like '%$keyword%'";
+			
+			
 		}
-		$this->db->stop_cache();
-		
-		// hitung total record
-		$this->db->select('COUNT(1) AS total', 1); // pastikan ada AS total nya, 1 bila isinya adalah function (dalam hal ini COUNT)
-		$query	= $this->db->get('product_categories'); 
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
 
-		$row 	= $query->row_array(); // fungsi ci untuk mengambil 1 row saja dari query
-		$total 	= $row['total'];		
+		$sql = "
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name
+		from registrations a
 		
+		left join customers c on a.customer_id = c.customer_id
+		left join cars d on a.car_id = d.car_id
+		left join insurances e on a.insurance_id = e.insurance_id
+		$where  $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
 		
-		// proses query sesuai dengan parameter
-		$this->db->select('*', 1);
-		//$this->db->order_by('market_id ASC');
-		$this->db->order_by($order_by);
-		// bila menggunakan paging gunakan limiter dan offseter
-		if ($limit > 0) $this->db->limit($limit, $offset);
-		$query = $this->db->get('product_categories');
+		$sql = $sql.$limit;
 		
+		$query = $this->db->query($sql);
+		//query();
 		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row) {
 			
-			$kode = $row['product_cat_id'];
 			
 			$row = format_html($row);
 			
+			
+			$transaction_date = format_new_date($row['transaction_date']);
+			$status = show_checkbox_status($row['status_transaction_id']);
+				
+		
+			
 			$data[] = array(
-				$row['product_cat_id'], 
-				$row['product_cat_code'], 
-				$row['product_cat_name'], 
-				$row['product_cat_description']
+				$row['transaction_id'], 
+				$row['transaction_code'],
+				$transaction_date,
+				$row['car_nopol'],
+				$row['customer_name'],
+				$row['insurance_name'],
+				$row['claim_no'],
+				$status,
 			); 
 		}
 		
 		// kembalikan nilai dalam format datatables_control
 		return make_datatables_control($params, $data, $total);
 	}
+	
 	function read_id($id)
 	{
-		$this->db->select('a.*, b.transaction_type_name, c.customer_name, d.transaction_payment_method_name', 1); // ambil seluruh data
-		$this->db->join('transaction_types b','b.transaction_type_id = a.transaction_type_id');
-		$this->db->join('transaction_payment_methods d','d.transaction_payment_method_id = a.transaction_payment_method_id');
-		$this->db->join('customers c', 'c.customer_id = a.subject_id', 'left');
-		$this->db->where('transaction_id', $id);
-		$query = $this->db->get('transactions a', 1); // parameter limit harus 1
+		$this->db->select('a.*', 1); // ambil seluruh data
+		$this->db->where('approved_id', $id);
+		$query = $this->db->get('approveds a', 1); // parameter limit harus 1
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
@@ -90,60 +110,74 @@ class Registration_model extends CI_Model
 	function delete($id)
 	{
 		$this->db->trans_start();
-			$this->db->where('product_cat_id', $id);
-		$this->db->delete('registration_items');
-		$this->db->where('product_cat_id', $id); // data yg mana yang akan di delete
-		$this->db->delete('product_categories');
+		$data['approved_active_status'] = '0';
+		$data['inactive_by_id'] =  $this->access->info['employee_id'];
+		$this->db->where('approved_id', $id); // data yg mana yang akan di update
+		$this->db->update('approveds', $data);
 	
-		$this->access->log_delete($id, 'Produk Kategori');
+		$this->access->log_delete($id, 'PO Received');
 		$this->db->trans_complete();
 
 		return $this->db->trans_status();
 	}
-	function create($data, $items)
+	function create($data, $items,$item2)
 	{
 		$this->db->trans_start();
-		$this->db->insert('registrations', $data);
+		$this->db->insert('approveds', $data);
 		$id = $this->db->insert_id();
 		
 		//Insert items
 		$index = 0;
 		foreach($items as $row)
 		{			
-			$row['transaction_id'] = $id;
-			$this->db->insert('detail_registrations', $row);
-			
-			
+			$row['approved_id'] = $id;
+			$this->db->insert('product_types', $row);
 			$index++;
 		}
 		
-		$this->insert_id = $id;
+		$index2 = 0;
+		foreach($item2 as $row2)
+		{			
+			$row2['approved_id'] = $id;
+			$this->db->insert('product_sub_type', $row2);
+			$index2++;
+		}
 		
-		//create transaction
-		//$this->insert_transaction($id, $data);
+		$this->insert_id = $id;//create transaction
+	//	$this->insert_transaction($id, $data);
 		
-		$this->access->log_insert($id, 'Penjualan User');
+		$this->access->log_insert($id, 'PO Received');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}// end of function 
-	function update($id, $data, $items)
+	function update($id, $data, $items,$item2)
 	{
 		$this->db->trans_start();
-		$this->db->where('product_cat_id', $id); // data yg mana yang akan di update
-		$this->db->update('product_categories', $data);
+		$this->db->where('approved_id', $id); // data yg mana yang akan di update
+		$this->db->update('approveds', $data);
 		
 		//Insert items
-		$this->db->where('product_cat_id', $id);
-		$this->db->delete('registration_items');
+		$this->db->where('approved_id', $id);
+		$this->db->delete('product_types');
 		$index = 0;
 		foreach($items as $row)
 		{			
-			$row['product_cat_id'] = $id;
-			$this->db->insert('registration_items', $row); 
+			$row['approved_id'] = $id;
+			$this->db->insert('product_types', $row); 
 			$index++;
 		}
 		
-		$this->access->log_update($id, 'Kategori produk');
+		$this->db->where('approved_id', $id);
+		$this->db->delete('product_sub_type');
+		$index = 0;
+		$index2 = 0;
+		foreach($item2 as $row2)
+		{			
+			$row2['approved_id'] = $id;
+			$this->db->insert('product_sub_type', $row2);
+			$index2++;
+		}
+		$this->access->log_update($id, 'PO Received');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
@@ -172,7 +206,7 @@ class Registration_model extends CI_Model
 	    $data['transaction_type_id'] = $this->trans_type;
 	    $data['transaction_code'] = $datatrans['transaction_code'];
 	    $data['transaction_data_id'] = $data_id;
-	    $data['period_id'] = $datatrans['period_id'];
+	    $data['period_id'] = 1;
 	    $this->db->insert('transactions_sl', $data);
 	    $id = $this->db->insert_id();
 		//$this->db->update('transactions_sl', array('transaction_data_id' => $id), array('transaction_id' => $id));
@@ -285,13 +319,34 @@ class Registration_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*, b.product_stock_id, c.product_code, c.product_name', 1);
-		$this->db->from('transaction_details a');
-		$this->db->join('product_stocks b', 'b.product_id = a.product_id and price_id = 1');
-		$this->db->join('products c','c.product_id = a.product_id');
+		$this->db->select('a.*, b.*', 1);
+		$this->db->from('approveds a');
+		$this->db->join('product_types b','b.approved_id = a.approved_id');
+	
+		$this->db->where('a.approved_id', $id);
+		$query = $this->db->get();
 		
-		$this->db->where('a.transaction_id', $id);
-		$query = $this->db->get(); debug();
+		debug();
+	
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	
+	
+	function detail_list_loader2($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('a.*', 1);
+		$this->db->from('product_sub_type a');
+		$this->db->where('a.approved_id', $id);
+		$query = $this->db->get();
+		
+		debug();
+	
 		foreach($query->result_array() as $row)
 		{
 			$result[] = format_html($row);
@@ -329,15 +384,14 @@ class Registration_model extends CI_Model
 		return $data;
 	}
 	
-	function load_product_price($id)
+	function load_product_stock($id)
 	{
 		$sql = "
-			select a.*, b.product_code, b.product_name, c.product_type_name, d.pst_name
-		from product_prices a
-		join products b on b.product_id = a.product_id
-		join product_types c on c.product_type_id = a.product_type_id
-		join product_sub_type d on d.pst_id = a.pst_id
-		where a.product_price_id = '$id'
+			select 
+			a.*, b.product_code
+			from product_stocks a 
+			join products b on b.product_id = a.product_id
+			where product_stock_id = $id
 		";
 		
 		
@@ -346,86 +400,36 @@ class Registration_model extends CI_Model
 		return $query;
 	}
 	
-	function check_stock($id)
+	
+	
+	function check_po_received($id)
 	{
-		$sql = "select product_stock_qty from product_stocks
-				where product_stock_id = '$id'
+		$sql = "select * from transactions where transaction_sent_id = $id
 				";
 		
 		$query = $this->db->query($sql);
 		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = format_html($row);
-		return $result['product_stock_qty'];
+		if ($query->num_rows() > 0)
+		{		
+			return TRUE;
+		}else{
+			return FALSE;
+		}
 	}
+	function active($id){
+		$this->db->trans_start();
+		
+		$this->db->trans_start();
+		$data['transaction_active_status'] = '1';
+		$data['inactive_by_id'] =  $this->access->info['employee_id'];
+		$this->db->where('transaction_id', $id); // data yg mana yang akan di update
+		$this->db->update('transactions', $data);
 	
-	function get_data_product($id)
-	{
-		$sql = "	select b.product_code, b.product_name, c.product_type_name, d.pst_name
-		from product_prices a
-		join products b on b.product_id = a.product_id
-		join product_types c on c.product_type_id = a.product_type_id
-		join product_sub_type d on d.pst_id = a.pst_id
-		where a.product_price_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = format_html($row);
-		return array($result['product_code'], $result['product_name'], $result['product_type_name'], $result['pst_name']);
-	}
-	
-	function get_data_detail($id) {
-		
-		$query = "select a.*, b.product_code, b.product_name
-				from transaction_details a
-				join products b on b.product_id = a.product_id
-				where transaction_id = '$id'
-					"
-					;
-		
-        $query = $this->db->query($query);
-       // query();
-        if ($query->num_rows() == 0)
-            return array();
+		$this->access->log_update($id, 'PO Received');
+		$this->db->trans_complete();
 
-        $data = $query->result_array();
-
-        foreach ($data as $index => $row) {
-         	
-        }
-        return $data;
-    }
+		return $this->db->trans_status();
 	
-	function get_purchase_price($id)
-	{
-		$sql = "select product_purchase_price
-				from products
-				where product_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = format_html($row);
-		return $result['product_purchase_price'];
 	}
-	
-	function get_old_stock($id)
-	{
-		$sql = "select product_stock_qty
-				from product_stocks
-				where product_stock_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-	//	query();
-		$result = null;
-		foreach ($query->result_array() as $row) $result = format_html($row);
-		return $result['product_stock_qty'];
-	}
-	
-
 }
 #

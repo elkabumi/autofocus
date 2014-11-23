@@ -74,6 +74,19 @@ class Lookup extends CI_Controller
 		$this->dtc->customer_get();
 	}
 	
+	# lookup data mobil
+	function car_table_control()
+	{
+		$this->load->library('dtc');
+		$this->dtc->car_control();
+	}
+	
+	function car_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->car_get();
+	}
+	
 	 #lookup data product aktif
 	function active_product_table_control($cat_id = 0)
 	{
@@ -85,6 +98,19 @@ class Lookup extends CI_Controller
 	{
 		$this->load->library('dtc');
 		$this->dtc->active_product_get();
+	}
+	
+	 #lookup data product price
+	function product_price_table_control($insurance_id = 0)
+	{
+		$this->load->library('dtc');
+		$this->dtc->product_price_control($insurance_id);
+	}
+	
+	function product_price_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->product_price_get();
 	}
 	
 	 #lookup data product

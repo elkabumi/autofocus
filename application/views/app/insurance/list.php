@@ -23,10 +23,10 @@ $(function(){
 	<thead>
 		<tr>
 			<th>ID</th>
-            <th>insurance name</th>
-            <th>insuracne phone </th>
-			<th>insurance addres</th>
-            <th>insurance Date</th>
+            <th>Nama Asuransi</th>
+            <th>Telepon</th>
+			<th>Alamat</th>
+            <th>Tanggal</th>
             <th>Active Status</th>
             <th>Information</th>
 		</tr> 

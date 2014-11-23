@@ -23,10 +23,15 @@ class Registration extends CI_Controller
 			
 		$data['row_id'] = '';
 		$data['period_id'] = $period_id[0];
-		$data['transaction_code']			= format_code('transactions','transaction_code','TR',7);
 		$data['stand_id'] = '';
 		$data['transaction_date'] = date('d/m/Y');
+		$data['transaction_code'] =  format_code('registrations','transaction_code','T',7);
 		$data['customer_id'] = '';
+		$data['car_id'] = '';
+		$data['claim_type'] = '1';
+		$data['insurance_id'] = '';
+		$data['check_in'] = date('d/m/Y');
+		$data['transaction_estimation_date'] = '';
 		
 		$data['transaction_description'] = '';
 		$data['transaction_payment_method_id'] = '';
@@ -40,20 +45,17 @@ class Registration extends CI_Controller
 		
 		$this->load->helper('form');
 		
-		
-		$data['cbo_transaction_payment_method'] 			= $this->global_model->get_transaction_payment_method();
-		
 		$this->render->add_form('app/registration/form', $data);
 		$this->render->build('Transaksi Penjualan User');
 		
 		$this->render->add_view('app/registration/transient_list');
 		$this->render->build('Data Produk');
 		
-		$this->render->add_view('app/registration/form_end', $data);
-		$this->render->build('Pembayaran');
+		//$this->render->add_view('app/registration/form_end', $data);
+		//$this->render->build('Pembayaran');
 		
 		
-		$this->render->show('Transaksi Penjualan User');
+		$this->render->show('Registrasi');
 		
 	}
 	function table_controller()
@@ -115,48 +117,40 @@ class Registration extends CI_Controller
 		// bila bukan delete, berarti create atau update ------------------------------------------------------------------
 	
 		// definisikan kriteria data
-		$this->form_validation->set_rules('i_transaction_code','Kode','trim|min_length[3]|max_length[50]|required');
+		$this->form_validation->set_rules('i_code','Kode','trim|min_length[3]|max_length[50]|required');
 		$this->form_validation->set_rules('i_stand_id','Cabang','trim|required|integer');
-		$this->form_validation->set_rules('i_transaction_date','Tanggal','trim|required|valid_date|sql_date');
+		
 		$this->form_validation->set_rules('i_transaction_description','Keterangan','trim|required');
-		$this->form_validation->set_rules('i_transaction_sent_price','Ongkos Kirim','trim|required|numeric');
-		$this->form_validation->set_rules('i_transaction_payed','Pembayaran','trim|required|numeric');
 		
 		// cek data berdasarkan kriteria
 		if ($this->form_validation->run() == FALSE) send_json_validate(); 
-		
-		
-		
+
 		$id = $this->input->post('row_id');
-		$data['transaction_code'] 			= $this->input->post('i_transaction_code');
+		$data['transaction_code'] 			= $this->input->post('i_code');
 		$data['period_id'] 					= $this->input->post('i_period_id');
 		$data['stand_id'] 					= $this->input->post('i_stand_id');
-		$data['transaction_type_id'] 		= 2;
-		$data['transaction_date'] 			= $this->input->post('i_transaction_date');
-		
-		$data['subject_id']					= $this->input->post('i_customer_id');
-		$data['transaction_payment_method_id']	= $this->input->post('i_transaction_payment_method');
+		$data['customer_id'] 				= $this->input->post('i_customer_id');
+		$data['car_id'] 					= $this->input->post('i_car_id');
+		$data['employee_id']				= $this->access->info['employee_id'];
+		$data['incident_date'] 				= "";
+		$data['claim_type']					= $this->input->post('i_claim_type');
+		$data['insurance_id'] 					= $this->input->post('i_insurance_id');
+		$data['claim_no'] 					= $this->input->post('i_claim_no');
+		$data['check_in'] 					= $this->input->post('i_check_in');
+		$data['transaction_estimation_date'] 					= $this->input->post('i_transaction_estimation_date');
+		$data['check_out'] 					= "";
+		$data['transaction_date'] 			= date("Y-m-d");
+		$data['status_transaction_id'] 		= 1;
 		$data['transaction_description']	= $this->input->post('i_transaction_description');
-		$data['transaction_approval']		= null;
-		$data['transaction_sent_price']		= ($this->input->post('i_transaction_sent_price') ? $this->input->post('i_transaction_sent_price') : 0);
-		$data['transaction_down_payment']		= ($this->input->post('i_transaction_down_payment') ? $this->input->post('i_transaction_down_payment') : 0);
-		$data['transaction_payed']			= $this->input->post('i_transaction_payed');
-		$data['transaction_change']			= $this->input->post('i_transaction_change');
-		$data['salesman_id']				= 0;
-		
-		
-		
 		
 		$list_product_id		= $this->input->post('transient_product_id');
-		$list_product_stock_id		= $this->input->post('transient_product_stock_id');
+		$list_product_price_id		= $this->input->post('transient_product_price_id');
 		$list_transaction_detail_qty	= $this->input->post('transient_transaction_detail_qty');
 		$list_transaction_detail_price	 	= $this->input->post('transient_transaction_detail_price');
 		$list_transaction_detail_total_price	= $this->input->post('transient_transaction_detail_total_price');
 		
 		if(!$list_product_id) send_json_error('Data item produk belum ada');
-		if($data['transaction_payment_method_id'] == '2' && $data['subject_id'] == "") send_json_error('Pembayaran kredit harus memasukkan data customer');
-		
-		if($data['transaction_payed'] < $this->input->post('i_transaction_final_total_price')) send_json_error('Pembayaran tidak boleh kurang dari total harga');
+	
 		
 		$total_price = 0;
 		
@@ -164,44 +158,27 @@ class Registration extends CI_Controller
 		if($list_product_id){
 		foreach($list_product_id as $key => $value)
 		{
-			$get_purchase_price = $this->registration_model->get_purchase_price($list_product_id[$key]);
+			//$get_purchase_price = $this->registration_model->get_purchase_price($list_product_id[$key]);
 			
 			$items[] = array(				
-				'product_id'  => $list_product_id[$key],
-				'price_id' => '1',
-				'product_stock_id' => $list_product_stock_id[$key],
-				'transaction_detail_qty'  => $list_transaction_detail_qty[$key],
-				'transaction_detail_price'  => $list_transaction_detail_price[$key],
-				'transaction_detail_purchase_price' => $get_purchase_price,
-				'transaction_detail_total_price'  => $list_transaction_detail_total_price[$key]
+				//'product_id'  => $list_product_id[$key],
+				'detail_transaction_type_id' => '1',
+				'employee_id' => $this->access->info['employee_id'],
+				'product_price_id' => $list_product_price_id[$key],
+				'detail_transaction_qty'  => $list_transaction_detail_qty[$key],
+				'detail_transaction_price'  => $list_transaction_detail_price[$key],
+				'detail_transaction_total_price'  => $list_transaction_detail_total_price[$key]
 			);
 			$total_price += $list_transaction_detail_total_price[$key];
 		}
 		}
 		
-		$data['transaction_total_price'] = $total_price;
+		$data['total_transaction'] = $total_price;
 		
-		$data['transaction_final_total_price'] = $data['transaction_total_price'] + $data['transaction_sent_price'];
-		
-		if($data['transaction_payment_method_id'] == 2){
-			$data['transaction_sisa'] = $data['transaction_final_total_price'] - $data['transaction_down_payment'];
-		}else{
-			$data['transaction_sisa'] = 0;
-		}
-		
-		if($data['transaction_sisa'] == 0){
-			$data['transaction_status'] = 1;
-		}else{
-			$data['transaction_status'] = 0;
-		}
-		
-		//send_json_error($data['transaction_total_price']);
 		
 		if(empty($id)) // jika tidak ada id maka create
 		{ 
-			$data['transaction_code'] 			= format_code('transactions','transaction_code','PU',7);
-			$data['transaction_datetime']		= date('Y-m-d H:m:s');
-			$data['transaction_active_status']	= 1;
+			//$data['transaction_code'] 			= format_code('transactions','transaction_code','PU',7);
 				
 			$error = $this->registration_model->create($data, $items);
 			send_json_action($error, "Data telah ditambah", "Data gagal ditambah", $this->registration_model->insert_id);
@@ -225,7 +202,7 @@ class Registration extends CI_Controller
 				form_transient_pair('transient_product_id', $value['product_code'], $value['product_id'],
 				
 				array(
-                    'transient_product_stock_id' => $value['product_stock_id'],
+                    'transient_product_price_id' => $value['product_price_id'],
 					'transient_product_code' => $value['product_code']
 				)),
 				form_transient_pair('transient_product_name', $value['product_name']),
@@ -249,7 +226,7 @@ class Registration extends CI_Controller
 			$data['index']			= '';
 			$data['transaction_id'] 				= $transaction_id;
 			$data['product_id']	= '';	
-			$data['product_stock_id'] = '';
+			$data['product_price_id'] = '';
 			$data['product_name'] = '';			
 			$data['transaction_detail_qty'] 	= '';
 			$data['transaction_detail_price'] 	= '';
@@ -262,7 +239,7 @@ class Registration extends CI_Controller
 			$data['transaction_id'] 				= $transaction_id;
 			$data['product_id']	= array_shift($this->input->post('transient_product_id'));
 			$data['product_code']	= array_shift($this->input->post('transient_product_code'));
-			$data['product_stock_id']	= array_shift($this->input->post('transient_product_stock_id'));
+			$data['product_price_id']	= array_shift($this->input->post('transient_product_price_id'));
 			$data['product_name'] = array_shift($this->input->post('transient_product_name'));
 			$data['transaction_detail_qty'] 	= array_shift($this->input->post('transient_transaction_detail_qty'));
 			$data['transaction_detail_price'] = array_shift($this->input->post('transient_transaction_detail_price'));
@@ -288,30 +265,24 @@ class Registration extends CI_Controller
 		
 		$no 		= $this->input->post('i_index');
 		$product_id 	= $this->input->post('i_product_id');
-		$product_stock_id 		= $this->input->post('i_product_stock_id');
+		$product_price_id 		= $this->input->post('i_product_price_id');
 		$product_code 	= $this->input->post('i_product_code');
 		$transaction_detail_price 	= $this->input->post('i_transaction_detail_price');
 		$transaction_detail_qty 	= $this->input->post('i_transaction_detail_qty');
 		$transaction_detail_total_price 	= $this->input->post('i_transaction_detail_total_price');
-		
-		$check_stock = $this->registration_model->check_stock($product_stock_id);
-		
-		$get_data_product = $this->registration_model->get_data_product($product_stock_id);
-		
-		if($check_stock < $transaction_detail_qty){
-			send_json_error('Simpan gagal. Jumlah penjualan tidak boleh melebihi stok');
-		}
-	
+				
+		$get_data_product = $this->registration_model->get_data_product($product_price_id);
+		$product_lengkap = $get_data_product[1]." (".$get_data_product[2]." - ".$get_data_product[3].")";
 		//send_json_error($no);
 		
 		$data = array(
 				form_transient_pair('transient_product_id', $product_code, $product_id),
-				form_transient_pair('transient_product_name', $get_data_product[1]),
+				form_transient_pair('transient_product_name', $product_lengkap),
 				form_transient_pair('transient_transaction_detail_price', tool_money_format($transaction_detail_price), $transaction_detail_price),
 				form_transient_pair('transient_transaction_detail_qty', $transaction_detail_qty, $transaction_detail_qty),
 				form_transient_pair('transient_transaction_detail_total_price', tool_money_format($transaction_detail_total_price), $transaction_detail_total_price,
 				array(
-                    'transient_product_stock_id' => $product_stock_id,
+                    'transient_product_price_id' => $product_price_id,
 					'transient_product_code' => $product_code
 				))
 		);
@@ -319,20 +290,20 @@ class Registration extends CI_Controller
 		send_json_transient($index, $data);
 	}
 	
-	function load_product_stock()
+	function load_product_price()
 	{
-		$id 	= $this->input->post('product_stock_id');
+		$id 	= $this->input->post('product_price_id');
 		
-		$query = $this->registration_model->load_product_stock($id);
+		$query = $this->registration_model->load_product_price($id);
 		$data = array();
 		
 		foreach($query->result_array() as $row)
 		{
 			$data['product_id'] = $row['product_id'];
 			$data['product_code'] = $row['product_code'];
-			$data['price'] = $row['user_price'];
+			$data['price'] = $row['product_price'];
 			$data['qty'] = 1;
-			$data['total'] = $row['user_price'];
+			$data['total'] = $row['product_price'];
 		}
 		send_json_message('Product Stock', $data);
 	}

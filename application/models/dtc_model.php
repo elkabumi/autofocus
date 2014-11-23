@@ -732,13 +732,13 @@ class Dtc_model extends CI_Model
 		$sort_dir						= $param['sort_dir'];
 		
 		$order_by_column[] = 'customer_id';
-		$order_by_column[] = 'customer_number';
+		$order_by_column[] = 'customer_ktp_number';
 		$order_by_column[] = 'customer_name';
 		
 		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
 		# order define column end
 		
-		$column['p1']			= 'customer_number';
+		$column['p1']			= 'customer_ktp_number';
 		$column['p2']			= 'customer_name';
 	
 		$this->db->start_cache();
@@ -776,7 +776,7 @@ class Dtc_model extends CI_Model
 			
 			$data[] = array(
 				$row['customer_id'], 
-				$row['customer_number'],
+				$row['customer_ktp_number'],
 				$row['customer_name']
 			); 
 
@@ -795,7 +795,97 @@ class Dtc_model extends CI_Model
 		if ($mode == 1)
 			$query = $this->db->get_where('customers', array('customer_id' => $id), 1);
 		else
-			$query = $this->db->get_where('customers', array('customer_number' => $id), 1);
+			$query = $this->db->get_where('customers', array('customer_ktp_number' => $id), 1);
+			
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
+	
+	## Data customer
+	function car_control($param)
+	{
+		// map parameter ke variable biasa agar mudah digunakan
+		$limit 		= $param['limit'];
+		$offset	 	= $param['offset'];
+		$category 	= $param['category'];
+		$keyword 	= $param['keyword'];
+		$where = '';
+		# order define columns start
+		$sort_column_index				= $param['sort_column'];
+		$sort_dir						= $param['sort_dir'];
+		
+		$order_by_column[] = 'car_id';
+		$order_by_column[] = 'car_nopol';
+		$order_by_column[] = 'car_model';
+		$order_by_column[] = 'car_no_rangka';
+		$order_by_column[] = 'car_no_machine';
+		
+		
+		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
+		# order define column end
+		
+		$column['p1']			= 'car_nopol';
+		$column['p2']			= 'car_no_rangka';
+		$column['p3']			= 'car_no_machine';
+	
+		$this->db->start_cache();
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
+		if (array_key_exists($category, $column) && strlen($keyword) > 0) 
+		{
+			
+				$where = " where ".$column[$category]." like '%$keyword%'";
+			
+			
+		}
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
+
+		$sql = "
+		select * from cars
+		$where  $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
+		
+		$sql = $sql.$limit;
+		
+		$query = $this->db->query($sql);
+		
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			
+			
+			$row = format_html($row);
+			
+			$data[] = array(
+				$row['car_id'], 
+				$row['car_nopol'],
+				$row['car_model'],
+				$row['car_no_rangka'],
+				$row['car_no_machine']
+			); 
+
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($param, $data, $total);
+	}
+	
+	function car_get($id, $mode)
+	{
+		if (empty($id) || !$id || !$mode) return NULL;
+		
+		$result = NULL;
+		
+		if ($mode == 1)
+			$query = $this->db->get_where('cars', array('car_id' => $id), 1);
+		else
+			$query = $this->db->get_where('cars', array('car_nopol' => $id), 1);
 			
 		foreach($query->result_array() as $row)	$result = format_html($row);
 		
@@ -893,6 +983,123 @@ class Dtc_model extends CI_Model
 			$query = $this->db->get_where('products', array('product_id' => $id), 1);
 		}else{
 			$query = $this->db->get_where('products', array('product_code' => $id), 1);
+		}
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
+	
+		## Data product price
+	function product_price_control($param, $insurance_id = 0)
+	{
+		// map parameter ke variable biasa agar mudah digunakan
+		$limit 		= $param['limit'];
+		$offset	 	= $param['offset'];
+		$category 	= $param['category'];
+		$keyword 	= $param['keyword'];
+		$where = '';
+		# order define columns start
+		$sort_column_index				= $param['sort_column'];
+		$sort_dir						= $param['sort_dir'];
+		
+		$order_by_column[] = 'product_price_id';
+		$order_by_column[] = 'product_name';
+		$order_by_column[] = 'product_type_name';
+		$order_by_column[] = 'pst_name';
+		$order_by_column[] = 'product_price';
+		
+		
+		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
+		# order define column end
+		
+		
+		$column['p1']			= 'product_name';
+	
+		$this->db->start_cache();
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
+		if (array_key_exists($category, $column) && strlen($keyword) > 0) 
+		{
+			
+				$where = " and ".$column[$category]." like '%$keyword%'";
+			
+			
+		}
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
+		
+		if($insurance_id){
+			$where .= " and b.insurance_id = '$insurance_id'";
+		}else{
+			$where .= " and b.insurance_id = '1'";
+		}
+		
+		$sql = "
+		select a.*, b.product_name, c.product_type_name, d.pst_name
+		from product_prices a
+		join products b on b.product_id = a.product_id
+		join product_types c on c.product_type_id = a.product_type_id
+		join product_sub_type d on d.pst_id = a.pst_id
+		where a.product_id > 0
+		and product_active_status = 1
+		$where  $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
+		
+		$sql = $sql.$limit;
+		
+		$query = $this->db->query($sql);
+		//query();
+		
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			
+			
+			$row = format_html($row);
+			
+			$data[] = array(
+				$row['product_price_id'], 
+				$row['product_name'],
+				$row['product_type_name'],
+				$row['pst_name'],
+				$row['product_price']				
+			); 
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($param, $data, $total);
+	}
+	
+	function product_price_get($id, $mode)
+	{
+		if (empty($id) || !$id || !$mode) return NULL;
+		
+		$result = NULL;
+		
+		if ($mode == 1){
+			
+			$sql = "
+		select a.*, b.product_name, c.product_type_name, d.pst_name
+		from product_prices a
+		join products b on b.product_id = a.product_id
+		join product_types c on c.product_type_id = a.product_type_id
+		join product_sub_type d on d.pst_id = a.pst_id
+		where a.product_price_id = '$id'
+		
+			
+			";
+
+		
+		
+		$query = $this->db->query($sql);
+		//query();
+		
+		}else{
+			$query = $this->db->get_where('product_prices', array('product_code' => $id), 1);
 		}
 		foreach($query->result_array() as $row)	$result = format_html($row);
 		

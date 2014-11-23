@@ -230,7 +230,30 @@ class Dtc
 		
 		if ($result) 
 		{ 
-			send_json_lookup_feedback($result['customer_id'], $result['customer_number'], $result['customer_name']);
+			send_json_lookup_feedback($result['customer_id'], $result['customer_ktp_number'], $result['customer_name']);
+		}
+		else send_json_error_feedback();
+	}
+	
+	# lookup data mobil
+	function car_control()
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->car_control(get_datatables_control());
+		send_json($data); 
+	}
+	
+	function car_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->car_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['car_id'], $result['car_nopol'], $result['car_no_rangka']." - ".$result['car_no_machine']);
 		}
 		else send_json_error_feedback();
 	}
@@ -255,6 +278,29 @@ class Dtc
 		if ($result) 
 		{ 
 			send_json_lookup_feedback($result['product_id'], $result['product_code'], $result['product_name']);
+		}
+		else send_json_error_feedback();
+	}
+	
+	# lookup data product price
+	function product_price_control($insurance_id = 0)
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->product_price_control(get_datatables_control(), $insurance_id);
+		send_json($data); 
+	}
+	
+	function product_price_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->product_price_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['product_price_id'], $result['product_name'], $result['product_type_name']." - ".$result['pst_name']);
 		}
 		else send_json_error_feedback();
 	}

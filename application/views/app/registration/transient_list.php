@@ -30,7 +30,7 @@ $(function(){
 		<tr>
 			
 			<th>Kode</th>
-			<th>Nama Barang</th>
+			<th>Jenis Perbaikan</th>
 			<th>Harga</th>
             <th>Jumlah</th>
             <th>Total</th>
