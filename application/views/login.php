@@ -76,7 +76,7 @@ $(function() {
 <div class="command_bar">
     <input type="submit" value="Login" onclick="return cek();" />
 	<input type="reset"  value="Reset" />
-    <a href="<?=site_url('home/registration')?>">Registration</a>
+    
 	</div>
 
   </div>
