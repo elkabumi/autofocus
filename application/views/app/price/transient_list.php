@@ -31,7 +31,7 @@ $(function(){
 </table>
 
 <div class="command_table" style="text-align:left;">
-    <input type="button" id="add" value="Add"/>
+    <!--<input type="button" id="add" value="Add"/>-->
 	<input type="button" id="edit" value="Edit"/>
     <input type="button" id="delete" value="Delete"/>
    

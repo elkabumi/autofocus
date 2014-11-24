@@ -128,8 +128,11 @@ class price extends CI_Controller{
 		{	
 		$data[$key] = array(
 				form_transient_pair('transient_ist_name', $value['pst_name']),
+				foreach($data as $key => $value){
+				$data[$key] = array(	
 				form_transient_pair('transient_ist_description', $value['pst_description']),
-				
+				);
+				}
 		);
 		
 		

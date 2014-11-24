@@ -20,7 +20,7 @@ $(function(){
     </tr>
 	<tr>  
 	  <td width="222" valign="top">Description</td>
-	  <td width="633" valign="top"><textarea name="i_pst_description" id="i_pst_description" cols="45" rows="3"><?=$transient_pst_name?>
+	  <td width="633" valign="top"><textarea name="i_pst_description" id="i_pst_description" cols="45" rows="3"><?=$transient_pst_description?>
     </textarea></td>
 	  </tr>
 </table>

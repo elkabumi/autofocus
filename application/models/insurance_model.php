@@ -350,6 +350,7 @@ class insurance_model extends CI_Model
 		$this->db->from('product_sub_type a');
 		$this->db->where('a.insurance_id', $id);
 		$query = $this->db->get();
+		//query($query);
 		
 		debug();
 	

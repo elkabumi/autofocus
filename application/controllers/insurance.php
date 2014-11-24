@@ -212,6 +212,7 @@ class insurance extends CI_Controller{
 		send_json(make_datatables_list(null)); 
 				
 		$data = $this->insurance_model->detail_list_loader2($row_id);
+		
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
@@ -265,8 +266,8 @@ class insurance extends CI_Controller{
 		} else {
 			
 			$data['index']			= $index;
-			$data['transient_ist_name'] 	= array_shift($this->input->post('transient_pst_name'));
-			$data['transient_ist_description'] = array_shift($this->input->post('transient_pst_description'));
+			$data['transient_pst_name'] 	= array_shift($this->input->post('transient_pst_name'));
+			$data['transient_pst_description'] = array_shift($this->input->post('transient_pst_description'));
 		}		
 		
 		$this->load->helper('form');

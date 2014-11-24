@@ -176,7 +176,7 @@ function list_controller()
 	
 	function get_kolom_price($id){
 		
-				$sql = "SELECT b.*,c.*
+				$sql = "SELECT a.*,b.*,c.*
 						from insurances a
 						JOIN product_types b ON a.insurance_id 	 = b.insurance_id 	
 						JOIN product_sub_type c ON a.insurance_id 	 = c.insurance_id 	
@@ -208,7 +208,7 @@ function list_controller()
 		$this->db->join('product_sub_type c','c.insurance_id = a.insurance_id');
 		$this->db->where('a.insurance_id', $id);
 		$query = $this->db->get(); debug();
-		
+		//query($query);
 		debug();
 	
 		foreach($query->result_array() as $row)
