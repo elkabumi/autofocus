@@ -2,9 +2,9 @@
 $(function(){
 	createForm({
 		id 				: "#id_form_nya", 
-		actionTarget	: "product/form_action",
-		backPage		: "product",
-		nextPage		: "product"
+		actionTarget	: "customer/form_action",
+		backPage		: "customer",
+		nextPage		: "customer"
 	});
 	
 	createDatePicker();
@@ -35,7 +35,7 @@ $(function(){
    </tr>
  <tr>
      <td>Keterangan</td>
-       <td><input name="i_description" type="text" id="i_description" value="<?=$customer_description ?>" size="70" /></td>
+       <td><textarea name="i_description" type="text" id="i_description"><?=$customer_description ?></textarea></td>
      </tr>
  </table>
 </div>
