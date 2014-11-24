@@ -2,10 +2,9 @@
 $(function(){
 	var otable = createTable({
 		id 		: "#table",
-		listSource 	: "product/table_controller",
-		formTarget 	: "product/form",
-		actionTarget: "product/form_action",
-		activeTarget		: "product/active",
+		listSource 	: "customer/table_controller",
+		formTarget 	: "customer/form",
+		actionTarget: "customer/form_action",
 		column_id	: 0,
 		
 		filter_by 	: [ 
@@ -26,8 +25,6 @@ $(function(){
             <th>Nomor Ktp</th>
             <th>Nama</th>
 			<th>Addres</th>
-            <th>Telepon</th>
-            <th>Telepon</th>
             <th>Telepon</th>
 		</tr> 
 	</thead> 

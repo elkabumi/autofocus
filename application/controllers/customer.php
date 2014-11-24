@@ -42,8 +42,8 @@ class Customer extends CI_Controller{
 
 		$this->load->helper('form');
 		$this->render->add_form('app/customer/form', $data);
-		$this->render->build('Item');
-		$this->render->show('Item');
+		$this->render->build('Customer');
+		$this->render->show('Customer');
 		//$this->access->generate_log_view($id);
 	}
 	
@@ -59,36 +59,23 @@ class Customer extends CI_Controller{
 		
 		$this->load->library('form_validation');
 		
-		$this->form_validation->set_rules('i_code','Item Code', 'trim|required|max_length[15]');
-		$this->form_validation->set_rules('i_name','Item Name', 'trim|required|max_length[200]');
-		$this->form_validation->set_rules('i_category_id','Item Category', 'trim|required');
-		$this->form_validation->set_rules('i_date','Create Date', 'trim|required|valid_date|sql_date');
+		$this->form_validation->set_rules('i_ktp','Nomor Ktp', 'trim|required|max_length[15]');
+		$this->form_validation->set_rules('i_name','Customer Name', 'trim|required|max_length[200]');
+		$this->form_validation->set_rules('i_addres','Customer Addres', 'trim|required');
+		$this->form_validation->set_rules('i_phone','Telepon', 'trim|required|is_numeric');
 		$this->form_validation->set_rules('i_description','Description', 'trim|max_length[100]');
 	
 		
 		if($this->form_validation->run() == FALSE) send_json_validate();
 		
-		$data['customer_code'] 				= $this->input->post('i_code');
-		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
-		//$data['customer_price'] 				= $this->input->post('i_price');
-		$data['customer_name'] 				= $this->input->post('i_name');
-		$data['customer_category_id'] 		= $this->input->post('i_category_id');
-		$data['customer_qty'] 				= '';
-		$data['customer_category_id'] 		= $this->input->post('i_category_id');
-		$data['customer_description'] 		= $this->input->post('i_description');
-		$data['customer_date'] 				= $this->input->post('i_date');
+		$data['customer_ktp_number'] 				= $this->input->post('i_ktp');
+		$data['customer_name'] 						= $this->input->post('i_name');
+		$data['customer_addres'] 					= $this->input->post('i_addres');
+		$data['customer_phone_number'] 				= $this->input->post('i_phone');
+		$data['customer_description'] 				= $this->input->post('i_description');
 		
 		
 		if(empty($id)){
-		
-			$data['customer_active_status']	= 1;
-			$data['created_by_id']			=  $this->access->info['employee_id'];
-			
-			$this->load->model('global_model');
-			$check_code = $this->global_model->check_code('customers', 'customer_code', $data['customer_code']);
-			if($check_code){
-				send_json_error("Simpan gagal. Code ".$data['customer_code']." sudah ada, isi dengan code yang lain");
-			}
 			
 			$error = $this->customer_model->create($data);
 			send_json_action($error, "Data telah ditambah", "Data gagal ditambah");

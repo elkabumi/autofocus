@@ -44,8 +44,8 @@ class Customer_model extends CI_Model{
 		};	
 
 		$sql = "
-		select a.* 
-		from customers a
+		select * 
+		from customers 
 		$where  $order_by
 			
 			";
@@ -62,10 +62,10 @@ class Customer_model extends CI_Model{
 			
 			$data[] = array(
 				$row['customer_id'],
-				$row['cuntomer_ktp_number'], 
+				$row['customer_ktp_number'], 
 				$row['customer_name'],
-				$row['cuntomer_addres'],
-				$row['cuntomer_phone_number']
+				$row['customer_addres'],
+				$row['customer_phone_number']
 			); 
 		}
 		
@@ -89,8 +89,7 @@ class Customer_model extends CI_Model{
 		$this->db->trans_start();
 		$this->db->insert('customers', $data);
 		$id = $this->db->insert_id();
-		$insurance_id = $data['customer_id'];
-		
+				
 		$this->access->log_insert($id, "customer [".$data['customer_name']."]");
 		$this->db->trans_complete();
 		return $this->db->trans_status();
@@ -108,13 +107,10 @@ class Customer_model extends CI_Model{
 	function delete($id){
 		$this->db->trans_start();
 		
-		$data['product_active_status'] = 0;
-		$data['inactive_by_id'] =  $this->access->info['employee_id'];
+		$this->db->where('customer_id', $id);
+		$this->db->delete('customers');
 		
-		$this->db->where('product_id', $id);
-		$this->db->update('products', $data);
-		
-		$this->access->log_delete($id, "Produk");
+		$this->access->log_delete($id, "Customers");
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
