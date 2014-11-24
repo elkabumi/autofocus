@@ -35,14 +35,15 @@ class price extends CI_Controller{
 				$data['row_id'] = $id;
 			
 		}
-		$data['detail'] = $this->price_model->get_kolom_price($id);
+		$list = $this->price_model->get_kolom_price($id);
+		$data_product = $this->price_model->load_product($id);
 		
 		$this->load->helper('form');
 			
 		$this->render->add_form('app/price/form', $data);
 		$this->render->build('Price ');
 		
-		$this->render->add_view('app/price/transient_list',$data);
+		$this->render->add_view('app/price/transient_list',  array('list' => $list, 'data_product' => $data_product));
 		$this->render->build('Price');
 		
 		$this->render->add_form('app/price/form_save', $data);
@@ -50,151 +51,69 @@ class price extends CI_Controller{
 		
 		$this->render->show('Price');
 	}
+	
+	function form_proses($product_id = 0)
+	{
+		$data = array();
+			
+				$list = $this->price_model->get_price($product_id);
+				
+				$no = 0;
+				foreach($list as $item): 
+          			
+					$data['subject_id'][$no] = $item['product_price_id'];
+					$data['subject_name'][$no] = $item['product_type_name']." (".$item['pst_name'].")";
+					$data['subject_type'][$no] = $item['product_type_id'];
+					$data['subject_sub_type'][$no] = $item['pst_id'];
+					$data['subject_value'][$no] = $item['product_price'];
+    				$no++;
+					
+			 	endforeach; 
+				$data['no'] = $no;
+				$data['row_id'] = $product_id;
+				
+				$get_insurance = $this->price_model->get_insurance($product_id);
+				
+				$data['insurance_id'] = $get_insurance;
+				
+					
+		$this->load->helper('form');
+		$this->render->add_form('app/price/form_proses', $data);
+		$this->render->build('Edit Harga');
+		$this->render->show('Edit Harga');
+		
+	}
+	
 	function form_action($is_delete = 0) // jika 0, berarti insert atau update, bila 1 berarti delete
 	{
-		$this->load->library('form_validation');
-		
-		// bila operasinya DELETE -----------------------------------------------------------------------------------------		
-		if($is_delete)
-		{
-			$this->load->model('price_model');
-			$id = $this->input->post('row_id');
-			
-			$check_used = $this->price_model->check_price($id);
-			$fail = "PO Received tidak dapat dinonaktifkan karena ada Reservasi";
-			if($check_used){
-				$is_process_error = FALSE;
-				
-			} else {
-				$is_process_error = $this->price_model->delete($id);
-			}
-			
-			send_json_action($is_process_error, "Data telah dihapus", $fail);
-		}
-		
-		
+		$this->load->library('form_validation'); // selalu ada di _action()
 		$id = $this->input->post('row_id');
-
 		
-		$list_ist_name		= $this->input->post('transient_ist_name');
-		$list_ist_description	= $this->input->post('transient_ist_description');
+		// cek dulu data yang masuk
+		$no = $this->input->post('i_no');
 		
-		
-		
-
-		$items = array();
-		if($list_ist_name){
-		foreach($list_ist_name as $key => $value)
-		{
-			
-			$items[] = array(				
-				'ist_name'  => $list_ist_name[$key],
-				'ist_description'  => $list_ist_description[$key]
-
-			);
-			
-			
-			
+		for($i=0; $i<$no; $i++){
+		$this->form_validation->set_rules('i_subject_value'.$i, 'Harga '.($i+1), 'trim|required|is_numeric'); // gunakan selalu trim di awal
 		}
+		
+		for($u=0; $u<$no; $u++){
+			$items['subject_id'][$u] = $this->input->post('i_subject_id'.$u);
+			$items['subject_value'][$u] = $this->input->post('i_subject_value'.$u);
 		}
-
-		
-
-
-		
-	
-		
-
-			$error = $this->price_model->update($id, $items);
-			send_json_action($error, "Data telah direvisi", "Data gagal direvisi", $id);
-		
-	}
-	
-	
-	function detail_list_loader($row_id=0)
-	{
-		if($row_id == 0)
-	
 		
 		
-		
-		
-		
-		send_json(make_datatables_list(null)); 
-				
-		$data = $this->price_model->detail_list_loader($row_id);
-		$sort_id = 0;
-		foreach($data as $key => $value) 
-		{	
-		$data[$key] = array(
-				form_transient_pair('transient_ist_name', $value['pst_name']),
-				foreach($data as $key => $value){
-				$data[$key] = array(	
-				form_transient_pair('transient_ist_description', $value['pst_description']),
-				);
-				}
-		);
-		
-		
-	
-		}		
-		send_json(make_datatables_list($data)); 
-	}
-	
-	
-	
-	function detail_form($transaction_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
-	{		
-		$this->load->library('render');
-		$index = $this->input->post('transient_index');
-		if (strlen(trim($index)) == 0) {
-					
-			// TRANSIENT CREATE - isi form dengan nilai default / kosong
-			$data['index']			= '';
-			$data['transient_ist_name'] 	= '';
-			$data['product_category_id'] 	= '';
-			
-			$data['transient_ist_description'] 	= '';
-		} else {
-			
-			$data['index']			= $index;
-			$data['transient_ist_name'] 	= array_shift($this->input->post('transient_ist_name'));
-			$data['transient_ist_description'] = array_shift($this->input->post('transient_ist_description'));
-		}		
-		
-		$this->load->helper('form');
-		
-	
-		$this->render->add_form('app/price/transient_form', $data);
-		$this->render->show_buffer();
-	}
-	function detail_form_action()
-	{		
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('i_ist_name', 'Material', 'trim|max_length[100]');
-	
-		$index = $this->input->post('i_index');		
 		// cek data berdasarkan kriteria
-		if ($this->form_validation->run() == FALSE) send_json_validate(); 
-	
+		if ($this->form_validation->run() == FALSE) send_json_validate(); // bila input tidak valid, exit dan kirim kesalahan
+			
 		
-		$no 		= $this->input->post('i_index');
-		
-		$i_ist_name	= $this->input->post('i_ist_name');
-		$i_ist_description	= $this->input->post('i_ist_description');
+			$error = $this->price_model->update($id, $items, $no);
+			send_json_action($error, "Data telah direvisi", "Data telah direvisi", $this->input->post('i_insurance_id'));
 		
 		
-
-		$data = array(
-	
-				form_transient_pair('transient_ist_name', $i_ist_name, $i_ist_name),
-				form_transient_pair('transient_ist_description', $i_ist_description,$i_ist_description)
-		);
-		 
-		send_json_transient($index, $data);
 	}
 	
-
+	
+	
 	
 	
 	

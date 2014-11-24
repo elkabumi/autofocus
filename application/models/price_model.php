@@ -153,26 +153,7 @@ function list_controller()
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}// end of function 
-	function update($id, $items)
-	{
-		$this->db->trans_start();
-	
-		
-		//Insert items
-		$this->db->where('product_item_id', $id);
-		$this->db->delete('product_item_sub_type');
-		$index = 0;
-		foreach($items as $row)
-		{			
-			$row['product_item_id'] = $id;
-			$this->db->insert('product_item_sub_type', $row); 
-			$index++;
-		}
-		
-		$this->access->log_update($id, 'PO Received');
-		$this->db->trans_complete();
-		return $this->db->trans_status();
-	}
+
 	
 	function get_kolom_price($id){
 		
@@ -182,7 +163,7 @@ function list_controller()
 						JOIN product_sub_type c ON a.insurance_id 	 = c.insurance_id 	
 
 				where a.insurance_id  = $id
-				
+				order by product_type_id
 				";
 
 		$query = $this->db->query($sql);
@@ -294,6 +275,99 @@ function list_controller()
 
 		return $this->db->trans_status();
 	
+	}
+	
+	function load_product($insurance_id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('a.*
+							', 1);
+		$this->db->from('products a');
+		$this->db->where('a.product_active_status', 1);
+		$this->db->where('a.insurance_id', $insurance_id);
+		$query = $this->db->get();
+		//query();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	
+	function get_item_price($product_id, $product_type_id, $pst_id) {
+		$query = "select product_price from product_prices 
+					where product_id = $product_id
+					and product_type_id = $product_type_id
+					and pst_id = $pst_id
+					"
+					;
+		
+        $query = $this->db->query($query);
+     	// query();
+       	$result = null ; 
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		return $result['product_price']; 
+    }
+	
+	function get_price($product_id = 0) {
+		
+		$query = "select a.* , b.product_type_name, c.pst_name
+					from product_prices a
+					join product_types b on b.product_type_id = a.product_type_id
+					join product_sub_type c on c.pst_id = a.pst_id
+					where product_id = $product_id
+					order by product_type_id, a.pst_id desc
+					"
+					;
+		
+        $query = $this->db->query($query);
+       // query();
+        if ($query->num_rows() == 0)
+            return array();
+
+        $data = $query->result_array();
+
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
+    }
+	
+	function get_insurance($product_id) {
+		$query = "select insurance_id from products 
+					where product_id = $product_id
+					"
+					;
+		
+        $query = $this->db->query($query);
+     	// query();
+       	$result = null ; 
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		return $result['insurance_id']; 
+    }
+	
+	function update($id, $items, $no)
+	{
+		$this->db->trans_start();
+		
+		$items_new = array();
+		for($i=0; $i<$no; $i++)	
+		{		
+			$product_price_id = $items['subject_id'][$i];
+			
+			$items_new['product_price'] = $items['subject_value'][$i];
+			
+			$this->db->where('product_price_id', $product_price_id);
+			$this->db->update('product_prices', $items_new);
+			
+		}
+		
+		$this->access->log_update($id, 'Edit Harga');
+		$this->db->trans_complete();
+		return $this->db->trans_status();
+
+		return $this->db->trans_status();
 	}
 }
 #

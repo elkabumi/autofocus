@@ -11,9 +11,9 @@
 		?>
    
 		
-
+<!--
 		<input type="button" id="enable" value="OK"/>
- 	 <input type="button" id="submit" value="Save"/>
+ 	 <input type="button" id="submit" value="Save"/>-->
 	<?php
 	
 		//if($row_id){
