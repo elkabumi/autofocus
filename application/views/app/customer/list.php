@@ -4,17 +4,10 @@ $(function(){
 		id 		: "#table",
 		listSource 	: "customer/table_controller",
 		formTarget 	: "customer/form",
-		actionTarget: "customer/form_action",
-		column_id	: 0,
+		actionTarget: "customer/form_action"
 		
-		filter_by 	: [ 
-		{id : "product_code", label : "Material Code"}, 
-		{id : "product_name", label : "Material Name"},
-		{id : "product_category_name", label : "Material Type"},
-		{id : "product_date", label : "Create Date"}],
-		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
-	otable.fnSetColumnVis(0, false, false);
+	
 });
 </script>
 <div id="example">

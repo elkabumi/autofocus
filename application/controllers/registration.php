@@ -319,18 +319,15 @@ class Registration extends CI_Controller
 			{
 				$data = $result;
 				$data['row_id'] = $id;		
-				$data['customer_id'] = $result['subject_id'];	
-				$data['transaction_date'] = strtotime($result['transaction_date']);
-				$data['transaction_datetime'] = strtotime($result['transaction_datetime']);
+				$data['car_nopol'] = $result['car_nopol'];	
 				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
 				
 			}
 			
 		$data_detail = $this->registration_model->get_data_detail($id);
 	   
-	   $this->global_model->create_report('registration', 'report/registration.php', $data, $data_detail, 'header.php');
+	   $this->global_model->create_report_registration('Laporan Regitrasi', 'report/registration.php', $data, $data_detail, 'header.php');
 	}
 	}
-	
 	
 }
