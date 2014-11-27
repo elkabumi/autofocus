@@ -5,8 +5,6 @@ $(function(){
 		listSource 	: "customer/table_controller",
 		formTarget 	: "customer/form",
 		actionTarget: "customer/form_action",
-		column_id	: 0,
-		
 		filter_by 	: [ 
 		{id : "customer_ktp_number", label : "Nomor KTP"}, 
 		{id : "customer_name", label : "Nama"},
@@ -15,8 +13,9 @@ $(function(){
 		{id : "customer_hp", label : "No Handphone"}
 		],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
+
 	});
-	otable.fnSetColumnVis(0, false, false);
+	
 });
 </script>
 <div id="example">

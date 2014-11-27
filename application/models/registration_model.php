@@ -77,12 +77,13 @@ class Registration_model extends CI_Model
 	}
 	function read_id($id)
 	{
-		$this->db->select('a.*, b.transaction_type_name, c.customer_name, d.transaction_payment_method_name', 1); // ambil seluruh data
-		$this->db->join('transaction_types b','b.transaction_type_id = a.transaction_type_id');
-		$this->db->join('transaction_payment_methods d','d.transaction_payment_method_id = a.transaction_payment_method_id');
-		$this->db->join('customers c', 'c.customer_id = a.subject_id', 'left');
+		$this->db->select('a.*,b.car_nopol,b.car_no_machine,b.car_model,c.customer_name,d.insurance_name,d.insurance_addres', 1); // ambil seluruh data
+		$this->db->join('cars b','b.car_id = a.car_id');
+		$this->db->join('customers c','c.customer_id = a.customer_id');
+		$this->db->join('insurances d','d.insurance_id = a.insurance_id');
 		$this->db->where('transaction_id', $id);
-		$query = $this->db->get('transactions a', 1); // parameter limit harus 1
+		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
+		//query($query);
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
@@ -378,10 +379,12 @@ class Registration_model extends CI_Model
 	
 	function get_data_detail($id) {
 		
-		$query = "select a.*, b.product_code, b.product_name
-				from transaction_details a
-				join products b on b.product_id = a.product_id
-				where transaction_id = '$id'
+		$query = "SELECT a . * , b.product_name, c.product_category_name
+					FROM detail_registrations a
+					JOIN product_prices d ON d.product_price_id = a.product_price_id
+					JOIN products b ON b.product_id = d.product_id
+					JOIN product_categories c ON c.product_category_id = b.product_category_id
+					WHERE transaction_id = '$id'
 					"
 					;
 		

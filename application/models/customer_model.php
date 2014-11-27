@@ -118,23 +118,5 @@ class Customer_model extends CI_Model{
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
-	function active($id){
-		$this->db->trans_start();
-		
-		$data['product_active_status'] = 1;
-		$data['inactive_by_id'] =  $this->access->info['employee_id'];
-		
-		$this->db->where('product_id', $id);
-		$this->db->update('products', $data);
-		
-		$this->access->log_update($id, "Produk");
-		$this->db->trans_complete();
-		return $this->db->trans_status();
-	}
-
-
-	
-	
-	
 	
 }
