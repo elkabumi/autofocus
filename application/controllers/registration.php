@@ -46,10 +46,10 @@ class Registration extends CI_Controller
 		$this->load->helper('form');
 		
 		$this->render->add_form('app/registration/form', $data);
-		$this->render->build('Transaksi Penjualan User');
+		$this->render->build('Registrasi');
 		
 		$this->render->add_view('app/registration/transient_list');
-		$this->render->build('Data Produk');
+		$this->render->build('Data Panel');
 		
 		//$this->render->add_view('app/registration/form_end', $data);
 		//$this->render->build('Pembayaran');
@@ -118,9 +118,15 @@ class Registration extends CI_Controller
 	
 		// definisikan kriteria data
 		$this->form_validation->set_rules('i_code','Kode','trim|min_length[3]|max_length[50]|required');
+		$this->form_validation->set_rules('i_period_id','Periode','trim|required|integer');
 		$this->form_validation->set_rules('i_stand_id','Cabang','trim|required|integer');
+		$this->form_validation->set_rules('i_customer_id','Customer','trim|required|integer');
+		$this->form_validation->set_rules('i_car_id','Mobil','trim|required|integer');
+		$this->form_validation->set_rules('i_claim_type','Tipe Klaim','trim|required');
 		
-		$this->form_validation->set_rules('i_transaction_description','Keterangan','trim|required');
+		$this->form_validation->set_rules('i_check_in','Tanggal Masuk','trim|required|valid_date|sql_date');
+		$this->form_validation->set_rules('i_transaction_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
+		//$this->form_validation->set_rules('i_transaction_description','Keterangan','trim|required');
 		
 		// cek data berdasarkan kriteria
 		if ($this->form_validation->run() == FALSE) send_json_validate(); 
@@ -134,7 +140,7 @@ class Registration extends CI_Controller
 		$data['employee_id']				= $this->access->info['employee_id'];
 		$data['incident_date'] 				= "";
 		$data['claim_type']					= $this->input->post('i_claim_type');
-		$data['insurance_id'] 					= $this->input->post('i_insurance_id');
+		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
 		$data['claim_no'] 					= $this->input->post('i_claim_no');
 		$data['check_in'] 					= $this->input->post('i_check_in');
 		$data['transaction_estimation_date'] 					= $this->input->post('i_transaction_estimation_date');

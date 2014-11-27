@@ -844,7 +844,8 @@ class Dtc_model extends CI_Model
 		};	
 
 		$sql = "
-		select * from cars
+		select a.*, concat(b.car_model_merk, ' - ', b.car_model_name) as car_model from cars a
+		join car_models b on b.car_model_id = a.car_model_id
 		$where  $order_by
 			
 			";

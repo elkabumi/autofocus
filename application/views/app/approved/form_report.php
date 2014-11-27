@@ -74,6 +74,18 @@ $(function(){
 		}
 		
 });
+
+$('#print_spk').click(function(){
+		
+				location.href = site_url + 'spk/report/' + $('input[name="row_id"]').val();
+			
+	});
+	
+	$('#print_pkb').click(function(){
+		
+				location.href = site_url + 'pkb/report/' + $('input[name="row_id"]').val();
+			
+	});
 	
 	createDatePicker();
 	//updateAll(); 
@@ -197,10 +209,11 @@ $(function(){
      </div>
 	
 	<div class="command_bar">
-		<input type="button" id="submit" value="Simpan Persetujuan"/>
-		<input type="button" id="enable" value="Edit"/>
+	
 	
 		<input type="button" id="cancel" value="Batal"/>
+       <input type="button" id="print_spk" value="Cetak SPK"  />
+       <input type="button" id="print_pkb" value="Cetak PKB"  />
 	</div>
 </div>
 <!-- table contact -->

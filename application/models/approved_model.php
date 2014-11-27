@@ -39,6 +39,7 @@ class Approved_model extends CI_Model
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
 		$order_by_column[] = 'status_transaction_id';
+		$order_by_column[] = 'status_transaction_id';
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -80,7 +81,11 @@ class Approved_model extends CI_Model
 			$transaction_date = format_new_date($row['transaction_date']);
 			$status = show_checkbox_status($row['status_transaction_id']);
 				
-		
+			if($row['status_transaction_id'] == 1){ 
+				$link = "<a href=".site_url('approved/form_approved/'.$row['transaction_id'])." class='link_input'> APPROVE </a>";		
+			}else if($row['status_transaction_id'] == 2){
+				$link = "<a href=".site_url('approved/form_report/'.$row['transaction_id'])." class='link_input'> Cetak Laporan </a>";		
+			}
 			
 			$data[] = array(
 				$row['transaction_id'], 
@@ -91,6 +96,7 @@ class Approved_model extends CI_Model
 				$row['insurance_name'],
 				$row['claim_no'],
 				$status,
+				$link
 			); 
 		}
 		
@@ -101,8 +107,8 @@ class Approved_model extends CI_Model
 	function read_id($id)
 	{
 		$this->db->select('a.*', 1); // ambil seluruh data
-		$this->db->where('approved_id', $id);
-		$query = $this->db->get('approveds a', 1); // parameter limit harus 1
+		$this->db->where('transaction_id', $id);
+		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
@@ -319,15 +325,14 @@ class Approved_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*, b.*', 1);
-		$this->db->from('approveds a');
-		$this->db->join('product_types b','b.approved_id = a.approved_id');
-	
-		$this->db->where('a.approved_id', $id);
-		$query = $this->db->get();
+		$this->db->select('a.*, c.product_id, c.product_code, c.product_name', 1);
+		$this->db->from('detail_registrations a');
+		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
+		$this->db->join('products c', 'c.product_id = b.product_id');
 		
-		debug();
-	
+		$this->db->where('a.transaction_id', $id);
+		$query = $this->db->get(); debug();
+		
 		foreach($query->result_array() as $row)
 		{
 			$result[] = format_html($row);
@@ -335,101 +340,18 @@ class Approved_model extends CI_Model
 		return $result;
 	}
 	
-	
-	function detail_list_loader2($id)
+	function approved($id)
 	{
-		// buat array kosong
-		$result = array(); 		
-		$this->db->select('a.*', 1);
-		$this->db->from('product_sub_type a');
-		$this->db->where('a.approved_id', $id);
-		$query = $this->db->get();
-		
-		debug();
-	
-		foreach($query->result_array() as $row)
-		{
-			$result[] = format_html($row);
-		}
-		return $result;
-	}
-	function get_debit_name($id)
-	{
-		$data = '';		
-		$this->db->select('coa_name',1);
-		$this->db->from('coas');
-		$this->db->where('coa_id', $id);
-		$query = $this->db->get();
-		
-		if($query->num_rows>0)
-		{
-			$row = $query->row_array();
-			$data = $row['coa_name'];
-		}
-		return $data;
-	}
-	function get_credit_name($id)
-	{
-		$data = '';		
-		$this->db->select('coa_name',1);
-		$this->db->from('coas');
-		$this->db->where('coa_id', $id);
-		$query = $this->db->get();
-		
-		if($query->num_rows>0)
-		{
-			$row = $query->row_array();
-			$data = $row['coa_name'];
-		}
-		return $data;
-	}
-	
-	function load_product_stock($id)
-	{
-		$sql = "
-			select 
-			a.*, b.product_code
-			from product_stocks a 
-			join products b on b.product_id = a.product_id
-			where product_stock_id = $id
-		";
-		
-		
-		$query = $this->db->query($sql); 
-		//query();	
-		return $query;
-	}
-	
-	
-	
-	function check_po_received($id)
-	{
-		$sql = "select * from transactions where transaction_sent_id = $id
-				";
-		
-		$query = $this->db->query($sql);
-		
-		if ($query->num_rows() > 0)
-		{		
-			return TRUE;
-		}else{
-			return FALSE;
-		}
-	}
-	function active($id){
 		$this->db->trans_start();
-		
-		$this->db->trans_start();
-		$data['transaction_active_status'] = '1';
-		$data['inactive_by_id'] =  $this->access->info['employee_id'];
+		$data['status_transaction_id'] = 2;
 		$this->db->where('transaction_id', $id); // data yg mana yang akan di update
-		$this->db->update('transactions', $data);
+		$this->db->update('registrations', $data);
 	
-		$this->access->log_update($id, 'PO Received');
+		
+		//$this->access->log_update($id, 'Kategori produk');
 		$this->db->trans_complete();
-
 		return $this->db->trans_status();
-	
 	}
+	
 }
 #
