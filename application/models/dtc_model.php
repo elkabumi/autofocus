@@ -802,7 +802,7 @@ class Dtc_model extends CI_Model
 		return $result;
 	}
 	
-	## Data customer
+	## Data mobil
 	function car_control($param)
 	{
 		// map parameter ke variable biasa agar mudah digunakan
@@ -886,6 +886,91 @@ class Dtc_model extends CI_Model
 			$query = $this->db->get_where('cars', array('car_id' => $id), 1);
 		else
 			$query = $this->db->get_where('cars', array('car_nopol' => $id), 1);
+			
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
+	
+	## Data model mobil
+	function car_model_control($param)
+	{
+		// map parameter ke variable biasa agar mudah digunakan
+		$limit 		= $param['limit'];
+		$offset	 	= $param['offset'];
+		$category 	= $param['category'];
+		$keyword 	= $param['keyword'];
+		$where = '';
+		# order define columns start
+		$sort_column_index				= $param['sort_column'];
+		$sort_dir						= $param['sort_dir'];
+		
+		$order_by_column[] = 'car_model_id';
+		$order_by_column[] = 'car_model_merk';
+		$order_by_column[] = 'car_model_name';
+		
+		
+		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
+		# order define column end
+		
+		$column['p1']			= 'car_model_merk';
+		$column['p2']			= 'car_model_name';
+	
+		$this->db->start_cache();
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
+		if (array_key_exists($category, $column) && strlen($keyword) > 0) 
+		{
+			
+				$where = " where ".$column[$category]." like '%$keyword%'";
+			
+			
+		}
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
+
+		$sql = "
+		select * from car_models
+		$where  $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
+		
+		$sql = $sql.$limit;
+		
+		$query = $this->db->query($sql);
+		
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			
+			
+			$row = format_html($row);
+			
+			$data[] = array(
+				$row['car_model_id'], 
+				$row['car_model_merk'],
+				$row['car_model_name']
+			); 
+
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($param, $data, $total);
+	}
+	
+	function car_model_get($id, $mode)
+	{
+		if (empty($id) || !$id || !$mode) return NULL;
+		
+		$result = NULL;
+		
+		if ($mode == 1)
+			$query = $this->db->get_where('car_models', array('car_model_id' => $id), 1);
+		else
+			$query = $this->db->get_where('car_models', array('car_model_merk' => $id), 1);
 			
 		foreach($query->result_array() as $row)	$result = format_html($row);
 		

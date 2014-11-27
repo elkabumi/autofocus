@@ -2,17 +2,15 @@
 $(function(){
 	var otable = createTable({
 		id 		: "#table",
-		listSource 	: "customer/table_controller",
-		formTarget 	: "customer/form",
-		actionTarget: "customer/form_action",
+		listSource 	: "car_model/table_controller",
+		formTarget 	: "car_model/form",
+		actionTarget: "car_model/form_action",
 		column_id	: 0,
 		
 		filter_by 	: [ 
-		{id : "customer_ktp_number", label : "Nomor KTP"}, 
-		{id : "customer_name", label : "Nama"},
-		{id : "customer_addres", label : "Alamat"},
-		{id : "customer_phone_number", label : "No Telepon"},
-		{id : "customer_hp", label : "No Handphone"}
+		{id : "car_model_merk", label : "Vendor Mobil"}, 
+		{id : "car_model_name", label : "Model Mobil"},
+		{id : "car_model_description", label : "Keterangan"}
 		],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
@@ -24,11 +22,9 @@ $(function(){
 	<thead>
 		<tr>
 			<th>ID</th>
-            <th>Nomor Ktp</th>
-            <th>Nama</th>
-			<th>Alamat</th>
-            <th>No Telepon</th>
-             <th>No Handphone</th>
+            <th>Vendor Mobil</th>
+            <th>Model Mobil</th>
+			<th>Keterangan</th>
 		</tr> 
 	</thead> 
 	<tbody> 	

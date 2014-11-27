@@ -258,6 +258,29 @@ class Dtc
 		else send_json_error_feedback();
 	}
 	
+	# lookup data model mobil
+	function car_model_control()
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->car_model_control(get_datatables_control());
+		send_json($data); 
+	}
+	
+	function car_model_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->car_model_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['car_model_id'], $result['car_model_merk']." - ".$result['car_model_name'], "");
+		}
+		else send_json_error_feedback();
+	}
+	
 	
 	# lookup data active product
 	function active_product_control($cat_id = 0)

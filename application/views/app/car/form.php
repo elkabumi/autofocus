@@ -7,7 +7,15 @@ $(function(){
 		nextPage		: "car"
 	});
 	
-	
+	createLookUp({
+		table_id		: "#lookup_table_car_model",
+		table_width		: 400,
+		listSource 		: "lookup/car_model_table_control",
+		dataSource		: "lookup/car_model_lookup_id",
+		column_id 		: 0,
+		component_id	: "#lookup_car",
+		filter_by		: [{id : "p1", label : "Vendor Mobil"}, {id : "p2", label : "Model Mobil"}]
+	});
 	
 	createDatePicker();
 });
@@ -27,7 +35,15 @@ $(function(){
    
     <tr>
      <td>Model</td>
-       <td><input name="i_model" type="text" id="i_model" value="<?=$car_model ?>" size="70" /></td>
+       <td>
+       <span class="lookup" id="lookup_car">
+				<input type="hidden" name="i_car_model_id" class="com_id" value="<?=$car_model_id?>" />
+              
+				<input type="text" class="com_input" style="width:300px !important; "/>
+				  <div class="iconic_base iconic_search com_popup"></div>
+                    <span class="com_desc"></span>
+				</span>
+       </td>
      </tr>
       <tr>
      <td>No Mesin</td>
@@ -46,7 +62,10 @@ $(function(){
      <td>Tipe Mobil</td> 
      <td><input name="i_type" type="text" id="i_type" value="<?=$car_type ?>" size="10"/></td>
    </tr>
-   
+    <tr>
+     <td>Tahun</td> 
+     <td><input name="i_year" type="text" id="i_year" value="<?=$car_year ?>" size="10" style="width:100px;"/></td>
+   </tr>
   <tr>
     <td width="196" valign="top">Keterangan</td>
       <td><textarea name="i_description" id="i_description" cols="45" rows="5"><?= $car_description ?></textarea></td>
@@ -61,3 +80,24 @@ $(function(){
 </div>
 </div>
 </form>
+
+
+
+<div id="">
+	<table id="lookup_table_car_model" cellpadding="0" cellspacing="0" border="0" class="display" > 
+		<thead>
+			<tr>
+			<th>ID</th>
+            <th>Vendor Mobil</th>
+			<th>Model Mobil</th>
+			</tr> 
+		</thead> 
+		<tbody> 	
+		</tbody>
+	</table>
+	<div id="panel">
+		<input type="button" id="choose" value="Pilih Data"/>
+		<input type="button" id="refresh" value="Refresh"/>
+		<input type="button" id="cancel" value="Cancel" />
+	</div>	
+</div>

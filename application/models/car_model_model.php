@@ -1,6 +1,6 @@
 <?php
 
-class Customer_model extends CI_Model{
+class car_model_model extends CI_Model{
 
 	function __construct(){
 		
@@ -17,22 +17,17 @@ class Customer_model extends CI_Model{
 		// map value dari combobox ke table
 		// daftar kolom yang valid
 		
-		$columns['customer_ktp_number'] 			= 'customer_ktp_number';
-		$columns['customer_name'] 					= 'customer_name';
-		$columns['customer_addres']					= 'customer_addres';
-		$columns['customer_phone_number']			= 'customer_phone_number';
-		$columns['customer_hp']						= 'customer_hp';
-		
+		$columns['car_model_merk'] 			= 'car_model_merk';
+		$columns['car_model_name'] 			= 'car_model_name';
+		$columns['car_model_description'] 			= 'car_model_description';
 		
 		$sort_column_index = $params['sort_column'];
 		$sort_dir = $params['sort_dir'];
 		
-		$order_by_column[] = 'customer_id';
-		$order_by_column[] = 'customer_ktp_number';
-		$order_by_column[] = 'customer_name';
-		$order_by_column[] = 'customer_addres';
-		$order_by_column[] = 'customer_phone_number';
-		$order_by_column[] = 'customer_hp';
+		$order_by_column[] = 'car_model_id';
+		$order_by_column[] = 'car_model_merk';
+		$order_by_column[] = 'car_model_name';
+		$order_by_column[] = 'car_model_description';
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -48,7 +43,7 @@ class Customer_model extends CI_Model{
 
 		$sql = "
 		select * 
-		from customers 
+		from car_models 
 		$where  $order_by
 			
 			";
@@ -64,12 +59,10 @@ class Customer_model extends CI_Model{
 		foreach($query->result_array() as $row) {
 			
 			$data[] = array(
-				$row['customer_id'],
-				$row['customer_ktp_number'], 
-				$row['customer_name'],
-				$row['customer_addres'],
-				$row['customer_phone_number'],
-				$row['customer_hp']
+				$row['car_model_id'],
+				$row['car_model_merk'], 
+				$row['car_model_name'],
+				$row['car_model_description']
 			); 
 		}
 		
@@ -79,8 +72,8 @@ class Customer_model extends CI_Model{
 	
 	function read_id($id){
 		$this->db->select('*', 1);
-		$this->db->where('customer_id', $id);
-		$query = $this->db->get('customers', 1);
+		$this->db->where('car_model_id', $id);
+		$query = $this->db->get('car_models', 1);
 		$result = null;
 		foreach($query->result_array() as $row)
 		{
@@ -91,19 +84,19 @@ class Customer_model extends CI_Model{
 	
 	function create($data){
 		$this->db->trans_start();
-		$this->db->insert('customers', $data);
+		$this->db->insert('car_models', $data);
 		$id = $this->db->insert_id();
 				
-		$this->access->log_insert($id, "customer [".$data['customer_name']."]");
+		$this->access->log_insert($id, "car_model [".$data['car_model_name']."]");
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
 	
 	function update($id, $data){
 		$this->db->trans_start();
-		$this->db->where('customer_id', $id);
-		$this->db->update('customers', $data);
-		$this->access->log_update($id, "customer[".$data['customer_name']."]");
+		$this->db->where('car_model_id', $id);
+		$this->db->update('car_models', $data);
+		$this->access->log_update($id, "car_model[".$data['car_model_name']."]");
 		
 		$this->db->trans_complete();
 		return $this->db->trans_status();
@@ -111,10 +104,10 @@ class Customer_model extends CI_Model{
 	function delete($id){
 		$this->db->trans_start();
 		
-		$this->db->where('customer_id', $id);
-		$this->db->delete('customers');
+		$this->db->where('car_model_id', $id);
+		$this->db->delete('car_models');
 		
-		$this->access->log_delete($id, "Customers");
+		$this->access->log_delete($id, "car_models");
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}

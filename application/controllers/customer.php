@@ -14,8 +14,8 @@ class Customer extends CI_Controller{
 	function index(){
 		
 		$this->render->add_view('app/customer/list');
-		$this->render->build('Item');
-		$this->render->show('item');
+		$this->render->build('Pelanggan');
+		$this->render->show('Pelanggan');
 	}
 	
 	function table_controller(){
@@ -27,11 +27,12 @@ class Customer extends CI_Controller{
 		$data = array();
 		if($id==0){
 			$data['row_id']					= '';
-			$data['customer_ktp_number']			= '';
+			$data['customer_ktp_number']	= '';
 			$data['customer_name']			= '';
-			$data['customer_addres']	= '';
+			$data['customer_addres']		= '';
 			$data['customer_phone_number']	= '';
-			$data['customer_description']			= '';
+			$data['customer_hp']			= '';
+			$data['customer_description']	= '';
 		}else{
 			$result = $this->customer_model->read_id($id);
 			if($result){
@@ -60,10 +61,11 @@ class Customer extends CI_Controller{
 		$this->load->library('form_validation');
 		
 		$this->form_validation->set_rules('i_ktp','Nomor Ktp', 'trim|required|max_length[15]');
-		$this->form_validation->set_rules('i_name','Customer Name', 'trim|required|max_length[200]');
-		$this->form_validation->set_rules('i_addres','Customer Addres', 'trim|required');
-		$this->form_validation->set_rules('i_phone','Telepon', 'trim|required|is_numeric');
-		$this->form_validation->set_rules('i_description','Description', 'trim|max_length[100]');
+		$this->form_validation->set_rules('i_name','Nama Pelanggan', 'trim|required|max_length[200]');
+		$this->form_validation->set_rules('i_addres','Alamat', 'trim|required');
+		$this->form_validation->set_rules('i_phone','No Telepon', 'trim|required|is_numeric');
+		$this->form_validation->set_rules('i_hp','No Handphone', 'trim|required|is_numeric');
+		$this->form_validation->set_rules('i_description','Keterangan', 'trim|max_length[100]');
 	
 		
 		if($this->form_validation->run() == FALSE) send_json_validate();
@@ -72,6 +74,7 @@ class Customer extends CI_Controller{
 		$data['customer_name'] 						= $this->input->post('i_name');
 		$data['customer_addres'] 					= $this->input->post('i_addres');
 		$data['customer_phone_number'] 				= $this->input->post('i_phone');
+		$data['customer_hp']		 				= $this->input->post('i_hp');
 		$data['customer_description'] 				= $this->input->post('i_description');
 		
 		

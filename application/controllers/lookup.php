@@ -87,6 +87,19 @@ class Lookup extends CI_Controller
 		$this->dtc->car_get();
 	}
 	
+	# lookup data model mobil
+	function car_model_table_control()
+	{
+		$this->load->library('dtc');
+		$this->dtc->car_model_control();
+	}
+	
+	function car_model_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->car_model_get();
+	}
+	
 	 #lookup data product aktif
 	function active_product_table_control($cat_id = 0)
 	{

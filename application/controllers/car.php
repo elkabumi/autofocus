@@ -26,13 +26,14 @@ class car extends CI_Controller{
 	function form($id = 0){
 		$data = array();
 		if($id==0){
-			$data['row_id']					= '';
+			$data['row_id']				= '';
 			$data['car_nopol']			= '';
-			$data['car_model']			= '';
+			$data['car_model_id']		= '';
 			$data['car_no_machine']		= '';
 			$data['car_no_rangka']		= '';
 			$data['car_color']			= '';
 			$data['car_type']			= '';
+			$data['car_year']			= '';
 			$data['car_description']	= '';
 		}else{
 			$result = $this->car_model->read_id($id);
@@ -62,22 +63,24 @@ class car extends CI_Controller{
 		$this->load->library('form_validation');
 		
 		$this->form_validation->set_rules('i_nopol','Nopol', 'trim|required|max_length[15]');
-		$this->form_validation->set_rules('i_model','Model', 'trim|required|max_length[200]');
+		$this->form_validation->set_rules('i_car_model_id','Model', 'trim|required|max_length[200]');
 		$this->form_validation->set_rules('i_no_machine','No Mesin', 'trim|required');
 		$this->form_validation->set_rules('i_no_rangka','No Rangka', 'trim|required');
 		$this->form_validation->set_rules('i_color','Warna', 'trim|required');
 		$this->form_validation->set_rules('i_type','Tipe Mobil', 'trim|required');
+		$this->form_validation->set_rules('i_year','Tahun', 'trim|required');
 		$this->form_validation->set_rules('i_description','Description', 'trim');
 	
 		
 		if($this->form_validation->run() == FALSE) send_json_validate();
 		
 		$data['car_nopol'] 				= $this->input->post('i_nopol');
-		$data['car_model']	 			= $this->input->post('i_model');
+		$data['car_model_id']	 		= $this->input->post('i_car_model_id');
 		$data['car_no_machine'] 		= $this->input->post('i_no_machine');
 		$data['car_no_rangka'] 			= $this->input->post('i_no_rangka');
 		$data['car_color'] 				= $this->input->post('i_color');
 		$data['car_type'] 				= $this->input->post('i_type');
+		$data['car_year'] 				= $this->input->post('i_year');
 		$data['car_description'] 		= $this->input->post('i_description');
 		
 		

@@ -10,9 +10,11 @@ $(function(){
 		
 		filter_by 	: [ 
 		{id : "car_nopol", label : "Nopol"}, 
-		{id : "car_model", label : "Model"},
+		{id : "car_model_merk", label : "Vendor Mobil"},
+		{id : "car_model_name", label : "Model Mobil"},
 		{id : "car_no_machine", label : "No Mesin"},
-		{id : "car_no_rangka", label : "No Rangka"}],
+		{id : "car_no_rangka", label : "No Rangka"},
+		{id : "car_year", label : "Tahun"}],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
 	otable.fnSetColumnVis(0, false, false);
@@ -28,7 +30,8 @@ $(function(){
 			<th>No Mesin</th>
             <th>No Rangka</th>
             <th>Warna</th>
-            <th>Tipe Mobil</th>
+            <th>Tipe</th>
+            <th>Tahun</th>
 		</tr> 
 	</thead> 
 	<tbody> 	
