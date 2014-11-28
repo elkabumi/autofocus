@@ -3,9 +3,9 @@ $(function(){
 
 	createForm({
 		id 				: "#id_form_nya", 
-		actionTarget	: "registration/form_action",
-		backPage		: "registration",
-		nextPage		: "registration/report"
+		actionTarget	: "approved/form_approved_action",
+		backPage		: "approved",
+		nextPage		: "approved"
 	});
 	
 	createLookUp({
@@ -74,6 +74,18 @@ $(function(){
 		}
 		
 });
+
+$('#print_spk').click(function(){
+		
+				location.href = site_url + 'spk/report/' + $('input[name="row_id"]').val();
+			
+	});
+	
+	$('#print_pkb').click(function(){
+		
+				location.href = site_url + 'pkb/report/' + $('input[name="row_id"]').val();
+			
+	});
 	
 	createDatePicker();
 	//updateAll(); 
@@ -93,6 +105,7 @@ $(function(){
          <input type="hidden" name="i_period_id" class="com_id" value="<?=$period_id?>" />
          <input type="text" class="com_input" size="6" /> 
          <input type="hidden" name="row_id" value="<?=$row_id?>" />
+          <input type="hidden" name="row2_id" value="<?=$row2_id?>" />
          <div class="iconic_base iconic_search com_popup"></div>
        </span></td> 
 		</tr>
@@ -151,7 +164,7 @@ $(function(){
     </tr>
 
  <tr>
-      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
+      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="asuransi" style="width:100%;">
         <tr>
           <td width="17%">Asuransi</td>
           <td width="1%">:</td>
@@ -162,11 +175,6 @@ $(function(){
 				  <div class="iconic_base iconic_search com_popup"></div>
 				</span></td>
         </tr>
-        <tr>
-          <td width="17%">PIC Asuransi</td>
-          <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_pic_asuransi" name="i_pic_asuransi" /></td>
-        </tr>
       </table></td>
      </tr>   
       <tr>
@@ -174,27 +182,12 @@ $(function(){
         <tr>
           <td width="17%">No Klaim</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" /></td>
+          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" value="<?= $claim_no ?>" /></td>
         </tr>
       </table></td>
 				
 				
       </tr>
-       <tr>
-          <td width="17%">No SPK</td>
-          <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no" /></td>
-        </tr>
-        <tr>
-          <td width="17%">No PKB</td>
-          <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" /></td>
-        </tr>
-          <tr>
-          <td width="17%">Own Retention (OR)</td>
-          <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" /></td>
-        </tr>
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>
@@ -204,11 +197,6 @@ $(function(){
       <td>Tanggal Estimasi Keluar   	  </td>
       <td>:</td>
       <td><input type="text" name="i_transaction_estimation_date" class="date_input" size="15" value="<?=$transaction_estimation_date?>" /></td>
-    </tr>
-     <tr>
-      <td>Tanggal SPK  </td>
-      <td>:</td>
-      <td><input type="text" name="i_spk_date" class="date_input" size="15" value="" /></td>
     </tr>
        <tr>
     <td width="158" valign="top">Keterangan</td>
@@ -221,10 +209,11 @@ $(function(){
      </div>
 	
 	<div class="command_bar">
-		<input type="button" id="submit" value="Simpan Registrasi"/>
-		<input type="button" id="enable" value="Edit"/>
+	
 	
 		<input type="button" id="cancel" value="Batal"/>
+       <input type="button" id="print_spk" value="Cetak SPK"  />
+       <input type="button" id="print_pkb" value="Cetak PKB"  />
 	</div>
 </div>
 <!-- table contact -->

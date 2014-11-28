@@ -17,21 +17,25 @@ $(function(){
 <div class="form_area_frame">
 <table  width="100%" cellpadding="4" class="form_layout">
 	<tr>
-     <td width="196" >Customer Ktp Number</td>
-       <td width="651"><input name="i_ktp" type="text" id="i_code" value="<?=$customer_ktp_number ?>" />
+     <td width="196" >Nomor KTP</td>
+       <td width="651"><input name="i_ktp" type="text" id="i_ktp" value="<?=$customer_ktp_number ?>" />
 	 <input type="hidden" name="row_id" value="<?=$row_id?>" /></td>
    </tr>  
     <tr>
-     <td>Customer Name</td>
+     <td>Nama</td>
        <td><input name="i_name" type="text" id="i_name" value="<?=$customer_name ?>" size="70" /></td>
      </tr>
      <tr>
-     <td>Customer Addres</td>
+     <td>Alamat</td>
         <td><input name="i_addres" type="text" id="i_addres" value="<?=$customer_addres ?>" size="70" /></td>
      </tr>
 	<tr>
-     <td width="196" >Customer Phone Number</td>
+     <td width="196" >No Telepon</td>
         <td><input name="i_phone" type="text" id="i_phone" value="<?=$customer_phone_number ?>" size="70" /></td>
+   </tr>
+   <tr>
+     <td width="196" >No Handphone</td>
+        <td><input name="i_hp" type="text" id="i_hp" value="<?=$customer_hp ?>" size="70" /></td>
    </tr>
  <tr>
      <td>Keterangan</td>

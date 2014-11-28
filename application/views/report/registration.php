@@ -45,7 +45,7 @@
   <tr>
     <td>Model Kendaraan</td>
     <td>:</td>
-    <td><?=$car_model?>
+    <td><?=$car_model_merk." - ".$car_model_name?>
     
     </td>
   </tr>

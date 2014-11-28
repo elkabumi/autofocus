@@ -18,9 +18,11 @@ class car_model extends CI_Model{
 		// daftar kolom yang valid
 		
 		$columns['car_nopol'] 			= 'car_nopol';
-		$columns['car_model'] 			= 'car_model';
+		$columns['car_model_merk'] 		= 'car_model_merk';
+		$columns['car_model_name'] 		= 'car_model_name';
 		$columns['car_no_machine']		= 'car_no_machine';
 		$columns['car_no_rangka']		= 'car_no_rangka';
+		$columns['car_year']			= 'car_year';
 		
 		
 		$sort_column_index = $params['sort_column'];
@@ -33,6 +35,7 @@ class car_model extends CI_Model{
 		$order_by_column[] = 'car_no_rangka';
 		$order_by_column[] = 'car_color';
 		$order_by_column[] = 'car_type';
+		$order_by_column[] = 'car_year';
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -47,9 +50,9 @@ class car_model extends CI_Model{
 		};	
 
 		$sql = "
-		select a.* 
+		select a.*, concat(b.car_model_merk, ' - ', b.car_model_name) as car_model
 		from cars a
-		
+		join car_models b on b.car_model_id = a.car_model_id
 		$where  $order_by
 			
 			";
@@ -75,7 +78,7 @@ class car_model extends CI_Model{
 				$row['car_no_rangka'],
 				$row['car_color'],
 				$row['car_type'],
-
+				$row['car_year']
 			); 
 		}
 		
