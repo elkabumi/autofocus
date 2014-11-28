@@ -151,7 +151,7 @@ $(function(){
     </tr>
 
  <tr>
-      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="asuransi" style="width:100%;">
+      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
         <tr>
           <td width="17%">Asuransi</td>
           <td width="1%">:</td>
@@ -161,6 +161,11 @@ $(function(){
 				<input type="text" class="com_input" />
 				  <div class="iconic_base iconic_search com_popup"></div>
 				</span></td>
+        </tr>
+        <tr>
+          <td width="17%">PIC Asuransi</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_pic_asuransi" name="i_pic_asuransi" /></td>
         </tr>
       </table></td>
      </tr>   
@@ -175,6 +180,21 @@ $(function(){
 				
 				
       </tr>
+       <tr>
+          <td width="17%">No SPK</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no" /></td>
+        </tr>
+        <tr>
+          <td width="17%">No PKB</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" /></td>
+        </tr>
+          <tr>
+          <td width="17%">Own Retention (OR)</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" /></td>
+        </tr>
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>
@@ -184,6 +204,11 @@ $(function(){
       <td>Tanggal Estimasi Keluar   	  </td>
       <td>:</td>
       <td><input type="text" name="i_transaction_estimation_date" class="date_input" size="15" value="<?=$transaction_estimation_date?>" /></td>
+    </tr>
+     <tr>
+      <td>Tanggal SPK  </td>
+      <td>:</td>
+      <td><input type="text" name="i_spk_date" class="date_input" size="15" value="" /></td>
     </tr>
        <tr>
     <td width="158" valign="top">Keterangan</td>

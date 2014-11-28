@@ -32,16 +32,14 @@ class Registration extends CI_Controller
 		$data['insurance_id'] = '';
 		$data['check_in'] = date('d/m/Y');
 		$data['transaction_estimation_date'] = '';
-		
 		$data['transaction_description'] = '';
-		$data['transaction_payment_method_id'] = '';
-		$data['transaction_ppn'] = '';
 		$data['transaction_total_price'] = '';
-		$data['transaction_sent_price'] = '0';	
-		$data['transaction_down_payment'] = '0';	
-		$data['transaction_final_total_price'] = '0';	
-		
-		$data['cbo_transaction_ppn'] 		= array('0' => 'Tanpa PPN', '1' => 'PPN 10%');
+		$data['own_retention']				= '';
+		$data['pic_asuransi']				= '';
+		$data['spk_date']					= '';
+		$data['spk_no']						= '';
+		$data['pkb_no']						= '';
+	
 		
 		$this->load->helper('form');
 		
@@ -64,43 +62,7 @@ class Registration extends CI_Controller
 		send_json($data); 
 	}
 	
-	function form($id = 0)
-	{
-		$data = array();
-		if ($id == 0) {
-			$data['row_id'] = '';
-			$data['product_cat_id'] = '';
-			$data['product_cat_code'] 			= format_code('product_categories', 'product_cat_code', 'PC', 3);
-			$data['product_cat_name'] = '';
-			$data['product_cat_description'] = '';
-		} else {
-			$result = $this->registration_model->read_id($id);
-			
-			if ($result) // cek dulu apakah data ditemukan 
-			{
-				$data = $result;
-				$data['row_id'] = $id;		
-				$data['customer_id'] = $result['subject_id'];	
-				
-			}
-		}	
-		
-		
-		$data['cbo_transaction_payment_method'] 		= array('1' => 'Cash', '2' => 'Kredit', '3' => 'Transfer');
-		$data['cbo_transaction_ppn'] 		= array('0' => 'Tanpa PPN', '1' => 'PPN 10%');
-		
-		$this->load->model('global_model');
-		$this->load->helper('form');
-		
-		$this->render->add_form('app/registration/form', $data);
-		$this->render->build('Penjualan User');
-		$this->render->add_view('app/registration/transient_list');
-		$this->render->build('Data Produk');
-		//if($id){
-		//$this->access->generate_log_view($id);
-		//}
-		$this->render->show('Penjualan Normal');
-	}
+	
 	function form_action($is_delete = 0) // jika 0, berarti insert atau update, bila 1 berarti delete
 	{
 		$this->load->library('form_validation');
@@ -123,9 +85,12 @@ class Registration extends CI_Controller
 		$this->form_validation->set_rules('i_customer_id','Customer','trim|required|integer');
 		$this->form_validation->set_rules('i_car_id','Mobil','trim|required|integer');
 		$this->form_validation->set_rules('i_claim_type','Tipe Klaim','trim|required');
-		
+		$this->form_validation->set_rules('i_own_retention','OR','trim|required|is_numeric');
 		$this->form_validation->set_rules('i_check_in','Tanggal Masuk','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_transaction_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
+		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required|integer');
+		$this->form_validation->set_rules('i_pkb_no','No PKB','trim|required|integer');
+		$this->form_validation->set_rules('i_spk_date','Tanggal SPK','trim|required|valid_date|sql_date');
 		//$this->form_validation->set_rules('i_transaction_description','Keterangan','trim|required');
 		
 		// cek data berdasarkan kriteria
@@ -148,6 +113,11 @@ class Registration extends CI_Controller
 		$data['transaction_date'] 			= date("Y-m-d");
 		$data['status_transaction_id'] 		= 1;
 		$data['transaction_description']	= $this->input->post('i_transaction_description');
+		$data['own_retention']				= $this->input->post('i_own_retention');
+		$data['pic_asuransi']				= $this->input->post('i_pic_asuransi');
+		$data['spk_date']					= $this->input->post('i_spk_date');
+		$data['spk_no']						= $this->input->post('i_spk_no');
+		$data['pkb_no']						= $this->input->post('i_pkb_no');
 		
 		$list_product_id		= $this->input->post('transient_product_id');
 		$list_product_price_id		= $this->input->post('transient_product_price_id');
@@ -155,7 +125,7 @@ class Registration extends CI_Controller
 		$list_transaction_detail_price	 	= $this->input->post('transient_transaction_detail_price');
 		$list_transaction_detail_total_price	= $this->input->post('transient_transaction_detail_total_price');
 		
-		if(!$list_product_id) send_json_error('Data item produk belum ada');
+		if(!$list_product_id) send_json_error('Simpan gagal. Data panel masih kosong');
 	
 		
 		$total_price = 0;
