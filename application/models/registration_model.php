@@ -77,10 +77,11 @@ class Registration_model extends CI_Model
 	}
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.car_nopol,b.car_no_machine,b.car_model,c.customer_name,d.insurance_name,d.insurance_addres', 1); // ambil seluruh data
+		$this->db->select('a.*,b.car_nopol,b.car_no_machine,concat(e.car_model_merk, ' - ', e.car_model_name) as car_model, c.customer_name,d.insurance_name,d.insurance_addres', 1); // ambil seluruh data
 		$this->db->join('cars b','b.car_id = a.car_id');
 		$this->db->join('customers c','c.customer_id = a.customer_id');
 		$this->db->join('insurances d','d.insurance_id = a.insurance_id');
+		$this->db->join('car_models e', 'e.car_model_id = b.car_model_id');
 		$this->db->where('transaction_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		//query($query);
