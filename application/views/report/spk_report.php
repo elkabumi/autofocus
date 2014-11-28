@@ -57,10 +57,10 @@
   <tr>
     <td>Merk Kendaraan</td>
     <td>:</td>
-    <td><?=$car_model?></td>
+    <td><?=$car_model_merk?></td>
     <td>Tipe Kendaraan</td>
     <td>:</td>
-    <td><?=$car_type?></td>
+    <td><?=$car_model_name?></td>
   </tr>
   <tr>
     <td>No Polisi</td>
