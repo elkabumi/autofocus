@@ -299,6 +299,7 @@ class Registration extends CI_Controller
 				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
 				
 			}
+		//$data='';
 			
 		$data_detail = $this->registration_model->get_data_detail($id);
 	   

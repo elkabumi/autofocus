@@ -381,7 +381,7 @@ class Spk_model extends CI_Model
 	
 	function get_data_detail($id) {
 		
-		$query = "SELECT a . * , b.product_name, c.product_category_name,e.pst_name
+		$query = "SELECT a . * , b.product_name,c.product_category_id, c.product_category_name,e.pst_name
 					FROM detail_registrations a
 					JOIN product_prices d ON d.product_price_id = a.product_price_id
 					JOIN products b ON b.product_id = d.product_id

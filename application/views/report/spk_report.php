@@ -88,6 +88,7 @@
 </div>
 <p><b>Detail Kerugian</b></p>
 <div class="">
+<h3>Jasa:</h3>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-weight:bold;">
   <tr>
    
@@ -102,7 +103,10 @@
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <?php 
   $no = 1;
-  foreach($data_detail as $item): ?>
+  foreach($data_detail as $item): 
+  switch($item['product_category_id']) {
+	  	case '2':
+  ?>
   <tr>
    
     <td width="5%"><?=$no?></td>
@@ -112,11 +116,45 @@
   </tr>
   <?php 
     $no++;
+	break;
+  }
   endforeach; 
 
   ?>
-  </table>
   </div>
+  </table>
+  <h3>Sperpart:</h3>
+ <div class="">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-weight:bold;">
+  <tr>
+   
+    <td width="5%">No</b></td>
+    <td width="15%">Deskripsi</td>
+    <td width="16%" align="right">Kategori</td>
+
+  </tr>
+  </table>
+</div>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <?php
+  $no_sperpart = 1;
+  foreach($data_detail as $item):
+  switch($item['product_category_id']) {
+  case '1':
+  ?>
+  <tr>
+    <td width="5%"><?=$no_sperpart?></td>
+    <td width="15%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
+    <td width="16%" align="right"><?=$item['pst_name']?></td>
+  
+  </tr>
+  <?php
+    $no_sperpart++;
+	break;
+  }
+  endforeach; 
+  
+  ?>
   </table>
 </div>
 </div>

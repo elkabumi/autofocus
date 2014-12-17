@@ -1,5 +1,5 @@
 <?php
-class Registration_model extends CI_Model 
+class Pkb_model extends CI_Model 
 {
 	var $trans_type = 2;
 	var $insert_id = NULL;
@@ -77,11 +77,12 @@ class Registration_model extends CI_Model
 	}
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.car_nopol,b.car_no_machine, e.car_model_merk, e.car_model_name, c.customer_name,d.insurance_name,d.insurance_addres', 1); // ambil seluruh data
+		$this->db->select('a.*,b.*,c.customer_name,d.insurance_name,d.insurance_addres,e.stand_name,e.stand_address,f.car_model_merk,f.car_model_name', 1); // ambil seluruh data
 		$this->db->join('cars b','b.car_id = a.car_id');
 		$this->db->join('customers c','c.customer_id = a.customer_id');
 		$this->db->join('insurances d','d.insurance_id = a.insurance_id');
-		$this->db->join('car_models e', 'e.car_model_id = b.car_model_id');
+		$this->db->join('stands e','e.stand_id = a.stand_id');
+		$this->db->join('car_models f','f.car_model_id = b.car_model_id');
 		$this->db->where('transaction_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		//query($query);
@@ -92,7 +93,7 @@ class Registration_model extends CI_Model
 	function delete($id)
 	{
 		$this->db->trans_start();
-			$this->db->where('product_cat_id', $id);
+		$this->db->where('product_cat_id', $id);
 		$this->db->delete('registration_items');
 		$this->db->where('product_cat_id', $id); // data yg mana yang akan di delete
 		$this->db->delete('product_categories');
@@ -380,12 +381,14 @@ class Registration_model extends CI_Model
 	
 	function get_data_detail($id) {
 		
-		$query = "SELECT a . * , b.product_name, c.product_category_name
+		$query = "SELECT a . * , b.product_name,c.product_category_id, c.product_category_name,e.pst_name
 					FROM detail_registrations a
 					JOIN product_prices d ON d.product_price_id = a.product_price_id
 					JOIN products b ON b.product_id = d.product_id
 					JOIN product_categories c ON c.product_category_id = b.product_category_id
+					JOIN product_sub_type e ON e.pst_id = d.pst_id
 					WHERE transaction_id = '$id'
+					
 					"
 					;
 		
