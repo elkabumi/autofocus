@@ -11,14 +11,14 @@ $(function(){
 	
 	function perhitungan()
 	{
-		var transaction_total = 0;
-		$('input[name="transient_transaction_detail_total_price[]"]').each(function()
+		var registration_total = 0;
+		$('input[name="transient_registration_detail_total_price[]"]').each(function()
 		{
-			transaction_total += parseFloat($(this).val());
+			registration_total += parseFloat($(this).val());
 		});
-		$('input#transaction_total').val(formatMoney(transaction_total));
-		$('input#i_transaction_final_total_price').val(transaction_total);
-		$('input#i_transaction_total_price').val(transaction_total);
+		$('input#registration_total').val(formatMoney(registration_total));
+		$('input#i_registration_final_total_price').val(registration_total);
+		$('input#i_registration_total_price').val(registration_total);
 		
 	}
 });
@@ -45,7 +45,7 @@ $(function(){
 	 <table align="right">
           <tr>
             <td><span class="summary_total"> Total</span></td>
-            <td><input id="transaction_total" value="<?= $transaction_total_price?>" type="text" readonly="readonly" class="format_money" size="50" />
+            <td><input id="registration_total" value="<?= $registration_total_price?>" type="text" readonly="readonly" class="format_money" size="50" />
            </td>
           </tr>
         </table>	

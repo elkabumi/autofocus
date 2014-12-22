@@ -83,7 +83,7 @@ class Pkb_model extends CI_Model
 		$this->db->join('insurances d','d.insurance_id = a.insurance_id');
 		$this->db->join('stands e','e.stand_id = a.stand_id');
 		$this->db->join('car_models f','f.car_model_id = b.car_model_id');
-		$this->db->where('transaction_id', $id);
+		$this->db->where('registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		//query($query);
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
@@ -113,7 +113,7 @@ class Pkb_model extends CI_Model
 		$index = 0;
 		foreach($items as $row)
 		{			
-			$row['transaction_id'] = $id;
+			$row['registration_id'] = $id;
 			$this->db->insert('detail_registrations', $row);
 			
 			
@@ -122,8 +122,8 @@ class Pkb_model extends CI_Model
 		
 		$this->insert_id = $id;
 		
-		//create transaction
-		//$this->insert_transaction($id, $data);
+		//create registration
+		//$this->insert_registration($id, $data);
 		
 		$this->access->log_insert($id, 'Penjualan User');
 		$this->db->trans_complete();
@@ -151,104 +151,104 @@ class Pkb_model extends CI_Model
 		return $this->db->trans_status();
 	}
 	
-	function insert_transaction($data_id, $datatrans, $update_mode = 0) {
+	function insert_registration($data_id, $datatrans, $update_mode = 0) {
 	$id = 0;
 
 	if ($update_mode) {
-	    $query = $this->db->get_where('transactions_sl', array('transaction_data_id' => $data_id, 'transaction_type_id' => $this->trans_type), 1);
+	    $query = $this->db->get_where('registrations_sl', array('registration_data_id' => $data_id, 'registration_type_id' => $this->trans_type), 1);
 	    if ($query->num_rows() > 0) {
 		$row = $query->row_array();
-		$id = $row['transaction_id'];
-		//update transaction
-		$data['transaction_date'] = $datatrans['transaction_date'];
-		$data['transaction_description'] = $datatrans['transaction_description'];
-		$this->db->update('transactions_sl', $data, array('transaction_id' => $id));
-		$this->db->where('transaction_id', $id);
+		$id = $row['registration_id'];
+		//update registration
+		$data['registration_date'] = $datatrans['registration_date'];
+		$data['registration_description'] = $datatrans['registration_description'];
+		$this->db->update('registrations_sl', $data, array('registration_id' => $id));
+		$this->db->where('registration_id', $id);
 		$this->db->delete('journals_sl');
 	    }
 	    else
 		$update_mode = 0;
 	}
 	if (!$update_mode) {
-	    $data['transaction_date'] = $datatrans['transaction_date'];
-	    $data['transaction_description'] = $datatrans['transaction_description'];
-	    $data['transaction_type_id'] = $this->trans_type;
-	    $data['transaction_code'] = $datatrans['transaction_code'];
-	    $data['transaction_data_id'] = $data_id;
+	    $data['registration_date'] = $datatrans['registration_date'];
+	    $data['registration_description'] = $datatrans['registration_description'];
+	    $data['registration_type_id'] = $this->trans_type;
+	    $data['registration_code'] = $datatrans['registration_code'];
+	    $data['registration_data_id'] = $data_id;
 	    $data['period_id'] = $datatrans['period_id'];
-	    $this->db->insert('transactions_sl', $data);
+	    $this->db->insert('registrations_sl', $data);
 	    $id = $this->db->insert_id();
-		//$this->db->update('transactions_sl', array('transaction_data_id' => $id), array('transaction_id' => $id));
+		//$this->db->update('registrations_sl', array('registration_data_id' => $id), array('registration_id' => $id));
 	}
 	if ($id == 0)
 	    return;
 	$index = 0;
 
 	$i = 0;
-	$journal_items['transaction_id'] = $id;
+	$journal_items['registration_id'] = $id;
 	$journal_items['market_id'] =  $datatrans['stand_id'];
 	
 	//pembayaran cash
-	if($datatrans['transaction_payment_method_id'] == 1){
+	if($datatrans['registration_payment_method_id'] == 1){
 	
 	$debit = 3; $kredit = 30;
 	
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
-	$journal_items['journal_debit'] = $datatrans['transaction_final_total_price'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
+	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'];
 	$journal_items['journal_credit'] = 0;
 	$journal_items['coa_id'] = $debit;
 	$this->db->insert('journals_sl', $journal_items);
 	
-	if($datatrans['transaction_sent_price'] > 0){
+	if($datatrans['registration_sent_price'] > 0){
 		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['transaction_description'];
+		$journal_items['journal_description'] = $datatrans['registration_description'];
 		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['transaction_sent_price'];
+		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
 		$journal_items['coa_id'] = 32;
 		$this->db->insert('journals_sl', $journal_items);
 	}
 
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
 	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['transaction_total_price'];
+	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
 	$journal_items['coa_id'] = $kredit;
 	$this->db->insert('journals_sl', $journal_items);
 	
 	//pembayaran kredit
-	}else if($datatrans['transaction_payment_method_id'] == 2){
+	}else if($datatrans['registration_payment_method_id'] == 2){
 		$debit = 8; $kredit = 30;
 	
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
-	$journal_items['journal_debit'] = $datatrans['transaction_final_total_price'] - $datatrans['transaction_down_payment'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
+	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'] - $datatrans['registration_down_payment'];
 	$journal_items['journal_credit'] = 0;
 	$journal_items['coa_id'] = $debit;
 	$this->db->insert('journals_sl', $journal_items);
 	
-	if($datatrans['transaction_down_payment'] > 0){
+	if($datatrans['registration_down_payment'] > 0){
 		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['transaction_description'];
-		$journal_items['journal_debit'] = $datatrans['transaction_down_payment'];
+		$journal_items['journal_description'] = $datatrans['registration_description'];
+		$journal_items['journal_debit'] = $datatrans['registration_down_payment'];
 		$journal_items['journal_credit'] = 0;
 		$journal_items['coa_id'] = 3;
 		$this->db->insert('journals_sl', $journal_items);
 	}
 	
-	if($datatrans['transaction_sent_price'] > 0){
+	if($datatrans['registration_sent_price'] > 0){
 		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['transaction_description'];
+		$journal_items['journal_description'] = $datatrans['registration_description'];
 		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['transaction_sent_price'];
+		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
 		$journal_items['coa_id'] = 32;
 		$this->db->insert('journals_sl', $journal_items);
 	}
 
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
 	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['transaction_total_price'];
+	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
 	$journal_items['coa_id'] = $kredit;
 	$this->db->insert('journals_sl', $journal_items);
 	
@@ -257,25 +257,25 @@ class Pkb_model extends CI_Model
 	$debit = 5; $kredit = 30;
 	
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
-	$journal_items['journal_debit'] = $datatrans['transaction_final_total_price'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
+	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'];
 	$journal_items['journal_credit'] = 0;
 	$journal_items['coa_id'] = $debit;
 	$this->db->insert('journals_sl', $journal_items);
 	
-	if($datatrans['transaction_sent_price'] > 0){
+	if($datatrans['registration_sent_price'] > 0){
 		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['transaction_description'];
+		$journal_items['journal_description'] = $datatrans['registration_description'];
 		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['transaction_sent_price'];
+		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
 		$journal_items['coa_id'] = 32;
 		$this->db->insert('journals_sl', $journal_items);
 	}
 
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
 	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['transaction_total_price'];
+	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
 	$journal_items['coa_id'] = $kredit;
 	$this->db->insert('journals_sl', $journal_items);
 		
@@ -289,11 +289,11 @@ class Pkb_model extends CI_Model
 		// buat array kosong
 		$result = array(); 		
 		$this->db->select('a.*, b.product_stock_id, c.product_code, c.product_name', 1);
-		$this->db->from('transaction_details a');
+		$this->db->from('registration_details a');
 		$this->db->join('product_stocks b', 'b.product_id = a.product_id and price_id = 1');
 		$this->db->join('products c','c.product_id = a.product_id');
 		
-		$this->db->where('a.transaction_id', $id);
+		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get(); debug();
 		foreach($query->result_array() as $row)
 		{
@@ -387,7 +387,7 @@ class Pkb_model extends CI_Model
 					JOIN products b ON b.product_id = d.product_id
 					JOIN product_categories c ON c.product_category_id = b.product_category_id
 					JOIN product_sub_type e ON e.pst_id = d.pst_id
-					WHERE transaction_id = '$id'
+					WHERE registration_id = '$id'
 					
 					"
 					;

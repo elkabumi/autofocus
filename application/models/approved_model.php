@@ -21,7 +21,7 @@ class Approved_model extends CI_Model
 		// map value dari combobox ke table
 		// daftar kolom yang valid
 		
-		$columns['code'] 			= 'transaction_code';
+		$columns['code'] 			= 'registration_code';
 		$columns['nopol'] 			= 'car_nopol';
 		$columns['customer_name']	= 'customer_name';
 		$columns['insurance_name'] 	= 'insurance_name';
@@ -31,15 +31,15 @@ class Approved_model extends CI_Model
 		$sort_column_index = $params['sort_column'];
 		$sort_dir = $params['sort_dir'];
 		
-		$order_by_column[] = 'transaction_id';
-		$order_by_column[] = 'transaction_code';
-		$order_by_column[] = 'transaction_date';
+		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_code';
+		$order_by_column[] = 'registration_date';
 		$order_by_column[] = 'car_nopol';
 		$order_by_column[] = 'customer_name';
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
-		$order_by_column[] = 'status_transaction_id';
-		$order_by_column[] = 'status_transaction_id';
+		$order_by_column[] = 'status_registration_id';
+		$order_by_column[] = 'status_registration_id';
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -78,19 +78,19 @@ class Approved_model extends CI_Model
 			$row = format_html($row);
 			
 			
-			$transaction_date = format_new_date($row['transaction_date']);
-			$status = show_checkbox_status($row['status_transaction_id']);
+			$registration_date = format_new_date($row['registration_date']);
+			$status = show_checkbox_status($row['status_registration_id']);
 				
-			if($row['status_transaction_id'] == 1){ 
-				$link = "<a href=".site_url('approved/form_approved/'.$row['transaction_id'])." class='link_input'> APPROVE </a>";		
-			}else if($row['status_transaction_id'] == 2){
-				$link = "<a href=".site_url('approved/form_report/'.$row['transaction_id'])." class='link_input'> Cetak Laporan </a>";		
+			if($row['status_registration_id'] == 1){ 
+				$link = "<a href=".site_url('approved/form_approved/'.$row['registration_id'])." class='link_input'> APPROVE </a>";		
+			}else if($row['status_registration_id'] == 2){
+				$link = "<a href=".site_url('approved/form_report/'.$row['registration_id'])." class='link_input'> Cetak Laporan </a>";		
 			}
 			
 			$data[] = array(
-				$row['transaction_id'], 
-				$row['transaction_code'],
-				$transaction_date,
+				$row['registration_id'], 
+				$row['registration_code'],
+				$registration_date,
 				$row['car_nopol'],
 				$row['customer_name'],
 				$row['insurance_name'],
@@ -107,7 +107,7 @@ class Approved_model extends CI_Model
 	function read_id($id)
 	{
 		$this->db->select('a.*', 1); // ambil seluruh data
-		$this->db->where('transaction_id', $id);
+		$this->db->where('registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
@@ -149,8 +149,8 @@ class Approved_model extends CI_Model
 			$index2++;
 		}
 		
-		$this->insert_id = $id;//create transaction
-	//	$this->insert_transaction($id, $data);
+		$this->insert_id = $id;//create registration
+	//	$this->insert_registration($id, $data);
 		
 		$this->access->log_insert($id, 'PO Received');
 		$this->db->trans_complete();
@@ -188,104 +188,104 @@ class Approved_model extends CI_Model
 		return $this->db->trans_status();
 	}
 	
-	function insert_transaction($data_id, $datatrans, $update_mode = 0) {
+	function insert_registration($data_id, $datatrans, $update_mode = 0) {
 	$id = 0;
 
 	if ($update_mode) {
-	    $query = $this->db->get_where('transactions_sl', array('transaction_data_id' => $data_id, 'transaction_type_id' => $this->trans_type), 1);
+	    $query = $this->db->get_where('registrations_sl', array('registration_data_id' => $data_id, 'registration_type_id' => $this->trans_type), 1);
 	    if ($query->num_rows() > 0) {
 		$row = $query->row_array();
-		$id = $row['transaction_id'];
-		//update transaction
-		$data['transaction_date'] = $datatrans['transaction_date'];
-		$data['transaction_description'] = $datatrans['transaction_description'];
-		$this->db->update('transactions_sl', $data, array('transaction_id' => $id));
-		$this->db->where('transaction_id', $id);
+		$id = $row['registration_id'];
+		//update registration
+		$data['registration_date'] = $datatrans['registration_date'];
+		$data['registration_description'] = $datatrans['registration_description'];
+		$this->db->update('registrations_sl', $data, array('registration_id' => $id));
+		$this->db->where('registration_id', $id);
 		$this->db->delete('journals_sl');
 	    }
 	    else
 		$update_mode = 0;
 	}
 	if (!$update_mode) {
-	    $data['transaction_date'] = $datatrans['transaction_date'];
-	    $data['transaction_description'] = $datatrans['transaction_description'];
-	    $data['transaction_type_id'] = $this->trans_type;
-	    $data['transaction_code'] = $datatrans['transaction_code'];
-	    $data['transaction_data_id'] = $data_id;
+	    $data['registration_date'] = $datatrans['registration_date'];
+	    $data['registration_description'] = $datatrans['registration_description'];
+	    $data['registration_type_id'] = $this->trans_type;
+	    $data['registration_code'] = $datatrans['registration_code'];
+	    $data['registration_data_id'] = $data_id;
 	    $data['period_id'] = 1;
-	    $this->db->insert('transactions_sl', $data);
+	    $this->db->insert('registrations_sl', $data);
 	    $id = $this->db->insert_id();
-		//$this->db->update('transactions_sl', array('transaction_data_id' => $id), array('transaction_id' => $id));
+		//$this->db->update('registrations_sl', array('registration_data_id' => $id), array('registration_id' => $id));
 	}
 	if ($id == 0)
 	    return;
 	$index = 0;
 
 	$i = 0;
-	$journal_items['transaction_id'] = $id;
+	$journal_items['registration_id'] = $id;
 	$journal_items['market_id'] =  $datatrans['stand_id'];
 	
 	//pembayaran cash
-	if($datatrans['transaction_payment_method_id'] == 1){
+	if($datatrans['registration_payment_method_id'] == 1){
 	
 	$debit = 3; $kredit = 30;
 	
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
-	$journal_items['journal_debit'] = $datatrans['transaction_final_total_price'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
+	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'];
 	$journal_items['journal_credit'] = 0;
 	$journal_items['coa_id'] = $debit;
 	$this->db->insert('journals_sl', $journal_items);
 	
-	if($datatrans['transaction_sent_price'] > 0){
+	if($datatrans['registration_sent_price'] > 0){
 		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['transaction_description'];
+		$journal_items['journal_description'] = $datatrans['registration_description'];
 		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['transaction_sent_price'];
+		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
 		$journal_items['coa_id'] = 32;
 		$this->db->insert('journals_sl', $journal_items);
 	}
 
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
 	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['transaction_total_price'];
+	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
 	$journal_items['coa_id'] = $kredit;
 	$this->db->insert('journals_sl', $journal_items);
 	
 	//pembayaran kredit
-	}else if($datatrans['transaction_payment_method_id'] == 2){
+	}else if($datatrans['registration_payment_method_id'] == 2){
 		$debit = 8; $kredit = 30;
 	
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
-	$journal_items['journal_debit'] = $datatrans['transaction_final_total_price'] - $datatrans['transaction_down_payment'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
+	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'] - $datatrans['registration_down_payment'];
 	$journal_items['journal_credit'] = 0;
 	$journal_items['coa_id'] = $debit;
 	$this->db->insert('journals_sl', $journal_items);
 	
-	if($datatrans['transaction_down_payment'] > 0){
+	if($datatrans['registration_down_payment'] > 0){
 		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['transaction_description'];
-		$journal_items['journal_debit'] = $datatrans['transaction_down_payment'];
+		$journal_items['journal_description'] = $datatrans['registration_description'];
+		$journal_items['journal_debit'] = $datatrans['registration_down_payment'];
 		$journal_items['journal_credit'] = 0;
 		$journal_items['coa_id'] = 3;
 		$this->db->insert('journals_sl', $journal_items);
 	}
 	
-	if($datatrans['transaction_sent_price'] > 0){
+	if($datatrans['registration_sent_price'] > 0){
 		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['transaction_description'];
+		$journal_items['journal_description'] = $datatrans['registration_description'];
 		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['transaction_sent_price'];
+		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
 		$journal_items['coa_id'] = 32;
 		$this->db->insert('journals_sl', $journal_items);
 	}
 
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
 	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['transaction_total_price'];
+	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
 	$journal_items['coa_id'] = $kredit;
 	$this->db->insert('journals_sl', $journal_items);
 	
@@ -294,25 +294,25 @@ class Approved_model extends CI_Model
 	$debit = 5; $kredit = 30;
 	
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
-	$journal_items['journal_debit'] = $datatrans['transaction_final_total_price'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
+	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'];
 	$journal_items['journal_credit'] = 0;
 	$journal_items['coa_id'] = $debit;
 	$this->db->insert('journals_sl', $journal_items);
 	
-	if($datatrans['transaction_sent_price'] > 0){
+	if($datatrans['registration_sent_price'] > 0){
 		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['transaction_description'];
+		$journal_items['journal_description'] = $datatrans['registration_description'];
 		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['transaction_sent_price'];
+		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
 		$journal_items['coa_id'] = 32;
 		$this->db->insert('journals_sl', $journal_items);
 	}
 
 	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['transaction_description'];
+	$journal_items['journal_description'] = $datatrans['registration_description'];
 	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['transaction_total_price'];
+	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
 	$journal_items['coa_id'] = $kredit;
 	$this->db->insert('journals_sl', $journal_items);
 		
@@ -330,7 +330,7 @@ class Approved_model extends CI_Model
 		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
 		$this->db->join('products c', 'c.product_id = b.product_id');
 		
-		$this->db->where('a.transaction_id', $id);
+		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get(); debug();
 		
 		foreach($query->result_array() as $row)
@@ -343,8 +343,8 @@ class Approved_model extends CI_Model
 	function approved($id)
 	{
 		$this->db->trans_start();
-		$data['status_transaction_id'] = 2;
-		$this->db->where('transaction_id', $id); // data yg mana yang akan di update
+		$data['status_registration_id'] = 2;
+		$this->db->where('registration_id', $id); // data yg mana yang akan di update
 		$this->db->update('registrations', $data);
 	
 		

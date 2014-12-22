@@ -166,6 +166,52 @@ class Dtc
 		else send_json_error_feedback();
 	}
 	
+	# lookup data transaction type
+	function transaction_type_control()
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->transaction_type_control(get_datatables_control());
+		send_json($data); 
+	}
+	
+	function transaction_type_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->transaction_type_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['transaction_type_id'], $result['transaction_type_name'], $result['transaction_type_name']);
+		}
+		else send_json_error_feedback();
+	}
+	
+	# lookup data group employee
+	function employee_group_control()
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->employee_group_control(get_datatables_control());
+		send_json($data); 
+	}
+	
+	function employee_group_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->employee_group_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['employee_group_id'], $result['employee_group_name'], $result['employee_group_description']);
+		}
+		else send_json_error_feedback();
+	}
+	
 	# lookup data product_category
 	function product_category_control()
 	{

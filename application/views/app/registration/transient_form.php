@@ -25,21 +25,21 @@ $(function(){
 			success: function(data){					
 				$('input[name="i_product_id"]').val(data.content['product_id']);
 				$('input[name="i_product_code"]').val(data.content['product_code']);
-				$('input[name="i_transaction_detail_price"]').val(data.content['price']);
-				$('input[name="i_transaction_detail_qty"]').val('');
-				$('input[name="i_transaction_detail_total_price"]').val('');
+				$('input[name="i_registration_detail_price"]').val(data.content['price']);
+				$('input[name="i_registration_detail_qty"]').val('');
+				$('input[name="i_registration_detail_total_price"]').val('');
 			}
 			
 		});
 		
 	}
 	
-	$('input[name="i_transaction_detail_qty"]').change(function(){
-		var price 	= $('input[name="i_transaction_detail_price"]').val();
+	$('input[name="i_registration_detail_qty"]').change(function(){
+		var price 	= $('input[name="i_registration_detail_price"]').val();
 		var qty = $(this).val();
 		var total = price * qty;
 		
-		$('input[name="i_transaction_detail_total_price"]').val(total);
+		$('input[name="i_registration_detail_total_price"]').val(total);
 		
 	});
 	
@@ -67,19 +67,19 @@ $(function(){
      <td width="199" >Harga
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_transaction_detail_price" type="text" id="i_transaction_detail_price" value="<?=$transaction_detail_price ?>" readonly="readonly" /></td>
+     <td width="704" ><input name="i_registration_detail_price" type="text" id="i_registration_detail_price" value="<?=$registration_detail_price ?>" readonly="readonly" /></td>
     </tr>
     <tr>
      <td width="199" >Jumlah
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_transaction_detail_qty" type="text" id="i_transaction_detail_qty" value="<?=$transaction_detail_qty ?>" /></td>
+     <td width="704" ><input name="i_registration_detail_qty" type="text" id="i_registration_detail_qty" value="<?=$registration_detail_qty ?>" /></td>
     </tr>
     <tr>
      <td width="199" >Total
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_transaction_detail_total_price" type="text" id="i_transaction_detail_total_price" value="<?=$transaction_detail_total_price ?>" readonly="readonly" /></td>
+     <td width="704" ><input name="i_registration_detail_total_price" type="text" id="i_registration_detail_total_price" value="<?=$registration_detail_total_price ?>" readonly="readonly" /></td>
     </tr>
 	
 </table>

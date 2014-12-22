@@ -7,7 +7,7 @@ class Employee extends CI_Controller{
 		$this->load->library('render');
 		$this->load->model('employee_model');
 		$this->load->library('access');
-		$this->access->set_module('employee.employee');
+		$this->access->set_module('master.employee');
 	}
 	
 	function index(){

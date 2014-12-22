@@ -105,14 +105,14 @@ $(function(){
 				<input type="hidden" name="i_stand_id" class="com_id" value="<?=$stand_id?>" />
                
 				<input type="text" class="com_input" />
-				<input type="hidden" name="i_transaction_date2" class="date_input" size="15" value="<?=$transaction_date?>" />
+				<input type="hidden" name="i_registration_date2" class="date_input" size="15" value="<?=$registration_date?>" />
 				 <div class="iconic_base iconic_search com_popup"></div>
 				</span></td>
     </tr>
       <tr>
           <td width="17%">Kode Transaksi</td>
           <td width="1%">:</td>
-          <td width="82%"><input name="i_code" type="text" id="i_code" value="<?=$transaction_code ?>" /></td>
+          <td width="82%"><input name="i_code" type="text" id="i_code" value="<?=$registration_code ?>" /></td>
         </tr>
     <tr>
       <td>Data Pelanggan
@@ -203,7 +203,7 @@ $(function(){
      <tr>
       <td>Tanggal Estimasi Keluar   	  </td>
       <td>:</td>
-      <td><input type="text" name="i_transaction_estimation_date" class="date_input" size="15" value="<?=$transaction_estimation_date?>" /></td>
+      <td><input type="text" name="i_registration_estimation_date" class="date_input" size="15" value="<?=$registration_estimation_date?>" /></td>
     </tr>
      <tr>
       <td>Tanggal SPK  </td>
@@ -213,7 +213,7 @@ $(function(){
        <tr>
     <td width="158" valign="top">Keterangan</td>
     <td width="10" valign="top">:</td>
-    <td width="745" valign="top"><textarea name="i_transaction_description" id="i_transaction_description" cols="45" rows="5"><?=$transaction_description?></textarea></td>
+    <td width="745" valign="top"><textarea name="i_registration_description" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
     </tr>
    
    

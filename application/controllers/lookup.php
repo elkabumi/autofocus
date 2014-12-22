@@ -35,6 +35,32 @@ class Lookup extends CI_Controller
 		$this->dtc->employee_get();
 	}
 	
+	# lookup data Transaction Type
+	function transaction_type_table_control()
+	{
+		$this->load->library('dtc');
+		$this->dtc->transaction_type_control();
+	}
+	
+	function transaction_type_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->transaction_type_get();
+	}
+	
+	# lookup data group employee
+	function employee_group_table_control()
+	{
+		$this->load->library('dtc');
+		$this->dtc->employee_group_control();
+	}
+	
+	function employee_group_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->employee_group_get();
+	}
+	
 	# lookup data product_category
 	function product_category_table_control()
 	{
