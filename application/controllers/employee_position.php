@@ -7,7 +7,7 @@ class Employee_position extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('access');
-		$this->access->set_module('employee.employee_position');
+		$this->access->set_module('master.employee_position');
 		$this->access->user_page();
 		$this->load->model('employee_position_model');
 				

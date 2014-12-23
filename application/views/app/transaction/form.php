@@ -3,9 +3,9 @@ $(function(){
 
 	createForm({
 		id 				: "#id_form_nya", 
-		actionTarget	: "approved/form_approved_action",
-		backPage		: "approved",
-		nextPage		: "approved"
+		actionTarget	: "transaction/form_action",
+		backPage		: "transaction",
+		nextPage		: "transaction/form2"
 	});
 	
 	createLookUp({
@@ -59,6 +59,16 @@ $(function(){
 		filter_by		: [{id : "p1", label : "Nama"}]
 	});
 	
+	createLookUp({
+		table_id		: "#lookup_table_employee_group",
+		table_width		: 400,
+		listSource 		: "lookup/employee_group_table_control",
+		dataSource		: "lookup/employee_group_lookup_id",
+		column_id 		: 0,
+		component_id	: "#lookup_employee_group",
+		filter_by		: [{id : "p1", label : "Nama"}]
+	});
+	
 	$('input[name="i_claim_type"]').change(function(){
 		var asuransi = document.getElementById("asuransi");
 		var no_klaim = document.getElementById("no_klaim");
@@ -102,10 +112,10 @@ $('#print_spk').click(function(){
             </td>
 			<td width="1%" >:</td>
 			<td  width="82%" > <span class="lookup" id="lookup_period">
-         <input type="hidden" name="i_period_id" class="com_id" value="<?=$period_id?>" />
-         <input type="text" class="com_input" size="6" /> 
-         <input type="hidden" name="row_id" value="<?=$row_id?>" />
-          <input type="hidden" name="row2_id" value="<?=$row2_id?>" />
+         		<input type="hidden" name="i_period_id" class="com_id" value="<?=$period_id?>" />
+         		<input readonly="readonly" type="text" class="com_input" size="6" /> 
+         		<input type="hidden" name="row_id" value="<?=$row_id?>" />
+        	 	<input type="hidden" name="i_transaction_id" value="<?=$transaction_id?>" />
          <div class="iconic_base iconic_search com_popup"></div>
        </span></td> 
 		</tr>
@@ -117,7 +127,7 @@ $('#print_spk').click(function(){
       <td>  <span class="lookup" id="lookup_stand">
 				<input type="hidden" name="i_stand_id" class="com_id" value="<?=$stand_id?>" />
                
-				<input type="text" class="com_input" />
+				<input readonly="readonly" type="text" class="com_input" />
 				<input type="hidden" name="i_registration_date2" class="date_input" size="15" value="<?=$registration_date?>" />
 				 <div class="iconic_base iconic_search com_popup"></div>
 				</span></td>
@@ -125,7 +135,7 @@ $('#print_spk').click(function(){
       <tr>
           <td width="17%">Kode Transaksi</td>
           <td width="1%">:</td>
-          <td width="82%"><input name="i_code" type="text" id="i_code" value="<?=$registration_code ?>" /></td>
+          <td width="82%"><input readonly="readonly" name="i_code" type="text" id="i_code" value="<?=$registration_code ?>" /></td>
         </tr>
     <tr>
       <td>Data Pelanggan
@@ -134,7 +144,7 @@ $('#print_spk').click(function(){
       <td> <span class="lookup" id="lookup_customer">
         <input type="hidden" name="i_customer_id" class="com_id" value="<?=$customer_id?>" />
         
-        <input type="text" class="com_input" />
+        <input readonly="readonly" type="text" class="com_input" />
         <div class="iconic_base iconic_search com_popup"></div>
           <span class="com_desc"></span>
         </span></td>
@@ -145,7 +155,7 @@ $('#print_spk').click(function(){
       <td> <span class="lookup" id="lookup_car">
 				<input type="hidden" name="i_car_id" class="com_id" value="<?=$car_id?>" />
               
-				<input type="text" class="com_input" />
+				<input readonly="readonly" type="text" class="com_input" />
 				  <div class="iconic_base iconic_search com_popup"></div>
                     <span class="com_desc"></span>
 				</span></td>
@@ -153,12 +163,12 @@ $('#print_spk').click(function(){
       <tr>
       <td>Klaim</td>
       <td>:</td>
-      <td><label>
-         <input type="radio" name="i_claim_type" value="1" id="i_claim_type" <?php if($claim_type == 1){ ?> checked="checked"<?php } ?> />
+      <td><label >
+         <input disabled="disabled" readonly="readonly" type="radio" name="i_claim_type" value="1" id="i_claim_type" <?php if($claim_type == 1){ ?> checked="checked"<?php } ?> />
          Menggunakan Asuransi</label>
      <br />
        <label>
-         <input name="i_claim_type" type="radio" id="i_claim_type" value="0" <?php if($claim_type == 0){ ?> checked="checked"<?php } ?>/>
+         <input readonly="readonly" name="i_claim_type" type="radio" id="i_claim_type" value="0" <?php if($claim_type == 0){ ?> checked="checked"<?php } ?>/>
          Pribadi
        </label></td>
     </tr>
@@ -171,7 +181,7 @@ $('#print_spk').click(function(){
           <td width="82%"><span class="lookup" id="lookup_insurance">
 				<input type="hidden" name="i_insurance_id" class="com_id" value="<?=$insurance_id?>" />
               
-				<input type="text" class="com_input" />
+				<input readonly="readonly" type="text" class="com_input" />
 				  <div class="iconic_base iconic_search com_popup"></div>
 				</span></td>
         </tr>
@@ -182,7 +192,7 @@ $('#print_spk').click(function(){
         <tr>
           <td width="17%">No Klaim</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" value="<?= $claim_no ?>" /></td>
+          <td width="82%"><input readonly="readonly" type="text" id="i_claim_no" name="i_claim_no" value="<?= $claim_no ?>" /></td>
         </tr>
       </table></td>
 				
@@ -191,29 +201,38 @@ $('#print_spk').click(function(){
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>
-      <td><input type="text" name="i_check_in" class="date_input" size="15" value="<?=$check_in?>" /></td>
+      <td><input readonly="readonly" type="text" name="i_check_in"  size="15" value="<?=$check_in?>" /></td>
     </tr>
      <tr>
       <td>Tanggal Estimasi Keluar   	  </td>
       <td>:</td>
-      <td><input type="text" name="i_registration_estimation_date" class="date_input" size="15" value="<?=$registration_estimation_date?>" /></td>
+      <td><input readonly="readonly" type="text" name="i_registration_estimation_date"  size="15" value="<?=$registration_estimation_date?>" /></td>
     </tr>
        <tr>
     <td width="158" valign="top">Keterangan</td>
     <td width="10" valign="top">:</td>
-    <td width="745" valign="top"><textarea name="i_registration_description" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
+    <td width="745" valign="top"><textarea readonly="readonly" name="i_registration_description" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
     </tr>
-   
+   <tr>
+      <td>Tim Kerja</td>
+      <td>:</td>
+      <td> <span class="lookup" id="lookup_employee_group">
+				<input type="hidden" name="i_employee_group_id" class="com_id" value="<?=$employee_group_id?>" />
+              
+				<input type="text" class="com_input" />
+				  <div class="iconic_base iconic_search com_popup"></div>
+                    <span class="com_desc"></span>
+				</span></td>
+    </tr>
    
      </table>
      </div>
 	
 	<div class="command_bar">
 	
-	
-		<input type="button" id="cancel" value="Batal"/>
-       <input type="button" id="print_spk" value="Cetak SPK"  />
-       <input type="button" id="print_pkb" value="Cetak PKB"  />
+        <input type="button" id="enable" value="Edit"/>	
+		<input type="button" id="submit" value="Simpan"/>
+        <input type="button" id="cancel" value="Batal"/>
 	</div>
 </div>
 <!-- table contact -->
@@ -309,6 +328,25 @@ $('#print_spk').click(function(){
 			<th>ID</th>
 				<th>Periode</th>
 				<th>Status</th>
+			</tr> 
+		</thead> 
+		<tbody> 	
+		</tbody>
+	</table>
+	<div id="panel">
+		<input type="button" id="choose" value="Pilih Data"/>
+		<input type="button" id="refresh" value="Refresh"/>
+		<input type="button" id="cancel" value="Cancel" />
+	</div>	
+</div>
+
+<div id="">
+	<table id="lookup_table_employee_group" cellpadding="0" cellspacing="0" border="0" class="display" > 
+		<thead>
+			<tr>
+			<th>ID</th>
+				<th>Nama</th>
+				<th>Keterangan</th>
 			</tr> 
 		</thead> 
 		<tbody> 	

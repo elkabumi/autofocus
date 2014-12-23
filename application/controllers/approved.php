@@ -36,7 +36,7 @@ class Approved extends CI_Controller{
 				$data['row_id'] = '';//$id;
 				$data['row2_id'] = $id;
 				$data['check_in'] = format_new_date($data['check_in']);
-				$data['transaction_estimation_date'] = format_new_date($data['transaction_estimation_date']);
+				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
 		
 			
 			}
@@ -63,7 +63,7 @@ class Approved extends CI_Controller{
 				$data['row_id'] = $id;
 				$data['row2_id'] = $id;
 				$data['check_in'] = format_new_date($data['check_in']);
-				$data['transaction_estimation_date'] = format_new_date($data['transaction_estimation_date']);
+				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
 		
 			
 			}
@@ -80,11 +80,11 @@ class Approved extends CI_Controller{
 		$this->render->show('Cetak Laporan');
 	}
 	
-	function detail_list_loader($transaction_id=0)
+	function detail_list_loader($registration_id=0)
 	{
-		if($transaction_id == 0)send_json(make_datatables_list(null)); 
+		if($registration_id == 0)send_json(make_datatables_list(null)); 
 				
-		$data = $this->approved_model->detail_list_loader($transaction_id);
+		$data = $this->approved_model->detail_list_loader($registration_id);
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
@@ -92,9 +92,9 @@ class Approved extends CI_Controller{
 		$data[$key] = array(
 				form_transient_pair('transient_product_id', $value['product_code'], $value['product_id']),
 				form_transient_pair('transient_product_name', $value['product_name']),
-				form_transient_pair('transient_transaction_detail_price', tool_money_format($value['detail_transaction_price']), $value['detail_transaction_price']),
-				form_transient_pair('transient_transaction_detail_qty', $value['detail_transaction_qty'], $value['detail_transaction_qty']),
-				form_transient_pair('transient_transaction_detail_total_price', tool_money_format($value['detail_transaction_total_price']), $value['detail_transaction_total_price'])
+				form_transient_pair('transient_registration_detail_price', tool_money_format($value['detail_registration_price']), $value['detail_registration_price']),
+				form_transient_pair('transient_registration_detail_qty', $value['detail_registration_qty'], $value['detail_registration_qty']),
+				form_transient_pair('transient_registration_detail_total_price', tool_money_format($value['detail_registration_total_price']), $value['detail_registration_total_price'])
 		);
 		
 		
