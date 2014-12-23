@@ -88,8 +88,8 @@ class Registration extends CI_Controller
 		$this->form_validation->set_rules('i_own_retention','OR','trim|required|is_numeric');
 		$this->form_validation->set_rules('i_check_in','Tanggal Masuk','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_transaction_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
-		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required|integer');
-		$this->form_validation->set_rules('i_pkb_no','No PKB','trim|required|integer');
+		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required');
+		$this->form_validation->set_rules('i_pkb_no','No PKB','trim|required');
 		$this->form_validation->set_rules('i_spk_date','Tanggal SPK','trim|required|valid_date|sql_date');
 		//$this->form_validation->set_rules('i_transaction_description','Keterangan','trim|required');
 		
