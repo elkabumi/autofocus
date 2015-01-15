@@ -82,9 +82,7 @@ class Transaction_model extends CI_Model
 			$registration_date = format_new_date($row['registration_date']);
 			$status = show_checkbox_status($row['status_registration_id']);
 			
-			if($row['transaction_id'] != ''){
-				$link = "<a href=".site_url('transaction/form2/'.$row['transaction_id'])." class='link_input'> Transaksi </a>";
-			}else if($row['status_registration_id'] == 1){
+			if($row['status_registration_id'] == 1){
 				$link = "<a class='link_input'>Belum Disetujui</a>";
 			}else if($row['status_registration_id'] == 2){
 				$link = "<a href=".site_url('transaction/form/'.$row['registration_id'])." class='link_input'> Transaksi </a>";
@@ -110,8 +108,10 @@ class Transaction_model extends CI_Model
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*', 1); // ambil seluruh data
-		$this->db->where('registration_id', $id);
+		$this->db->select('a.*,b.*,c.*', 1); // ambil seluruh data
+		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
+		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id','left');		
+		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
@@ -181,12 +181,12 @@ class Transaction_model extends CI_Model
 		
 		//Insert items
 		$this->db->where('transaction_id', $id);
-		$this->db->delete('transactions_details');
+		$this->db->delete('transaction_details');
 		$index = 0;
 		foreach($items as $row)
 		{			
 			$row['transaction_id'] = $id;
-			$this->db->insert('transactions_details', $row); 
+			$this->db->insert('transaction_details', $row); 
 			$index++;
 		}
 		
@@ -200,12 +200,16 @@ class Transaction_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*, c.product_id, c.product_code, c.product_name', 1);
+		$this->db->select('a.*, c.product_id, c.product_code, c.product_name,e.transaction_id,f.transaction_detail_id,f.transaction_detail_plain_first_date,f.transaction_detail_plain_last_date,f.transaction_detail_actual_date,f.transaction_detail_target_date,f.transaction_detail_description,f.transaction_id,f.transaction_detail_bongkar_komponen,f.transaction_detail_lasketok,f.transaction_detail_dempul,f.transaction_detail_cat,f.transaction_detail_poles,f.transaction_detail_rakit,f.transaction_detail_total,f.transaction_detail_date', 1);
 		$this->db->from('detail_registrations a');
+		$this->db->join('registrations d', 'd.registration_id = a.registration_id');
 		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
 		$this->db->join('products c', 'c.product_id = b.product_id');
+		$this->db->join('transactions e', 'e.registration_id = d.registration_id','left');
+		$this->db->join('transaction_details f', 'f.detail_registration_id = a.detail_registration_id','left');
 		
 		$this->db->where('a.registration_id', $id);
+		//$this->db->group_by('e.transaction_id');
 		$query = $this->db->get(); debug();
 		
 		foreach($query->result_array() as $row)
@@ -219,10 +223,11 @@ class Transaction_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*,b.*,c.*', 1);
+		$this->db->select('a.*,b.*,c.*,d.*', 1);
 		$this->db->from('registrations a');
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id');
-		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id');		
+		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id');
+		$this->db->join('transaction_types d', 'd.transaction_type_id = c.transaction_type_id');		
 		
 		$this->db->where('b.transaction_id', $id);
 		$query = $this->db->get(); debug();

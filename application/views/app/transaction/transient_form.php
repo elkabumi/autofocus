@@ -35,6 +35,102 @@ $(function(){
 		
 	}
 	
+	$('input[name="c_bongkar_komponen"]').change(function(){
+		var bongkar = $('input[name="i_bongkar_komponen"]').val();
+		var total = $('input[name="i_total"]').val();
+		var cek1 = $('input[name="i_cek1"]').val();
+		
+		if(cek1 == 0){
+			var pembayaran = parseFloat(total) + parseFloat(bongkar);
+			$('input[name="i_cek1"]').val(1);
+			$('input[name="i_total"]').val(pembayaran);
+		}else{
+			var pembayaran = parseFloat(total) - parseFloat(bongkar);
+			$('input[name="i_cek1"]').val(0);
+			$('input[name="i_total"]').val(pembayaran);
+		}
+	});
+	
+	$('input[name="c_lasketok"]').change(function(){
+		var lasketok = $('input[name="i_lasketok"]').val();
+		var total = $('input[name="i_total"]').val();
+		var cek2 = $('input[name="i_cek2"]').val();
+		
+		if(cek2 == 0){
+			var pembayaran = parseFloat(total) + parseFloat(lasketok);
+			$('input[name="i_cek2"]').val(1);
+			$('input[name="i_total"]').val(pembayaran);
+		}else{
+			var pembayaran = parseFloat(total) - parseFloat(lasketok);
+			$('input[name="i_cek2"]').val(0);
+			$('input[name="i_total"]').val(pembayaran);
+		}
+	});
+	
+	$('input[name="c_dempul"]').change(function(){
+		var dempul = $('input[name="i_dempul"]').val();
+		var total = $('input[name="i_total"]').val();
+		var cek3 = $('input[name="i_cek3"]').val();
+		
+		if(cek3 == 0){
+			var pembayaran = parseFloat(total) + parseFloat(dempul);
+			$('input[name="i_cek3"]').val(1);
+			$('input[name="i_total"]').val(pembayaran);
+		}else{
+			var pembayaran = parseFloat(total) - parseFloat(dempul);
+			$('input[name="i_cek3"]').val(0);
+			$('input[name="i_total"]').val(pembayaran);
+		}
+	});
+	
+	$('input[name="c_cat"]').change(function(){
+		var cat = $('input[name="i_cat"]').val();
+		var total = $('input[name="i_total"]').val();
+		var cek4 = $('input[name="i_cek4"]').val();
+		
+		if(cek4 == 0){
+			var pembayaran = parseFloat(total) + parseFloat(cat);
+			$('input[name="i_cek4"]').val(1);
+			$('input[name="i_total"]').val(pembayaran);
+		}else{
+			var pembayaran = parseFloat(total) - parseFloat(cat);
+			$('input[name="i_cek4"]').val(0);
+			$('input[name="i_total"]').val(pembayaran);
+		}
+	});
+	
+	$('input[name="c_poles"]').change(function(){
+		var poles = $('input[name="i_poles"]').val();
+		var total = $('input[name="i_total"]').val();
+		var cek5 = $('input[name="i_cek5"]').val();
+		
+		if(cek5 == 0){
+			var pembayaran = parseFloat(total) + parseFloat(poles);
+			$('input[name="i_cek5"]').val(1);
+			$('input[name="i_total"]').val(pembayaran);
+		}else{
+			var pembayaran = parseFloat(total) - parseFloat(poles);
+			$('input[name="i_cek5"]').val(0);
+			$('input[name="i_total"]').val(pembayaran);
+		}
+	});
+	
+	$('input[name="c_rakit"]').change(function(){
+		var rakit = $('input[name="i_rakit"]').val();
+		var total = $('input[name="i_total"]').val();
+		var cek6 = $('input[name="i_cek6"]').val();
+		
+		if(cek6 == 0){
+			var pembayaran = parseFloat(total) + parseFloat(rakit);
+			$('input[name="i_cek6"]').val(1);
+			$('input[name="i_total"]').val(pembayaran);
+		}else{
+			var pembayaran = parseFloat(total) - parseFloat(rakit);
+			$('input[name="i_cek6"]').val(0);
+			$('input[name="i_total"]').val(pembayaran);
+		}
+	});
+			
 	createDatePicker();
 	
 });
@@ -42,17 +138,85 @@ $(function(){
 <form class="subform_area">
 <div class="form_area_frame">
 <table cellpadding="2" class="form_layout">
-	<tr>
-     <td>Type Transaksi</td>
-        <td><span class="lookup" id="lookup_transaction_type">
-				<input type="hidden" name="i_transaction_type_id" class="com_id" value="<?=$transaction_type_id?>" />
-                 <input type="hidden" name="i_index" value="<?=$index?>" />
-                <input type="text" class="com_input" />
-                <div class="iconic_base iconic_search com_popup"></div>
-				</span>	
-       </td>
-     </tr>
      <tr>
+     <td>Nama Panel</td>
+       <td>
+       	  <input name="i_product_name" readonly="readonly" type="text" id="i_product_name" value="<?=$product_name ?>" />
+          <input type="text" name="i_index" value="<?=$index?>" />
+          <input type="text" name="i_detail_registration_id" value="<?=$detail_registration_id?>" />
+
+</td>
+     </tr>
+     <?
+	$sql = "select * from transaction_types";
+	$query = $this->db->query($sql);
+	
+	foreach($query->result_array() as $row){
+	 switch($row['transaction_type_id']){
+		case 1: 
+		?>
+		<tr>
+		<td>Bongkar komponen</td>
+       <td><input name="i_bongkar_komponen" type="text" id="i_bongkar_komponen" style="text-align:right;" value="<?=$row['transaction_type_price']?>" size="15" readonly="readonly" />
+      <input name="c_bongkar_komponen" type="checkbox" id="c_bongkar_komponen" value="1" <?php if($transaction_detail_bongkar_komponen != 0){ ?> checked="checked" <?php }?> />
+      <input type="hidden" name="i_cek1" value="<?=$transaction_detail_bongkar_komponen?>"/></td>
+     </tr>
+		<?
+		break;
+		case 2:
+		?>
+		<tr>
+     <td>Las/Ketok</td>
+       <td><input name="i_lasketok" type="text" id="i_lasketok" style="text-align:right;" value="<?=$row['transaction_type_price']?>" size="15" readonly="readonly" />
+      <input name="c_lasketok" type="checkbox" id="c_lasketok" value="2" <?php if($transaction_detail_lasketok != 0){ ?> checked="checked" <?php }?> />
+       <input type="hidden" name="i_cek2" value="<?=$transaction_detail_lasketok?>"/></td>
+</td>
+     </tr>
+		<?
+		break;
+		case 3:
+		?>
+        <tr>
+     <td>Dempul</td>
+       <td><input name="i_dempul" type="text" id="i_dempul" style="text-align:right;" value="<?=$row['transaction_type_price']?>" size="15" readonly="readonly" />
+      <input name="c_dempul" type="checkbox" id="c_dempul" value="3" <?php if($transaction_detail_dempul != 0){ ?> checked="checked" <?php }?> />
+      <input type="hidden" name="i_cek3" value="<?=$transaction_detail_dempul?>"/></td>
+     </tr>
+        <?
+		break;
+		case 4:
+		?>
+        <tr>
+     <td>Cat</td>
+       <td><input name="i_cat" type="text" id="i_cat" style="text-align:right;" value="<?=$row['transaction_type_price']?>" size="15" readonly="readonly" />
+      <input name="c_cat" type="checkbox" id="c_cat" value="4" <?php if($transaction_detail_cat != 0){ ?> checked="checked" <?php }?> />
+      <input type="hidden" name="i_cek4" value="<?=$transaction_detail_cat?>"/></td>
+     </tr>
+        <?
+		break;
+		case 5:
+		?>
+         <tr>
+     <td>Poles</td>
+       <td><input name="i_poles" type="text" id="i_poles" style="text-align:right;" value="<?=$row['transaction_type_price']?>" size="15" readonly="readonly" />
+      <input name="c_poles" type="checkbox" id="c_poles" value="5" <?php if($transaction_detail_poles != 0){ ?> checked="checked" <?php }?> />
+      <input type="hidden" name="i_cek5" value="<?=$transaction_detail_poles?>"/></td>
+     </tr>
+        <?
+		break;
+		case 6:
+		?>
+		<tr>
+     <td>Rakit</td>
+       <td><input name="i_rakit" type="text" id="i_rakit" style="text-align:right;" value="<?=$row['transaction_type_price']?>" size="15" readonly="readonly" />
+      <input name="c_rakit" type="checkbox" id="c_rakit" value="6" <?php if($transaction_detail_rakit != 0){ ?> checked="checked" <?php }?> />
+      <input type="hidden" name="i_cek6" value="<?=$transaction_detail_rakit?>"/></td>
+     </tr>
+		<?
+		 }
+	 }
+	 ?>
+     <!--<tr>
      <td>Tanggal awal plain</td>
        <td><input name="i_first_date" type="text" id="i_first_date" value="<?=$transaction_detail_plain_first_date ?>" class="date_input"/></td>
      </tr>
@@ -67,11 +231,26 @@ $(function(){
      <tr>
      <td>Tanggal target selesai</td>
        <td><input name="i_target_date" type="text" id="i_target_date" value="<?=$transaction_detail_target_date ?>" class="date_input"/></td>
+     </tr>-->
+     <tr>
+     <td>Tanggal Action</td>
+       <td><input name="i_date" type="text" id="i_date" value="<?=$transaction_detail_date ?>" class="date_input"/></td>
+     </tr>
+     <tr>
+     <td>Jumlah</td>
+     <?
+     if($transaction_detail_total == ''){?>
+	  <td><input name="i_total" type="text" id="i_total" value="0"/></td>
+	 <? }else{?>
+	  <td><input name="i_total" type="text" id="i_total" value="<?= $transaction_detail_total ?>"/></td>
+	 <?
+	 }
+	 ?>
      </tr>
      <tr>
     <td width="189" valign="top">Keterangan</td>
       <td width="745"><textarea name="i_description" id="i_description" cols="45" rows="5"><?= $transaction_detail_description ?></textarea></td>
-    </tr>
+      </tr>
 </table>
 </div>
 <div class="command_bar">
@@ -85,8 +264,8 @@ $(function(){
 		<thead>
 			<tr>
 			<th>ID</th>
-            	<th>Nip</th>
-				<th>Nama</th>
+            	<th>Type</th>
+				<th>Harga</th>
 			</tr> 
 		</thead> 
 		<tbody> 	

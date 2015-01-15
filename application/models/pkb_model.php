@@ -77,13 +77,14 @@ class Pkb_model extends CI_Model
 	}
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*,c.customer_name,d.insurance_name,d.insurance_addres,e.stand_name,e.stand_address,f.car_model_merk,f.car_model_name', 1); // ambil seluruh data
+		$this->db->select('a.*,b.*,c.customer_name,d.insurance_name,d.insurance_addres,e.stand_name,e.stand_address,f.car_model_merk,f.car_model_name,g.*', 1); // ambil seluruh data
 		$this->db->join('cars b','b.car_id = a.car_id');
 		$this->db->join('customers c','c.customer_id = a.customer_id');
 		$this->db->join('insurances d','d.insurance_id = a.insurance_id');
 		$this->db->join('stands e','e.stand_id = a.stand_id');
 		$this->db->join('car_models f','f.car_model_id = b.car_model_id');
-		$this->db->where('registration_id', $id);
+		$this->db->join('transactions g','g.registration_id = a.registration_id','left');
+		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		//query($query);
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.

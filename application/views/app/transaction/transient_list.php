@@ -11,14 +11,12 @@ $(function(){
 	
 	function perhitungan()
 	{
-		var registration_total = 0;
-		$('input[name="transient_registration_detail_total_price[]"]').each(function()
+		var transaction_total = 0;
+		$('input[name="transient_transaction_detail_total[]"]').each(function()
 		{
-			registration_total += parseFloat($(this).val());
+			transaction_total += parseFloat($(this).val());
 		});
-		$('input#registration_total').val(formatMoney(registration_total));
-		$('input#i_registration_final_total_price').val(registration_total);
-		$('input#i_registration_total_price').val(registration_total);
+		$('input#i_transaction_total').val(formatMoney(transaction_total));
 		
 	}
 });
@@ -28,12 +26,20 @@ $(function(){
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="transient_contact"> 
 	<thead>
 		<tr>
-			
-			<th>Kode</th>
 			<th>Jenis Perbaikan</th>
-			<th>Harga</th>
+            <th>Bongkar Komponen</th>
+			<th>Las/Ketok</th>
+			<th>Dempul</th>
+            <th>Cat</th>
+			<th>Poles</th>
+            <th>Rakit</th>
+			<!--<th>Tanggal plain awal</th>
+			<th>Tanggal plain akhir</th>
+            <th>Tanggal aktual</th>
+            <th>Tanggal target selesai</th>-->
+            <th>Tanggal Action</th>
+            <th>Keterangan</th>
             <th>Jumlah</th>
-            <th>Total</th>
 		</tr> 
 	</thead> 
 	<tbody> 	
@@ -45,13 +51,13 @@ $(function(){
 	 <table align="right">
           <tr>
             <td><span class="summary_total"> Total</span></td>
-            <td><input id="registration_total" value="<?= $total_registration?>" type="text" readonly="readonly" class="format_money" size="50" />
+            <td><input name="i_transaction_total" id="i_transaction_total" value="<?=$transaction_total?>" type="text" readonly="readonly" class="format_money" size="50" />
            </td>
           </tr>
         </table>	
+   	<input type="button" id="edit" value="Edit"/>
    
-   
-</div>
+</div>  
 <div id="editor"></div>
 </form>
 </div>

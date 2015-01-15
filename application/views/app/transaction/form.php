@@ -106,125 +106,68 @@ $('#print_spk').click(function(){
 <div class="form_area">
 <div class="form_area_frame">
 	<table width="100%" cellpadding="4" class="form_layout">
-	<tr>
-			<td width="17%">Periode
-               
-            </td>
-			<td width="1%" >:</td>
-			<td  width="82%" > <span class="lookup" id="lookup_period">
-         		<input type="hidden" name="i_period_id" class="com_id" value="<?=$period_id?>" />
-         		<input readonly="readonly" type="text" class="com_input" size="6" /> 
-         		<input type="hidden" name="row_id" value="<?=$row_id?>" />
-        	 	<input type="hidden" name="i_transaction_id" value="<?=$transaction_id?>" />
-         <div class="iconic_base iconic_search com_popup"></div>
-       </span></td> 
-		</tr>
-   
-   <tr>
-      <td>Cabang
-        		</td>
-      <td>:</td>
-      <td>  <span class="lookup" id="lookup_stand">
-				<input type="hidden" name="i_stand_id" class="com_id" value="<?=$stand_id?>" />
-               
-				<input readonly="readonly" type="text" class="com_input" />
-				<input type="hidden" name="i_registration_date2" class="date_input" size="15" value="<?=$registration_date?>" />
-				 <div class="iconic_base iconic_search com_popup"></div>
-				</span></td>
-    </tr>
-      <tr>
-          <td width="17%">Kode Transaksi</td>
-          <td width="1%">:</td>
-          <td width="82%"><input readonly="readonly" name="i_code" type="text" id="i_code" value="<?=$registration_code ?>" /></td>
-        </tr>
     <tr>
-      <td>Data Pelanggan
-        </td>
-      <td>:</td>
-      <td> <span class="lookup" id="lookup_customer">
-        <input type="hidden" name="i_customer_id" class="com_id" value="<?=$customer_id?>" />
-        
-        <input readonly="readonly" type="text" class="com_input" />
-        <div class="iconic_base iconic_search com_popup"></div>
-          <span class="com_desc"></span>
-        </span></td>
-    </tr>
-    <tr>
-      <td>Data Mobil</td>
-      <td>:</td>
-      <td> <span class="lookup" id="lookup_car">
-				<input type="hidden" name="i_car_id" class="com_id" value="<?=$car_id?>" />
-              
-				<input readonly="readonly" type="text" class="com_input" />
-				  <div class="iconic_base iconic_search com_popup"></div>
-                    <span class="com_desc"></span>
-				</span></td>
-    </tr>
-      <tr>
-      <td>Klaim</td>
-      <td>:</td>
-      <td><label >
-         <input disabled="disabled" readonly="readonly" type="radio" name="i_claim_type" value="1" id="i_claim_type" <?php if($claim_type == 1){ ?> checked="checked"<?php } ?> />
-         Menggunakan Asuransi</label>
-     <br />
-       <label>
-         <input readonly="readonly" name="i_claim_type" type="radio" id="i_claim_type" value="0" <?php if($claim_type == 0){ ?> checked="checked"<?php } ?>/>
-         Pribadi
-       </label></td>
-    </tr>
-
- <tr>
-      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="asuransi" style="width:100%;">
-        <tr>
-          <td width="17%">Asuransi</td>
-          <td width="1%">:</td>
-          <td width="82%"><span class="lookup" id="lookup_insurance">
-				<input type="hidden" name="i_insurance_id" class="com_id" value="<?=$insurance_id?>" />
-              
-				<input readonly="readonly" type="text" class="com_input" />
-				  <div class="iconic_base iconic_search com_popup"></div>
-				</span></td>
-        </tr>
-      </table></td>
-     </tr>   
-      <tr>
-     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="no_klaim" style="width:100%;">
-        <tr>
-          <td width="17%">No Klaim</td>
-          <td width="1%">:</td>
-          <td width="82%"><input readonly="readonly" type="text" id="i_claim_no" name="i_claim_no" value="<?= $claim_no ?>" /></td>
-        </tr>
-      </table></td>
-				
-				
-      </tr>
-        <tr>
-      <td>Tanggal Masuk   	  </td>
-      <td>:</td>
-      <td><input readonly="readonly" type="text" name="i_check_in"  size="15" value="<?=$check_in?>" /></td>
-    </tr>
-     <tr>
-      <td>Tanggal Estimasi Keluar   	  </td>
-      <td>:</td>
-      <td><input readonly="readonly" type="text" name="i_registration_estimation_date"  size="15" value="<?=$registration_estimation_date?>" /></td>
-    </tr>
-       <tr>
-    <td width="158" valign="top">Keterangan</td>
-    <td width="10" valign="top">:</td>
-    <td width="745" valign="top"><textarea readonly="readonly" name="i_registration_description" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
-    </tr>
-   <tr>
-      <td>Tim Kerja</td>
-      <td>:</td>
-      <td> <span class="lookup" id="lookup_employee_group">
+      <td width="23%">Tim Kerja</td>
+      <td width="1%">:</td>
+      <td width="76%"> <span class="lookup" id="lookup_employee_group">
 				<input type="hidden" name="i_employee_group_id" class="com_id" value="<?=$employee_group_id?>" />
-              
+              	<input type="hidden" name="row_id" value="<?=$row_id?>" />
+            	<input type="hidden" name="i_transaction_id" value="<?=$transaction_id?>" />
 				<input type="text" class="com_input" />
 				  <div class="iconic_base iconic_search com_popup"></div>
                     <span class="com_desc"></span>
 				</span></td>
     </tr>
-   
+	<tr>
+   <td>Tanggal awal plain</td>
+         <td>:</td>
+       <td><input name="i_first_date" type="text" id="i_first_date" value="<?=$transaction_plain_first_date ?>" class="date_input"/></td>
+     </tr>
+     <tr>
+     <td>Tanggal akhir plain</td>
+     <td>:</td>
+       <td><input name="i_last_date" type="text" id="i_last_date" value="<?=$transaction_plain_last_date ?>" class="date_input"/></td>
+     </tr>
+     <tr>
+     <td>Tanggal Aktual</td>
+     <td>:</td>
+       <td><input name="i_actual_date" type="text" id="i_actual_date" value="<?=$transaction_actual_date ?>" class="date_input"/></td>
+     </tr>
+     <tr>
+     <td>Tanggal target selesai</td>
+     <td>:</td>
+       <td><input name="i_target_date" type="text" id="i_target_date" value="<?=$transaction_target_date ?>" class="date_input"/></td>
+     </tr>
+     <tr>
+     <td>Keterangan bongkar komponen</td>
+     <td>:</td>
+       <td><input name="i_komponen" type="text" id="i_komponen" value="<?=$transaction_komponen ?>" /></td>
+     </tr>
+     <tr>
+     <td>Keterangan las/ketok</td>
+     <td>:</td>
+       <td><input name="i_lasketok" type="text" id="i_lasketok" value="<?=$transaction_lasketok ?>" /></td>
+     </tr>
+     <tr>
+     <td>Keterangan dempul</td>
+     <td>:</td>
+       <td><input name="i_dempul" type="text" id="i_dempul" value="<?=$transaction_dempul ?>" /></td>
+     </tr>
+     <tr>
+     <td>Keterangan cat</td>
+     <td>:</td>
+       <td><input name="i_cat" type="text" id="i_cat" value="<?=$transaction_cat ?>" /></td>
+     </tr>
+     <tr>
+     <td>Keterangan poles</td>
+     <td>:</td>
+       <td><input name="i_poles" type="text" id="i_poles" value="<?=$transaction_poles ?>" /></td>
+     </tr>
+     <tr>
+     <td>Keterangan rakit</td>
+     <td>:</td>
+       <td><input name="i_rakit" type="text" id="i_rakit" value="<?=$transaction_rakit ?>" /></td>
+     </tr>
      </table>
      </div>
 	

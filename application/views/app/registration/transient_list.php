@@ -17,8 +17,6 @@ $(function(){
 			registration_total += parseFloat($(this).val());
 		});
 		$('input#registration_total').val(formatMoney(registration_total));
-		$('input#i_registration_final_total_price').val(registration_total);
-		$('input#i_registration_total_price').val(registration_total);
 		
 	}
 });
