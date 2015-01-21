@@ -135,7 +135,13 @@ class product_model extends CI_Model{
 			$this->db->insert('product_prices', $item);
 		}
 		
-		
+		// cek menggunakan stok atau tidak
+			$use_stock = $this->get_use_stock($data['product_category_id']);
+			if($use_stock == 1){
+				$data_stock['product_id'] = $id;
+				$data_stock['product_stock_qty'] = 0;
+				$this->db->insert('product_stocks', $data_stock);
+			}
 		
 		$this->access->log_insert($id, "produk [".$data['product_name']."]");
 		$this->db->trans_complete();
@@ -179,7 +185,17 @@ class product_model extends CI_Model{
 	}
 
 
-	
+	function get_use_stock($id)
+	{
+		$sql = "SELECT product_category_use_stock from product_categories where product_category_id = $id";
+		$query = $this->db->query($sql);
+		//query();
+		$result = null ; 
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result['product_category_use_stock'];
+		
+	}
 	
 	
 	

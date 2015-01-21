@@ -38,6 +38,7 @@ class product_category extends CI_Controller
 			$data['row_id'] = '';
 			$data['i_name'] = '';//format_code('product_categories','product_category_code','',3);
 			$data['i_description'] = '';
+			$data['i_use_stock'] = 1;
 			
 		} else {
 			
@@ -49,6 +50,7 @@ class product_category extends CI_Controller
 				$data['row_id'] = $result['product_category_id'];
 				$data['i_name'] = $result['product_category_name'];
 				$data['i_description'] = $result['product_category_description'];		
+				$data['i_use_stock'] = $result['product_category_use_stock'];		
 			}
 		}
 		
@@ -73,6 +75,7 @@ class product_category extends CI_Controller
 		
 		// cek dulu data yang masuk
 		$this->form_validation->set_rules('i_name', 'Name', 'trim|required'); // gunakan selalu trim di awal
+		$this->form_validation->set_rules('i_use_stock','Use stock', 'trim');
 		$this->form_validation->set_rules('i_description','Description', 'trim|max_length[100]');
 	
 		
@@ -87,6 +90,7 @@ class product_category extends CI_Controller
 			$data['product_category_active_status']		= 1;
 			$data['created_by_id']			=  $this->access->info['employee_id'];
 			$data['product_category_name'] = $this->input->post('i_name');
+			$data['product_category_use_stock'] = $this->input->post('i_use_stock');
 			$data['product_category_description'] = $this->input->post('i_description');
 			$data['product_categories_date']	= date('Y-m-d');
 			$error = $this->product_category_model->create($data);
@@ -99,7 +103,7 @@ class product_category extends CI_Controller
 			// map input ke kolom database
 			$data['product_category_name'] = $this->input->post('i_name');
 			$data['product_category_description'] = $this->input->post('i_description');
-			
+			$data['product_category_use_stock'] = $this->input->post('i_use_stock');
 			$error = $this->product_category_model->update($id, $data);
 			send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
 		}

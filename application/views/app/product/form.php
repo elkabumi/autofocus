@@ -46,6 +46,8 @@ $(function(){
      <td>Item Name</td>
        <td><input name="i_name" type="text" id="i_name" value="<?=$product_name ?>" size="70" /></td>
      </tr>
+
+      
    
      <tr>
      <td>Item Category</td>

@@ -27,7 +27,7 @@ class product extends CI_Controller{
 		$data = array();
 		if($id==0){
 			$data['row_id']					= '';
-			$data['product_code']			= '';
+			$data['product_code']			= format_code('products','product_code','P',7);
 			$data['product_name']			= '';
 			$data['insurance_id'] 			= '';
 			$data['product_category_id']	= '';
@@ -65,6 +65,7 @@ class product extends CI_Controller{
 		$this->form_validation->set_rules('i_code','Item Code', 'trim|required|max_length[15]');
 		$this->form_validation->set_rules('i_name','Item Name', 'trim|required|max_length[200]');
 		$this->form_validation->set_rules('i_category_id','Item Category', 'trim|required');
+		$this->form_validation->set_rules('i_insurance_id','Asuransi', 'trim|required');
 		$this->form_validation->set_rules('i_date','Create Date', 'trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_description','Description', 'trim|max_length[100]');
 	
@@ -93,7 +94,12 @@ class product extends CI_Controller{
 				send_json_error("Simpan gagal. Code ".$data['product_code']." sudah ada, isi dengan code yang lain");
 			}
 			
+			
+			
 			$error = $this->product_model->create($data);
+			
+			
+			
 			send_json_action($error, "Data telah ditambah", "Data gagal ditambah");
 		}else{
 			$error = $this->product_model->update($id, $data);
