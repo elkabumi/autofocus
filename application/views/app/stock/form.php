@@ -18,22 +18,23 @@ $(function(){
 	<table width="100%" cellpadding="4" class="form_layout">
 	<tr>
      <td width="196" >Kode</td>
-       <td width="651"><input readonly="readonly" name="i_kode" type="text" id="i_kode" value="<?=$product_stock_kode ?>" />
+       <td width="651"><input readonly="readonly" name="i_code" type="text" id="i_code" value="<?=$product_code ?>" />
      
 	 <input type="hidden" name="row_id" value="<?=$row_id?>" /></td>
    </tr>
       <tr>
      <td>Nama</td>
-       <td><input name="i_name" type="text" id="i_name" value="<?=$product_stock_name ?>" size="70" /></td>
+       <td><input name="i_name" type="text" id="i_name" value="<?=$product_name ?>" readonly="readonly" size="70" /></td>
+     </tr>
+       <tr>
+     <td>Cabang</td>
+       <td><input name="i_stand_name" readonly="readonly" type="text" id="i_stand_name" value="<?=$stand_name ?>" size="70" /></td>
      </tr>
       <tr>
      <td>Jumlah</td>
-       <td><input name="i_jumlah" type="text" id="i_jumlah" value="<?=$product_stock_jumlah ?>" size="70" /></td>
+       <td><input name="i_qty" type="text" id="i_qty" value="<?=$product_stock_qty ?>" size="70" /></td>
      </tr>
-  <tr>
-    <td width="196" valign="top">Keterangan</td>
-      <td><textarea name="i_description" id="i_description" cols="45" rows="5"><?= $product_stock_description ?></textarea></td>
-    </tr>
+  
    </table>
 </div>
 <div class="command_bar">
