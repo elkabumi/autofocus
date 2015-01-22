@@ -523,13 +523,13 @@ if (! function_exists('show_checkbox_status')) {
 	{
 		if($status == 0)
 		{
-			//return '<input type="checkbox" disabled="disabled" />';
-			return "Inactive";
+			return '<input type="checkbox" disabled="disabled" />';
+			//return "Inactive";
 		}
 		else
 		{
-			//return '<input type="checkbox" disabled="disabled" checked="true" />';
-			return "Active";
+			return '<input type="checkbox" disabled="disabled" checked="true" />';
+			//return "Active";
 		}
 	}
 }

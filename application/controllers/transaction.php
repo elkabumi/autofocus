@@ -37,10 +37,10 @@ class Transaction extends CI_Controller{
 				$data['transaction_id'] = '';
 				$data['employee_group_id'] = '';
 				$data['transaction_type_id'] = '';
-				$data['transaction_detail_plain_first_date'] = date('d/m/Y');
-				$data['transaction_detail_plain_last_date'] = date('d/m/Y');
-				$data['transaction_detail_actual_date'] = date('d/m/Y');
-				$data['transaction_detail_target_date'] = date('d/m/Y');
+				$data['transaction_plain_first_date'] = date('d/m/Y');
+				$data['transaction_plain_last_date'] = date('d/m/Y');
+				$data['transaction_actual_date'] = date('d/m/Y');
+				$data['transaction_target_date'] = date('d/m/Y');
 				$data['transaction_detail_description'] = '';
 			}else{
 				$result = $this->transaction_model->read_id($registration_id);
@@ -85,10 +85,10 @@ class Transaction extends CI_Controller{
 				$data['transaction_id'] = '';
 				$data['employee_group_id'] = '';
 				$data['transaction_type_id'] = '';
-				$data['transaction_detail_plain_first_date'] = date('d/m/Y');
-				$data['transaction_detail_plain_last_date'] = date('d/m/Y');
-				$data['transaction_detail_actual_date'] = date('d/m/Y');
-				$data['transaction_detail_target_date'] = date('d/m/Y');
+				$data['transaction_plain_first_date'] = date('d/m/Y');
+				$data['transaction_plain_last_date'] = date('d/m/Y');
+				$data['transaction_actual_date'] = date('d/m/Y');
+				$data['transaction_target_date'] = date('d/m/Y');
 				$data['transaction_detail_description'] = '';
 			}else{
 				$result = $this->transaction_model->read_id2($transaction_id);
@@ -260,7 +260,7 @@ class Transaction extends CI_Controller{
 				form_transient_pair('transient_transaction_detail_plain_last_date', $value['transaction_detail_plain_last_date']),
 				form_transient_pair('transient_transaction_detail_actual_date', $value['transaction_detail_actual_date']),
 				form_transient_pair('transient_transaction_detail_target_date', $value['transaction_detail_target_date']),*/
-				form_transient_pair('transient_transaction_detail_date', $value['transaction_detail_date']),
+				form_transient_pair('transient_transaction_detail_date', format_new_date($value['transaction_detail_date'])),
 				form_transient_pair('transient_transaction_detail_description', $value['transaction_detail_description']),
 				form_transient_pair('transient_transaction_detail_total', tool_money_format($value['transaction_detail_total']),$value['transaction_detail_total'])
 		);
@@ -391,7 +391,7 @@ class Transaction extends CI_Controller{
 				form_transient_pair('transient_transaction_detail_plain_last_date',$transaction_detail_plain_last_date),
 				form_transient_pair('transient_transaction_detail_actual_date', $transaction_detail_actual_date),
 				form_transient_pair('transient_transaction_detail_target_date', $transaction_detail_target_date),*/
-				form_transient_pair('transient_transaction_detail_date', $transaction_detail_date),
+				form_transient_pair('transient_transaction_detail_date', format_new_date($transaction_detail_date)),
 				form_transient_pair('transient_transaction_detail_description',$transaction_detail_description),
 				form_transient_pair('transient_transaction_detail_total',tool_money_format($transaction_detail_total),$transaction_detail_total)
 
