@@ -138,9 +138,20 @@ class product_model extends CI_Model{
 		// cek menggunakan stok atau tidak
 			$use_stock = $this->get_use_stock($data['product_category_id']);
 			if($use_stock == 1){
-				$data_stock['product_id'] = $id;
-				$data_stock['product_stock_qty'] = 0;
-				$this->db->insert('product_stocks', $data_stock);
+
+				$this->db->select('*', 1);
+				$this->db->from('stands');
+				$query_stand = $this->db->get(); debug();
+
+				foreach($query_stand->result_array() as $row_stand)
+				{
+
+					$data_stock['product_id'] = $id;
+					$data_stock['product_stock_qty'] = 0;
+					$data_stock['stand_id'] = $row_stand['stand_id'];
+					$this->db->insert('product_stocks', $data_stock);
+				}
+
 			}
 		
 		$this->access->log_insert($id, "produk [".$data['product_name']."]");

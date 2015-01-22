@@ -17,19 +17,19 @@ class Stock_model extends CI_Model{
 		// map value dari combobox ke table
 		// daftar kolom yang valid
 		
-		$columns['product_stock_kode'] 			= 'product_stock_kode';
-		$columns['product_stock_name'] 			= 'product_stock_name';
-		$columns['product_stock_jumlah'] 		= 'product_stock_jumlah';
-		$columns['product_stock_description']	= 'product_stock_description';
+		$columns['product_code'] 			= 'product_stock_kode';
+		$columns['product_name'] 			= 'product_stock_name';
+		$columns['stand_name'] 				= 'stand_name';
 		
 		$sort_column_index = $params['sort_column'];
 		$sort_dir = $params['sort_dir'];
 		
 		$order_by_column[] = 'product_stock_id';
-		$order_by_column[] = 'product_stock_kode';
-		$order_by_column[] = 'product_stock_name';
-		$order_by_column[] = 'product_stock_jumlah';
-		$order_by_column[] = 'product_stock_description';
+		$order_by_column[] = 'product_code';
+		$order_by_column[] = 'product_name';
+		$order_by_column[] = 'stand_name';
+		$order_by_column[] = 'product_stock_qty';
+		
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -44,8 +44,10 @@ class Stock_model extends CI_Model{
 		};	
 
 		$sql = "
-		select a.*
+		select a.*, b.product_code, b.product_name, c.stand_name
 		from product_stocks a
+		join products b on b.product_id = a.product_id
+		join stands c on c.stand_id = a.stand_id
 		$where  $order_by
 			
 			";
@@ -65,10 +67,10 @@ class Stock_model extends CI_Model{
 				
 			$data[] = array(
 				$row['product_stock_id'], 
-				$row['product_stock_kode'],
-				$row['product_stock_name'],
-				$row['product_stock_jumlah'],
-				$row['product_stock_description'],
+				$row['product_code'],
+				$row['product_name'],
+				$row['stand_name'],
+				$row['product_stock_qty']
 			); 
 		}
 		
@@ -77,9 +79,11 @@ class Stock_model extends CI_Model{
 	}
 	
 	function read_id($id){
-		$this->db->select('*', 1);
+		$this->db->select('a.*, b.product_code, b.product_name, c.stand_name', 1);
+		$this->db->join('products b', 'b.product_id = a.product_id');
+		$this->db->join('stands c', 'c.stand_id = a.stand_id');
 		$this->db->where('product_stock_id', $id);
-		$query = $this->db->get('product_stocks', 1);
+		$query = $this->db->get('product_stocks a', 1);
 		$result = null;
 		foreach($query->result_array() as $row)
 		{
@@ -94,7 +98,7 @@ class Stock_model extends CI_Model{
 		$id = $this->db->insert_id();
 		
 		
-		$this->access->log_insert($id, "produk[".$data['product_stock_kode']."]");
+		$this->access->log_insert($id, "");
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
@@ -103,7 +107,7 @@ class Stock_model extends CI_Model{
 		$this->db->trans_start();
 		$this->db->where('product_stock_id', $id);
 		$this->db->update('product_stocks', $data);
-		$this->access->log_update($id, "produk[".$data['product_stock_kode']."]");
+		$this->access->log_update($id, "");
 		
 		$this->db->trans_complete();
 		return $this->db->trans_status();

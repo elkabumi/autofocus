@@ -2,21 +2,18 @@
 $(function(){
 	var otable = createTable({
 		id 		: "#table",
-		listSource 	: "approved/table_controller",
-		formTarget 	: "approved/form",
-		actionTarget: "approved/form_action",
-		activeTarget: "approved/active",
+		listSource 	: "transaction_status/table_controller",
+		formTarget 	: "transaction_status/form",
+		actionTarget: "transaction_status/form_action",
+		activeTarget: "transaction_status/active",
 		column_id	: 0,
-	
-
+		
 		filter_by 	: [ 
 		{id : "code", label : "Kode Transaksi"}, 
-		{id : "date", label : "Tanggal Registrasi"},
 		{id : "nopol", label : "Nopol"},
-		{id : "customer_name", label : "Nama Customer"},
-		{id : "insurance_name", label : "Nama Asuransi"},
+		{id : "customer_name", label : "Nama Pelanggan"},
+		{id : "insurance_name", label : "Asuransi"},
 		{id : "claim_no", label : "No Klaim"}
-
 		],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
@@ -34,8 +31,8 @@ $(function(){
             <th>Nama Customer</th>
             <th>Asuransi</th>
       		<th>No Klaim</th>
-            <!--<th>Status</th>-->
-            <th>Config</th>
+            <th>Status</th>
+            <!--<th>Config</th>-->
 		</tr> 
 	</thead> 
 	<tbody> 	

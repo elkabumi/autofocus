@@ -27,7 +27,7 @@ class Stock extends CI_Controller{
 		$data = array();
 		if($id==0){
 			$data['row_id'] = '';
-			$data['product_stock_kode']		= format_code('product_stocks','product_stock_kode','P',5);
+			$data['product_code']		= format_code('product_stocks','product_stock_kode','P',5);
 			$data['product_stock_name']		= '';
 			$data['product_stock_jumlah']		= '';
 			$data['product_stock_description']			= '';
@@ -36,7 +36,7 @@ class Stock extends CI_Controller{
 			if($result){
 				$data = $result;
 				$data['row_id'] = $id;
-				$data['product_stock_id'] = $id;
+				
 			}
 		}
 		
@@ -59,18 +59,15 @@ class Stock extends CI_Controller{
 		
 		$this->load->library('form_validation');
 		
-		$this->form_validation->set_rules('i_kode','Kode', 'trim|required');
-		$this->form_validation->set_rules('i_name','Nama', 'trim|required');
-		$this->form_validation->set_rules('i_jumlah','Jumlah', 'trim|required');
-		$this->form_validation->set_rules('i_description','Description', 'trim');
+		
+		$this->form_validation->set_rules('i_qty','Jumlah', 'trim|required|numeric');
 	
 		
 		if($this->form_validation->run() == FALSE) send_json_validate();
 		
-		$data['product_stock_kode'] 			= $this->input->post('i_kode');
-		$data['product_stock_name']	 			= $this->input->post('i_name');
-		$data['product_stock_jumlah'] 			= $this->input->post('i_jumlah');
-		$data['product_stock_description'] 		= $this->input->post('i_description');		
+		
+		$data['product_stock_qty'] 			= $this->input->post('i_qty');
+		
 		
 		if(empty($id)){			
 			$error = $this->stock_model->create($data);

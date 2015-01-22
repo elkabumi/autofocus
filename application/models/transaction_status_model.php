@@ -1,5 +1,5 @@
 <?php
-class Approved_model extends CI_Model 
+class Transaction_status_model extends CI_Model 
 {
 	var $trans_type = 5;
 	var $insert_id = NULL;
@@ -22,7 +22,6 @@ class Approved_model extends CI_Model
 		// daftar kolom yang valid
 		
 		$columns['code'] 			= 'registration_code';
-		$columns['date'] 			= 'registration_date';
 		$columns['nopol'] 			= 'car_nopol';
 		$columns['customer_name']	= 'customer_name';
 		$columns['insurance_name'] 	= 'insurance_name';
@@ -45,13 +44,9 @@ class Approved_model extends CI_Model
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
-				if($columns[$category] == "registration_date"){
-					$date = explode("/", $keyword);
-					$new_keyword = $date[2]."-".$date[1]."-".$date[0];
-					$where = " and ".$columns[$category]." = '$new_keyword'";
-				}else{
-					$where = " and ".$columns[$category]." like '%$keyword%'";
-				}
+			
+				$where = " where ".$columns[$category]." like '%$keyword%'";
+			
 			
 		}
 		if ($limit > 0) {
@@ -61,11 +56,9 @@ class Approved_model extends CI_Model
 		$sql = "
 		select a.* , c.customer_name, d.car_nopol, e.insurance_name
 		from registrations a
-		
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
-		where status_registration_id = 1
 		$where  $order_by
 			
 			";
@@ -85,12 +78,21 @@ class Approved_model extends CI_Model
 			
 			
 			$registration_date = format_new_date($row['registration_date']);
-			$status = show_checkbox_status($row['status_registration_id']);
-				
+			
+			$status = 0;
+
+			switch($row['status_registration_id']){
+				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
+				case 2: $status = "<div class='registration_status2'>Proses Pengerjaan</div>"; break;
+				case 3: $status = "<div class='registration_status3'>Pengerjaan Selesai</div>"; break;
+				case 4: $status = "<div class='registration_status4'>Mobil Keluar</div>"; break;
+			}
+
+
 			if($row['status_registration_id'] == 1){ 
-				$link = "<a href=".site_url('approved/form_approved/'.$row['registration_id'])." class='link_input'> APPROVE </a>";		
+				$link = "<a href=".site_url('transaction_status/form_transaction_status/'.$row['registration_id'])." class='link_input'> APPROVE </a>";		
 			}else if($row['status_registration_id'] == 2){
-				$link = "<a href=".site_url('approved/form_report/'.$row['registration_id'])." class='link_input'> Cetak Laporan </a>";		
+				$link = "<a href=".site_url('transaction_status/form_report/'.$row['registration_id'])." class='link_input'> Cetak Laporan </a>";		
 			}
 			
 			$data[] = array(
@@ -101,8 +103,7 @@ class Approved_model extends CI_Model
 				$row['customer_name'],
 				$row['insurance_name'],
 				$row['claim_no'],
-				//$status,
-				$link
+				$status
 			); 
 		}
 		
@@ -122,10 +123,10 @@ class Approved_model extends CI_Model
 	function delete($id)
 	{
 		$this->db->trans_start();
-		$data['approved_active_status'] = '0';
+		$data['transaction_status_active_status'] = '0';
 		$data['inactive_by_id'] =  $this->access->info['employee_id'];
-		$this->db->where('approved_id', $id); // data yg mana yang akan di update
-		$this->db->update('approveds', $data);
+		$this->db->where('transaction_status_id', $id); // data yg mana yang akan di update
+		$this->db->update('transaction_statuss', $data);
 	
 		$this->access->log_delete($id, 'PO Received');
 		$this->db->trans_complete();
@@ -135,14 +136,14 @@ class Approved_model extends CI_Model
 	function create($data, $items,$item2)
 	{
 		$this->db->trans_start();
-		$this->db->insert('approveds', $data);
+		$this->db->insert('transaction_statuss', $data);
 		$id = $this->db->insert_id();
 		
 		//Insert items
 		$index = 0;
 		foreach($items as $row)
 		{			
-			$row['approved_id'] = $id;
+			$row['transaction_status_id'] = $id;
 			$this->db->insert('product_types', $row);
 			$index++;
 		}
@@ -150,7 +151,7 @@ class Approved_model extends CI_Model
 		$index2 = 0;
 		foreach($item2 as $row2)
 		{			
-			$row2['approved_id'] = $id;
+			$row2['transaction_status_id'] = $id;
 			$this->db->insert('product_sub_type', $row2);
 			$index2++;
 		}
@@ -165,27 +166,27 @@ class Approved_model extends CI_Model
 	function update($id, $data, $items,$item2)
 	{
 		$this->db->trans_start();
-		$this->db->where('approved_id', $id); // data yg mana yang akan di update
-		$this->db->update('approveds', $data);
+		$this->db->where('transaction_status_id', $id); // data yg mana yang akan di update
+		$this->db->update('transaction_statuss', $data);
 		
 		//Insert items
-		$this->db->where('approved_id', $id);
+		$this->db->where('transaction_status_id', $id);
 		$this->db->delete('product_types');
 		$index = 0;
 		foreach($items as $row)
 		{			
-			$row['approved_id'] = $id;
+			$row['transaction_status_id'] = $id;
 			$this->db->insert('product_types', $row); 
 			$index++;
 		}
 		
-		$this->db->where('approved_id', $id);
+		$this->db->where('transaction_status_id', $id);
 		$this->db->delete('product_sub_type');
 		$index = 0;
 		$index2 = 0;
 		foreach($item2 as $row2)
 		{			
-			$row2['approved_id'] = $id;
+			$row2['transaction_status_id'] = $id;
 			$this->db->insert('product_sub_type', $row2);
 			$index2++;
 		}
@@ -346,26 +347,7 @@ class Approved_model extends CI_Model
 		return $result;
 	}
 	
-	function detail_list_loader2($id)
-	{
-		// buat array kosong
-		$result = array(); 		
-		$this->db->select('b.*', 1);
-		$this->db->from('registrations a');
-		$this->db->join('photos b', 'b.registration_id = a.registration_id');
-		
-		$this->db->where('a.registration_id', $id);
-		$this->db->where('b.photo_type_id ',1);
-		$query = $this->db->get(); 
-		debug();
-		//query();
-		foreach($query->result_array() as $row)
-		{
-			$result[] = format_html($row);
-		}
-		return $result;
-	}
-	function approved($id)
+	function transaction_status($id)
 	{
 		$this->db->trans_start();
 		$data['status_registration_id'] = 2;

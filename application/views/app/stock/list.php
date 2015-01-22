@@ -8,8 +8,10 @@ $(function(){
 		column_id	: 0,
 		
 		filter_by 	: [ 
-		{id : "product_stock_kode", label : "Kode"}, 
-		{id : "product_stock_name", label : "Nama"}],
+		{id : "product_code", label : "Kode"}, 
+		{id : "product_name", label : "Nama"},
+		{id : "stand_name", label : "Cabang"}, 
+		],
 		"aLengthMenu"		: [[50, 100], [50, 100]],
 	});
 	otable.fnSetColumnVis(0, false, false);
@@ -22,15 +24,16 @@ $(function(){
 			<th>ID</th>
             <th>Kode</th>
             <th>Nama</th>
+            <th>Cabang</th>
 			<th>Jumlah</th>
-            <th>Keterangan</th>
+          
 		</tr> 
 	</thead> 
 	<tbody> 	
 	</tbody>
 </table>
 <div id="panel" class="command_table">
-	<input type="button" id="add" value="Add"/>
+	<!--<input type="button" id="add" value="Add"/>-->
 	<input type="button" id="edit" value="Edit"/>
    	<input type="button" id="delete" value="Hapus"/>
 	<input type="button" id="refresh" value="Refresh"/>

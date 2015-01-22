@@ -45,7 +45,7 @@ class Transaction_model extends CI_Model
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
 			
-				$where = " where ".$columns[$category]." like '%$keyword%'";
+				$where = " and ".$columns[$category]." like '%$keyword%'";
 			
 			
 		}
@@ -61,6 +61,7 @@ class Transaction_model extends CI_Model
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
 		left join transactions f on f.registration_id = a.registration_id
+		where status_registration_id = 2
 		$where  $order_by
 			
 			";
