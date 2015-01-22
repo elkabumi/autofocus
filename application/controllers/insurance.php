@@ -291,7 +291,7 @@ class insurance extends CI_Controller{
 		$no 		= $this->input->post('i_index');
 		
 		$product_type_desc	= $this->input->post('i_product_type_desc');
-			$product_type_name	= $this->input->post('i_product_type_name');
+		$product_type_name	= $this->input->post('i_product_type_name');
 		
 		
 

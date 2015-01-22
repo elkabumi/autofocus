@@ -218,7 +218,25 @@ class Transaction_model extends CI_Model
 		}
 		return $result;
 	}
-	
+	function detail_list_loader3($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('b.*', 1);
+		$this->db->from('registrations a');
+		$this->db->join('photos b', 'b.registration_id = a.registration_id');
+		
+		$this->db->where('a.registration_id', $id);
+		$this->db->where('b.photo_type_id ',1);
+		$query = $this->db->get(); 
+		debug();
+		//query();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
 	function detail_list_loader2($id)
 	{
 		// buat array kosong

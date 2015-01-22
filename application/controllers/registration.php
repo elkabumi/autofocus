@@ -43,16 +43,21 @@ class Registration extends CI_Controller
 		
 		$this->load->helper('form');
 		
+		
 		$this->render->add_form('app/registration/form', $data);
 		$this->render->build('Registrasi');
 		
 		$this->render->add_view('app/registration/transient_list');
 		$this->render->build('Data Panel');
 		
+		$this->render->add_view('app/registration/transient_list2');
+		$this->render->build('Photo Before');
+		
 		//$this->render->add_view('app/registration/form_end', $data);
 		//$this->render->build('Pembayaran');
 		
 		
+		$this->render->add_js('ajaxfileupload');
 		$this->render->show('Registrasi');
 		
 	}
@@ -87,7 +92,7 @@ class Registration extends CI_Controller
 		$this->form_validation->set_rules('i_claim_type','Tipe Klaim','trim|required');
 		$this->form_validation->set_rules('i_own_retention','OR','trim|required|is_numeric');
 		$this->form_validation->set_rules('i_check_in','Tanggal Masuk','trim|required|valid_date|sql_date');
-		$this->form_validation->set_rules('i_transaction_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
+		$this->form_validation->set_rules('i_registration_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required');
 		$this->form_validation->set_rules('i_pkb_no','No PKB','trim|required');
 		$this->form_validation->set_rules('i_spk_date','Tanggal SPK','trim|required|valid_date|sql_date');
@@ -125,6 +130,10 @@ class Registration extends CI_Controller
 		$list_registration_detail_price	 	= $this->input->post('transient_registration_detail_price');
 		$list_registration_detail_total_price	= $this->input->post('transient_registration_detail_total_price');
 		
+		
+		$list_registration_photo_name	 	= $this->input->post('transient_photo_name');
+		$list_registration_photo	= $this->input->post('transient_photo');
+		
 		if(!$list_product_id) send_json_error('Simpan gagal. Data panel masih kosong');
 	
 		
@@ -151,17 +160,37 @@ class Registration extends CI_Controller
 		
 		$data['total_registration'] = $total_price;
 		
+		$item2 = array();
+		if($list_registration_photo_name){
+		foreach($list_registration_photo_name as $key => $value)
+		{
+			if($list_registration_photo[$key])
+			rename($this->config->item('upload_tmp').$list_registration_photo[$key],
+			$this->config->item('upload_storage')."img/".$list_registration_photo[$key]);	
+			
+			$item2[] = array(				
+				'photo_name'  => $list_registration_photo_name[$key],
+				'photo'  => $list_registration_photo[$key]
+				
+			);
+			
+			
+			
+		}
+		}
+
+		
 		
 		if(empty($id)) // jika tidak ada id maka create
 		{ 
 			//$data['registration_code'] 			= format_code('registrations','registration_code','PU',7);
 				
-			$error = $this->registration_model->create($data, $items);
+			$error = $this->registration_model->create($data, $items,$item2);
 			send_json_action($error, "Data telah ditambah", "Data gagal ditambah", $this->registration_model->insert_id);
 		}
 		else // id disebutkan, lakukan proses UPDATE
 		{
-			$error = $this->registration_model->update($id, $data, $items);
+			$error = $this->registration_model->update($id, $data, $items,$item2);
 			send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
 		}		
 	}
@@ -192,6 +221,32 @@ class Registration extends CI_Controller
 		}		
 		send_json(make_datatables_list($data)); 
 	}
+	
+	
+	function detail_list_loader2($registration_id=0)
+	{
+		if($registration_id == 0)
+		
+		send_json(make_datatables_list(null)); 
+				
+		$data = $this->registration_model->detail_list_loader2($registration_id);
+		
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		$data[$key] = array(
+				form_transient_pair('transient_photo_name', $value['photo_name']),
+				form_transient_pair('transient_photo', $value['photo'])
+				
+		);
+		
+		
+	
+		}		
+		send_json(make_datatables_list($data)); 
+	}
+	
+	
 	function detail_form($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
 	{		
 		$this->load->library('render');
@@ -226,6 +281,63 @@ class Registration extends CI_Controller
 		$this->render->add_form('app/registration/transient_form', $data);
 		$this->render->show_buffer();
 	}
+	
+	
+	function detail_form2($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
+	{		
+		$this->load->library('render');
+		$index = $this->input->post('transient_index');
+		if (strlen(trim($index)) == 0) {
+					
+			// TRANSIENT CREATE - isi form dengan nilai default / kosong
+			$data['index']			= '';
+			$data['registration_id'] 				= $registration_id;
+			$data['photo_name']	= '';	
+			$data['photo'] = '';
+		} else {
+			
+			$data['index']			= $index;
+			$data['registration_id'] 				= $registration_id;
+			$data['photo_name'] = array_shift($this->input->post('transient_photo_name'));
+			$data['photo'] = array_shift($this->input->post('transient_photo'));
+			
+		}		
+		$this->render->add_form('app/registration/transient_form2', $data);
+		
+		$this->render->show_buffer();
+	}
+	function detail_form_action2()
+	{		
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('i_photo_name', 'nama foto', 'trim|max_length[100]');
+		$this->form_validation->set_rules('i_photo','foto', 'trim|required');
+	
+		$index = $this->input->post('i_index');		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+	
+		
+		$no 		= $this->input->post('i_index');
+		
+		$photo_name	= $this->input->post('i_photo_name');
+		$photo	= $this->input->post('i_photo');
+		
+		
+		$foto='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.form_transient_pair('transient_photo', $photo,$photo).'';
+		form_transient_pair('transient_photo', $photo,$photo);
+		$data = array(
+	
+				form_transient_pair('transient_photo_name', $photo_name, $photo_name),
+				form_transient_pair('transient_photo',	$foto,$photo),
+				
+					
+					
+		);
+		 
+		send_json_transient($index, $data);
+	}
+	
+	
 	function detail_form_action()
 	{		
 		$this->load->library('form_validation');
@@ -305,6 +417,34 @@ class Registration extends CI_Controller
 	   
 	   $this->global_model->create_report_registration('Laporan Regitrasi', 'report/registration.php', $data, $data_detail, 'header.php');
 	}
+	}
+	
+	function do_upload()
+	{		
+		//$this->load->library('blob');
+		//$blob = $this->blob->send('fileToUpload', BLOB_ALLOW_IMAGES, 1);
+		$config['upload_path'] = 'tmp/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		//$config['max_size']	= '1000';
+		//$config['max_width']  = '1024';
+		//$config['max_height']  = '768';
+		$this->load->library('upload', $config);
+		
+		if ( ! $this->upload->do_upload('fileToUpload'))
+		{
+			$output = array('error' => strip_tags($this->upload->display_errors()));
+			debug($output);
+			//$output = array('error' => print_r($error,1), 'msg'=>'test');
+			send_json($output);
+			//$this->load->view('upload_form', $error);
+		}	
+		else
+		{
+			$data = $this->upload->data();
+			$output = array('error' => '', 'value' => $data['file_name']);
+			send_json($output);
+			//$this->load->view('upload_success', $data);
+		}
 	}
 	
 }

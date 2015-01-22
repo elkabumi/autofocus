@@ -50,6 +50,8 @@ class Approved extends CI_Controller{
 		$this->render->add_view('app/approved/transient_list', $data);
 		$this->render->build('Data Panel');
 		
+		$this->render->add_view('app/approved/transient_list2');
+		$this->render->build('Photo Before');
 		$this->render->show('approved');
 	}
 	
@@ -99,6 +101,29 @@ class Approved extends CI_Controller{
 		
 		
 		
+		}		
+		send_json(make_datatables_list($data)); 
+	}
+	function detail_list_loader2($registration_id=0)
+	{
+		if($registration_id == 0)
+		
+		send_json(make_datatables_list(null)); 
+				
+		$data = $this->approved_model->detail_list_loader2($registration_id);
+		
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img/'.form_transient_pair('transient_photo', $value['photo']).'';
+		$data[$key] = array(
+				form_transient_pair('transient_photo_name', $value['photo_name']),
+				$foto
+				
+		);
+		
+		
+	
 		}		
 		send_json(make_datatables_list($data)); 
 	}
