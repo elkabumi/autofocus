@@ -69,7 +69,7 @@ function ajaxFileUpload()
 	   }
 	   ?>
     <div class="img" >
- <img  src="<?=base_url().'storage/img/'.$transient_photo?>"  width="100px"  height:"70px";  alt="" />
+ <img  src="<?=base_url().'storage/img_before/'.$transient_photo?>"  width="100px"  height:"70px";  alt="" />
 
  <input type="hidden" name="i_photo"  value="<?=$transient_photo?>" />
  <div class="desc"></div>

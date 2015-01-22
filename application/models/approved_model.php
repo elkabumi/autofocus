@@ -45,7 +45,7 @@ class Approved_model extends CI_Model
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
 			
-				$where = " where ".$columns[$category]." like '%$keyword%'";
+				$where = "AND  ".$columns[$category]." like '%$keyword%'";
 			
 			
 		}
@@ -60,7 +60,7 @@ class Approved_model extends CI_Model
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
-		$where  $order_by
+		WHERE a.status_registration_id ='1' $where  $order_by
 			
 			";
 

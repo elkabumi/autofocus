@@ -115,7 +115,7 @@ class Approved extends CI_Controller{
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
-		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img/'.form_transient_pair('transient_photo', $value['photo']).'';
+		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.form_transient_pair('transient_photo', $value['photo']).'';
 		$data[$key] = array(
 				form_transient_pair('transient_photo_name', $value['photo_name']),
 				$foto

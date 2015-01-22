@@ -309,7 +309,7 @@ class Registration extends CI_Controller
 	function detail_form_action2()
 	{		
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('i_photo_name', 'nama foto', 'trim|max_length[100]');
+		$this->form_validation->set_rules('i_photo_name', 'nama foto', 'trim|required');
 		$this->form_validation->set_rules('i_photo','foto', 'trim|required');
 	
 		$index = $this->input->post('i_index');		

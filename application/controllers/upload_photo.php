@@ -105,7 +105,7 @@
 				}
 				
 				$error = $this->upload_photo_model->create($id,$data, $items);
-				send_json_action($error, "Data telah ditambah", "Data gagal ditambah", $this->upload_photo_model->insert_id);
+				send_json_action($error, "Data telah direvisi", "Data gagal direvisi",$id);
 			
 				
 			}
@@ -127,8 +127,12 @@
 						form_transient_pair('transient_photo_name', $value['photo_name'],$value['photo_name'],
 										array(
 											'transient_photo_id' => $value['photo_id'])),
-						form_transient_pair('transient_photo',	$foto, $value['photo']),
-						form_transient_pair('transient_photo_after',	$foto_after.'', $value['photo_after']),
+						form_transient_pair('transient_photo_v',	$foto, $foto, 
+										array(
+											'transient_photo' => $value['photo'])),
+						form_transient_pair('transient_photo_after_v',	$foto_after,$foto_after,
+											 array(
+											'transient_photo_after' => $value['photo_after'])),
 						
 				);
 		
@@ -187,15 +191,20 @@
 			$i_photo	= $this->input->post('i_photo');
 			$i_photo_after	= $this->input->post('i_photo_after');
 			
-	$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.form_transient_pair('transient_photo', $photo,$photo).'';
-	$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.form_transient_pair('transient_photo', $i_photo_after,$i_photo_after).'';
+	$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.$i_photo.'';
+	$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$i_photo_after.'';
 		
 			$data = array(
-				form_transient_pair('transient_photo_name', $i_photo_name,$i_photo_name,
-									array(
-									'transient_photo_id' => $i_photo_id)), 
-				form_transient_pair('transient_photo',	$foto, $i_photo),
-				form_transient_pair('transient_photo_after',	$foto_after, $i_photo_after),
+				
+						form_transient_pair('transient_photo_name', $i_photo_name,$i_photo_name,
+										array(
+											'transient_photo_id' => $i_photo_id)),
+						form_transient_pair('transient_photo_v',	$foto, $foto, 
+										array(
+											'transient_photo' => $i_photo)),
+						form_transient_pair('transient_photo_after_v',	$foto_after,$foto_after,
+											 array(
+											'transient_photo_after' => $i_photo_after)),
 			);
 			 
 			send_json_transient($index, $data);
