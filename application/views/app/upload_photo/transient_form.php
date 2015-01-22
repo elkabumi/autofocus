@@ -16,7 +16,7 @@ function ajaxFileUpload()
 		});
  
 		$.ajaxFileUpload({
-				url:'<?=site_url('user/do_upload')?>',
+				url:'<?=site_url('upload_photo/do_upload')?>',
 				secureuri:false,
 				fileElementId:'fileToUpload',
 				dataType: 'json',
@@ -53,28 +53,42 @@ function ajaxFileUpload()
      <td width="222" req="req" >nama foto
      </td>
      <td width="633" >
-    <input name="i_photo_name" type="text" id="i_photo_name" value="<?=$photo_name ?>" />
+    <input name="i_photo_name" type="text" id="i_photo_name" value="<?=$transient_photo_name ?>" />
    <input type="hidden" name="i_index" value="<?=$index?>" />
+    <input type="hidden" name="i_photo_id" value="<?=$transient_photo_id?>" />
       </td>
     </tr>
 	<tr>
-     <td width="222" req="req" >photo Before
+<td width="222" req="req" > foto Before
      </td>
-    <td valign="top">
+<td valign="top">
       <?php
-	   if($registration_id == "" || $photo == ""){
+	   if($registration_id == "" || $transient_photo == ""){
 	   ?><div id="foto_hidden2" style="width:100px; height:70px; border:1px solid #999; text-align:center; padding-top:40px;"><b>FOTO</b></div>
 	   <?php
 	   }
 	   ?>
     <div class="img" >
-    <?php if($registration_id == ""){?>
- <img id="imagex" src="<?=base_url().'tmp/'.$photo?>"  width="100px"  height:"70px";  alt="" />
- <?php   }else{ ?>
- <img id="imagex" src="<?=base_url().'storage/img/'.$photo?>"  width="100px"  height:"70px";  alt="" />
- <?php } ?>
- <input type="hidden" name="i_photo" id="photo" value="<?=$photo?>" />
- <input type="hidden" name="i_oldphoto" value="<?=$photo?>" />
+ <img  src="<?=base_url().'storage/img/'.$transient_photo?>"  width="100px"  height:"70px";  alt="" />
+
+ <input type="hidden" name="i_photo"  value="<?=$transient_photo?>" />
+ <div class="desc"></div>
+</div>
+  </tr>
+	<tr>
+<td width="222" req="req" > foto After
+     </td>
+    <td valign="top">
+      <?php
+	   if($registration_id == "" || $transient_photo_after == ""){
+	   ?><div id="foto_hidden2" style="width:100px; height:70px; border:1px solid #999; text-align:center; padding-top:40px;"><b>FOTO</b></div>
+	   <?php
+	   }
+	   ?>
+    <div class="img" >
+ <img id="imagex" src="<?=base_url().'tmp/'.$transient_photo_after?>"  width="100px"  height:"70px";  alt="" />
+
+ <input type="hidden" name="i_photo_after" id="photo" value="<?=$transient_photo_after?>" />
  <div class="desc"></div>
 </div>
 	  <input id="fileToUpload" type="file" size="10" name="fileToUpload" class="input">

@@ -166,7 +166,7 @@ class Registration extends CI_Controller
 		{
 			if($list_registration_photo[$key])
 			rename($this->config->item('upload_tmp').$list_registration_photo[$key],
-			$this->config->item('upload_storage')."img/".$list_registration_photo[$key]);	
+			$this->config->item('upload_storage')."img_before/".$list_registration_photo[$key]);	
 			
 			$item2[] = array(				
 				'photo_name'  => $list_registration_photo_name[$key],
