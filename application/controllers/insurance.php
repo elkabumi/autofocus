@@ -304,7 +304,7 @@ class insurance extends CI_Controller{
 		send_json_transient($index, $data);
 	}
 	
-function detail_form_action2()
+	function detail_form_action2()
 	{		
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('i_ist_name', 'Material', 'trim|max_length[100]');

@@ -1,5 +1,5 @@
 <?php
-class Transaction_model extends CI_Model 
+class Upload_photo_model extends CI_Model 
 {
 	var $trans_type = 5;
 	var $insert_id = NULL;
@@ -86,9 +86,11 @@ class Transaction_model extends CI_Model
 			if($row['status_registration_id'] == 1){
 				$link = "<a class='link_input'>Belum Disetujui</a>";
 			}else if($row['status_registration_id'] == 2){
-				$link = "<a href=".site_url('transaction/form/'.$row['registration_id'])." class='link_input'> Transaksi </a>";
+				$link = "<a href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Upload Foto </a>";
 		
-			}		
+			}else if($row['status_registration_id'] == 3){	
+				$link = "<a class='link_input'> Proses Selesai </a>";
+			}
 			
 			$data[] = array(
 				$row['registration_id'], 
@@ -144,11 +146,11 @@ class Transaction_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data, $items)
+	function create($id,$data, $items)
 	{
 		$this->db->trans_start();
-		$this->db->insert('transactions', $data);
-		$id = $this->db->insert_id();
+		$this->db->where('registration_id', $id); // data yg mana yang akan di update
+		$this->db->update('registrations', $data);
 		
 		//insert tim kerja
 		
@@ -162,15 +164,17 @@ class Transaction_model extends CI_Model
 		$index = 0;
 		foreach($items as $row)
 		{			
-			$row['transaction_id'] = $id;
-			$this->db->insert('transaction_details', $row);
+			$this->db->trans_start();
+			$this->db->where('photo_id', $row['photo_id']); // data yg mana yang akan di update
+			$this->db->update('photos', $row);
+			
 			$index++;
 		}
 		
 		$this->insert_id = $id;//create registration
 	//	$this->insert_registration($id, $data);
 		
-		$this->access->log_insert($id, 'Transaksi');
+		$this->access->log_insert($id, 'Upload foto');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}// end of function 
@@ -197,29 +201,8 @@ class Transaction_model extends CI_Model
 	}
 	
 	
+	
 	function detail_list_loader($id)
-	{
-		// buat array kosong
-		$result = array(); 		
-		$this->db->select('a.*, c.product_id, c.product_code, c.product_name,e.transaction_id,f.transaction_detail_id,f.transaction_detail_plain_first_date,f.transaction_detail_plain_last_date,f.transaction_detail_actual_date,f.transaction_detail_target_date,f.transaction_detail_description,f.transaction_id,f.transaction_detail_bongkar_komponen,f.transaction_detail_lasketok,f.transaction_detail_dempul,f.transaction_detail_cat,f.transaction_detail_poles,f.transaction_detail_rakit,f.transaction_detail_total,f.transaction_detail_date', 1);
-		$this->db->from('detail_registrations a');
-		$this->db->join('registrations d', 'd.registration_id = a.registration_id');
-		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
-		$this->db->join('products c', 'c.product_id = b.product_id');
-		$this->db->join('transactions e', 'e.registration_id = d.registration_id','left');
-		$this->db->join('transaction_details f', 'f.detail_registration_id = a.detail_registration_id','left');
-		
-		$this->db->where('a.registration_id', $id);
-		//$this->db->group_by('e.transaction_id');
-		$query = $this->db->get(); debug();
-		
-		foreach($query->result_array() as $row)
-		{
-			$result[] = format_html($row);
-		}
-		return $result;
-	}
-	function detail_list_loader3($id)
 	{
 		// buat array kosong
 		$result = array(); 		
