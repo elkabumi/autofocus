@@ -57,7 +57,6 @@
 			$this->render->build('Registrasi');
 			$this->render->add_view('app/transaction/transient_list', $data);
 			$this->render->build('Data Panel');
-			$this->render->add_view('app/transaction/transient_list3', $data);
 			
 			$this->render->show('Transaksi');
 		}

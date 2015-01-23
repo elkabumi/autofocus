@@ -77,7 +77,7 @@
 				send_json_action($is_process_error, "Data telah dihapus", "Data gagal dihapus");
 			}
 				$id 			=$this->input->post('row_id');	
-				$data['status_registration_id'] = 3;	
+				$data['status_registration_id'] = 4;	
 				
 				$list_photo_id		= $this->input->post('transient_photo_id');
 				$list_photo_name	= $this->input->post('transient_photo_name');
@@ -105,7 +105,7 @@
 				}
 				
 				$error = $this->upload_photo_model->create($id,$data, $items);
-				send_json_action($error, "Data telah direvisi", "Data gagal direvisi",$id);
+				send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
 			
 				
 			}
