@@ -25,7 +25,7 @@ class po_reservation_summary_report extends CI_Controller{
 			$this->render->add_view('app/po_reservation_summary_report/transient_list');
 			$this->render->build('Detail Laporan Stock');
 		
-			$this->render->show('Material Report');
+			$this->render->show('Laporan Stock');
 		
 	}
 	function detail_table_loader($type = 0,$material_id = 0) {
@@ -59,7 +59,7 @@ class po_reservation_summary_report extends CI_Controller{
 	
 	function report($stand_id){
 	
-		if($stand_id != '0'){$where="where b.stand_id = '$stand_id'";}else{$where ='';}
+		if($stand_id != '0'){$where="where a.stand_id = '$stand_id'";}else{$where ='';}
 		
 		
 		

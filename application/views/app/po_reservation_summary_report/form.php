@@ -73,8 +73,8 @@ $(function(){
      </div>
 	<div class="command_bar">
 
-	<input type="button" id="print_student" value="download xls"  style="width:100px;" />
-		<input type="button" id="preview" value="preview"   />
+	<input type="button" id="print_student" value="Download Excel"  style="width:150px;" />
+		<input type="button" id="preview" value="Preview"   />
 
 	 
 	</div>

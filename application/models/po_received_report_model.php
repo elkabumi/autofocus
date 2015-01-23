@@ -88,7 +88,7 @@ class Po_received_report_model extends CI_Model
 				case 4: $status = "<div class='registration_status4'>Mobil Keluar</div>"; break;
 			}
 			$link_detail = "<a href=".site_url('po_received_report/form/'.$row['registration_id'])." class='link_input'> Detail </a>";
-			$link_report = "<a href=".site_url('transaction_status/form_report/'.$row['registration_id'])." class='link_input'> Cetak Laporan </a>";		
+			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input'> Download PDF</a>";		
 		
 			
 			$data[] = array(

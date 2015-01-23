@@ -292,7 +292,7 @@ $('#print_spk').click(function(){
 		<input type="button" id="submit" value="Simpan"/>
         <input type="button" id="cancel" value="Batal"/>
         -->
-     <a href="<?=site_url('po_received_report/report/'.$row_id.'')?>" style="text-align: center;
+    <a href="<?=site_url('po_received_report/report/'.$row_id.'')?>" style="text-align: center;
 	font-size: 12px;
 	font-weight:bold;
 	width: 70px;
@@ -306,7 +306,7 @@ $('#print_spk').click(function(){
 	cursor:pointer;
 	border:1px solid #1CBB9B;
 	color:#fff;
-	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.2);">Cetak Laporan </a>
+	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.2);">Download PDF </a>
 	</div>
 
 </div>
