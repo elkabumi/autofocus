@@ -9,10 +9,13 @@ $(function(){
 		column_id	: 0,
 		
 		filter_by 	: [ 
-		{id : "approved_name", label : "approved Code"}, 
-		{id : "approved_addres", label : "approved Name"},
-		{id : "approved_phone", label : "approved Type"},
-		{id : "approved_date", label : "Create Date"}],
+		{id : "code", label : "Kode Transaksi"}, 
+		{id : "date", label : "Tanggal Registrasi"},
+		{id : "nopol", label : "Nopol"},
+		{id : "customer_name", label : "Nama Customer"},
+		{id : "insurance_name", label : "Nama Asuransi"},
+		{id : "claim_no", label : "No Klaim"}
+],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
 	otable.fnSetColumnVis(0, false, false);
@@ -29,7 +32,7 @@ $(function(){
             <th>Nama Customer</th>
             <th>Asuransi</th>
       		<th>No Klaim</th>
-            <th>Status</th>
+            <th>Status Progress</th>
             <th>Config</th>
 		</tr> 
 	</thead> 

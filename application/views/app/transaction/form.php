@@ -5,7 +5,7 @@ $(function(){
 		id 				: "#id_form_nya", 
 		actionTarget	: "transaction/form_action",
 		backPage		: "transaction",
-		nextPage		: "transaction/form2"
+		nextPage		: "transaction/form"
 	});
 	
 	createLookUp({

@@ -11,8 +11,8 @@
 			}
 			function index(){
 			$this->render->add_view('app/transaction/list');
-			$this->render->build('Data Registrasi');
-			$this->render->show('Data Registrasi');
+			$this->render->build('Progress Pengerjaan');
+			$this->render->show('Progress Pengerjaan');
 		}
 		function table_controller(){
 			$data = $this->transaction_model->list_controller();
@@ -201,7 +201,7 @@
 				else // id disebutkan, lakukan proses UPDATE
 				{
 					$error = $this->transaction_model->update($id, $data, $items);
-					send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
+					send_json_action($error, "Data telah direvisi", "Data gagal direvisi", $data['registration_id']);
 				}
 			}
 			function detail_list_loader($registration_id=0)
