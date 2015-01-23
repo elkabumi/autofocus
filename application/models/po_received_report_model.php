@@ -120,6 +120,24 @@ class Po_received_report_model extends CI_Model
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
 	}
+	function read_id_report($id)
+	{
+		$this->db->select('a.*,b.*,c.*,d.period_name,e.stand_name,f.customer_name,g.car_nopol,h.insurance_name,i.employee_group_name', 1); // ambil seluruh data
+		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
+		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id','left');		
+		$this->db->join('periods d', 'a.period_id = d.period_id','left');
+		$this->db->join('stands e', 'a.stand_id = e.stand_id','left');				
+		$this->db->join('customers f', 'a.customer_id = f.customer_id','left');		
+		$this->db->join('cars g', 'a.car_id = g.car_id','left');
+		$this->db->join('insurances h', 'a.insurance_id = h.insurance_id','left');		
+		$this->db->join('employee_groups i', 'b.employee_group_id  = i.employee_group_id ','left');		
+		
+		$this->db->where('a.registration_id', $id);
+		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
+		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
+		return $result; 
+	}
 	function delete($id)
 	{
 		$this->db->trans_start();

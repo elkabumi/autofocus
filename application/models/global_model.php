@@ -147,6 +147,18 @@ class Global_model extends CI_Model
 		}
 		return $data;
 	}
+	function get_stand()
+	{		
+		$this->db->select('stand_id,stand_name');
+		$query = $this->db->get(' stands');		
+		$data = array();
+		$data[0] = "--Pilih Semua--";
+		foreach($query->result_array() as $row)
+		{
+				$data[$row['stand_id']] = $row['stand_name'];
+		}
+		return $data;
+	}
 		function get_po_number()
 	{		
 		$this->db->select('transaction_code');
@@ -226,7 +238,7 @@ class Global_model extends CI_Model
 	
 	
 	function create_report($title, $content, $data = '', $data_detail = '') {
-		$data['header'] = $this->report_header();
+		
 				$data['format'] =	header("Pragma: public");
 									header("Expires: 0");
 									header("Cache-Control : must-revalidate, post-check=0, pre-check=0");
