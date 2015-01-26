@@ -82,7 +82,10 @@ class Upload_photo_model extends CI_Model
 			
 			$registration_date = format_new_date($row['registration_date']);
 			$status = show_checkbox_status($row['status_registration_id']);
-			
+			switch($row['status_registration_id']){
+				case 3: $status = "<div class='registration_status3'>Pengerjaan Selesai</div>"; break;
+				case 4: $status = "<div class='registration_status4'>Mobil Selesai</div>"; break;
+			}
 			if($row['status_registration_id'] == 3){	
 				$link = "<a href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Upload Foto </a>";
 			}
