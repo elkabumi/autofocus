@@ -102,9 +102,41 @@ class Po_received_report extends CI_Controller{
 	function report($id = 0){
 	
 		if($id){
-	   $this->load->model('global_model');
-	   
-	  	$data = $this->po_received_report_model->read_id($id);
+	   	$this->load->model('global_model');
+	   	$result = $this->po_received_report_model->read_id_report($id);
+		if ($result) // cek dulu apakah data ditemukan 
+			{
+				$data = $result;
+				$data['row_id'] = $id;		
+				$data['period_name'] = ($result['period_name']) ? $result['period_name'] : "-";
+				$data['stand_name'] = ($result['stand_name']) ? $result['stand_name'] : "-";
+				$data['registration_code'] = ($result['registration_code']) ? $result['registration_code'] : "-";
+				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
+				$data['car_nopol'] = ($result['car_nopol']) ? $result['car_nopol'] : "-";
+				$data['claim_type'] = ($result['claim_type']);
+				$data['insurance_name'] = ($result['insurance_name']) ? $result['insurance_name'] : "-";
+				
+				$data['claim_no'] = ($result['claim_no']) ? $result['claim_no'] : "-";
+				$data['check_in'] = ($result['check_in']) ? $result['check_in'] : "-";
+				$data['check_out'] = ($result['check_out']) ? $result['check_out'] : "-";
+				
+				$data['registration_description'] = ($result['registration_description']) ? $result['registration_description'] : "-";
+				$data['employee_group_name'] = ($result['employee_group_name']) ? $result['employee_group_name'] : "-";
+				$data['transaction_plain_first_date'] = ($result['transaction_plain_first_date']) ? $result['transaction_plain_first_date'] : "-";
+				
+				$data['transaction_actual_date'] = ($result['transaction_actual_date']) ? $result['transaction_actual_date'] : "-";
+				$data['transaction_plain_last_date'] = ($result['transaction_plain_last_date']) ? $result['transaction_plain_last_date'] : "-";
+				$data['transaction_target_date'] = ($result['transaction_target_date']) ? $result['transaction_target_date'] : "-";
+					
+				$data['transaction_komponen'] = ($result['transaction_komponen']) ? $result['transaction_komponen'] : "-";
+				$data['transaction_lasketok'] = ($result['transaction_lasketok']) ? $result['transaction_lasketok'] : "-";
+				$data['transaction_dempul'] = ($result['transaction_dempul']) ? $result['transaction_dempul'] : "-";
+				$data['transaction_cat'] = ($result['transaction_cat']) ? $result['transaction_cat'] : "-";
+				$data['transaction_poles'] = ($result['transaction_poles']) ? $result['transaction_poles'] : "-";
+				$data['transaction_rakit'] = ($result['transaction_rakit']) ? $result['transaction_rakit'] : "-";
+				
+				
+			}
 		$data_detail = $this->po_received_report_model->detail_list_loader($id);
 	   
 	   $this->global_model->create_report_per_mobil('Laporan Detail Per Mobil', 'report/report_per_mobil.php', $data, $data_detail, 'header.php');

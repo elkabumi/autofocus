@@ -105,7 +105,7 @@
 				}
 				
 				$error = $this->upload_photo_model->create($id,$data, $items);
-				send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
+				send_json_action($error, "Data telah direvisi", "Data gagal direvisi" ,$id);
 			
 				
 			}
