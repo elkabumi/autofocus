@@ -51,13 +51,15 @@
 				$data['transaction_cat'] = $result['transaction_cat'];
 				$data['transaction_poles'] = $result['transaction_poles'];
 				$data['transaction_rakit'] = $result['transaction_rakit'];
+				$data['status_registration_id'] = $result['status_registration_id'];
 			}
 				}
 			$this->load->helper('form');
 			$this->render->add_form('app/upload_photo/form', $data);
 			$this->render->build('Registrasi');
+		
+			$this->render->add_view('app/upload_photo/transient_list', $data);	
 			
-			$this->render->add_view('app/upload_photo/transient_list', $data);
 			$this->render->build('Upload Photo');
 			$this->render->add_js('ajaxfileupload');
 			$this->render->show('Transaksi');
@@ -120,9 +122,18 @@
 				$sort_id = 0;
 				foreach($data as $key => $value) 
 				{
-	$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.$value['photo'].'';
-	$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$value['photo_after'].'';
-			
+					$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.$value['photo'].'';
+					if($value['photo_after'] == ''){
+						$foto_after='';
+					}else{
+						if($value['status_registration_id'] == '4'){
+							$foto_after='<img   width="50px;" height="50px;" src='.base_url().'storage/img_after/'.$value['photo_after'].'';
+
+						}else{
+							$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$value['photo_after'].'';
+
+						}
+					}
 				$data[$key] = array(
 						form_transient_pair('transient_photo_name', $value['photo_name'],$value['photo_name'],
 										array(
@@ -176,7 +187,7 @@
 		function detail_form_action()
 		{		
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('i_photo_after', 'photo after', 'trim|max_length[100]');
+			$this->form_validation->set_rules('i_photo_after', 'photo after', 'trim|required');
 		
 			$index = $this->input->post('i_index');		
 			// cek data berdasarkan kriteria
@@ -191,9 +202,12 @@
 			$i_photo	= $this->input->post('i_photo');
 			$i_photo_after	= $this->input->post('i_photo_after');
 			
-	$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.$i_photo.'';
-	$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$i_photo_after.'';
-		
+			$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.$i_photo.'';
+			if($i_photo_after == ''){
+				$foto_after ='';
+			}else{
+				$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$i_photo_after.'';
+			}
 			$data = array(
 				
 						form_transient_pair('transient_photo_name', $i_photo_name,$i_photo_name,

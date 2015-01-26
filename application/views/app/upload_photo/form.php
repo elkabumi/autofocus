@@ -290,10 +290,13 @@ $('#print_spk').click(function(){
      </div>
 	<!-- table contact -->
 	<div class="command_bar">
-	
+	<?php
+		if($status_registration_id == '3'){
+	?>
         <input type="button" id="enable" value="Edit"/>	
 		<input type="button" id="submit" value="Simpan"/>
-        <input type="button" id="cancel" value="Batal"/>
+        <?php } ?>
+        <input type="button" id="cancel" value="Close"/>
 	</div>
 </div>
 
