@@ -5,7 +5,7 @@ $(function(){
 		id 				: "#id_form_nya", 
 		actionTarget	: "upload_photo/form_action",
 		backPage		: "upload_photo",
-		nextPage		: "upload_photo/form2"
+		nextPage		: "upload_photo"
 	});
 	
 	createLookUp({
