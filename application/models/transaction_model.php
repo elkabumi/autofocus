@@ -178,7 +178,7 @@ class Transaction_model extends CI_Model
 			$index++;
 		}
 		
-		$this->insert_id = $id;//create registration
+		$this->insert_id = $data['registration_id'];//create registration
 	//	$this->insert_registration($id, $data);
 
 		

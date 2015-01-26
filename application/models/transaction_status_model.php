@@ -83,11 +83,14 @@ class Transaction_status_model extends CI_Model
 
 			switch($row['status_registration_id']){
 				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
-				case 2: $status = "<div class='registration_status2'>Proses Pengerjaan</div>"; break;
+				case 2: 
+
+				$progress = $this->get_progress_pengerjaan($row['registration_id']);
+
+				$status = "<div class='registration_status2'>Proses Pengerjaan $progress %</div>"; break;
 				case 3: $status = "<div class='registration_status3'>Pengerjaan Selesai</div>"; break;
 				case 4: $status = "<div class='registration_status4'>Mobil Keluar</div>"; break;
 			}
-
 
 			if($row['status_registration_id'] == 1){ 
 				$link = "<a href=".site_url('transaction_status/form_transaction_status/'.$row['registration_id'])." class='link_input'> APPROVE </a>";		
@@ -360,6 +363,33 @@ class Transaction_status_model extends CI_Model
 		//$this->access->log_update($id, 'Kategori produk');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
+	}
+
+	function get_progress_pengerjaan($id)
+	{
+		$sql = "select 
+				transaction_komponen,
+				transaction_lasketok,
+				transaction_dempul,
+				transaction_cat,
+				transaction_poles,
+				transaction_rakit
+				from transactions
+				where registration_id = '$id'
+				";
+		
+		$query = $this->db->query($sql);
+		
+		$result = null;
+		foreach ($query->result_array() as $row) $result = format_html($row);
+
+		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
+		$result['transaction_cat'] + $result['transaction_poles'] + 
+		$result['transaction_rakit'] + $result['transaction_komponen'];
+
+		$progress = $progress / 6 ;
+
+		return $progress;
 	}
 	
 }
