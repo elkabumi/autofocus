@@ -17,8 +17,8 @@ $(function(){
 	<thead>
 		<tr>
 			
-			<th>nama foto</th>
-            <th>foto</th>
+			<th>Nama foto</th>
+            <th>Foto After</th>
 		</tr> 
 	</thead> 
 	<tbody> 	

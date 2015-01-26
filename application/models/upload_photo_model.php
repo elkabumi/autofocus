@@ -61,7 +61,7 @@ class Upload_photo_model extends CI_Model
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
 		left join transactions f on f.registration_id = a.registration_id
-		where status_registration_id = 2
+		where status_registration_id = 3 OR status_registration_id = 4
 		$where  $order_by
 			
 			";
@@ -83,15 +83,11 @@ class Upload_photo_model extends CI_Model
 			$registration_date = format_new_date($row['registration_date']);
 			$status = show_checkbox_status($row['status_registration_id']);
 			
-			if($row['status_registration_id'] == 1){
-				$link = "<a class='link_input'>Belum Disetujui</a>";
-			}else if($row['status_registration_id'] == 2){
+			if($row['status_registration_id'] == 3){	
 				$link = "<a href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Upload Foto </a>";
-			}else if($row['status_registration_id'] == 3){	
-				$link = "<a class='link_input'> View </a>";
 			}
 			else if($row['status_registration_id'] == 4){	
-				$link = "<a class='link_input'> Proses Selesai </a>";
+				$link = "<a  href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> View</a>";
 			}
 			
 			$data[] = array(

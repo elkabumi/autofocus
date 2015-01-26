@@ -154,6 +154,24 @@ class Registration extends CI_Controller
 				'detail_registration_price'  => $list_registration_detail_price[$key],
 				'detail_registration_total_price'  => $list_registration_detail_total_price[$key]
 			);
+			
+			$check = 0;
+			$check_reservation = 0;
+			$product_id_original = $list_product_id[$key];
+			foreach($list_product_id as $key_check => $value)
+				{
+			
+					if($product_id_original == $list_product_id[$key_check]){
+						$check++;
+					}
+			
+				}
+			if($check > 1){
+				
+				$get_data_product = $this->po_received_model->get_data_product($product_id_original);
+				send_json_error("Simpan gagal. Produk item tidak boleh sama [ ".$get_data_product[0]. " - ".$get_data_product[1]." ]");
+			}
+			
 			$total_price += $list_registration_detail_total_price[$key];
 		}
 		}

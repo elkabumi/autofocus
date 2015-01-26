@@ -39,26 +39,20 @@ class Approved_model extends CI_Model
 		$order_by_column[] = 'customer_name';
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
-		$order_by_column[] = 'status_registration_id';
-		$order_by_column[] = 'status_registration_id';
+		$order_by_column[] = 'registration_id';
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
-<<<<<<< HEAD
-			
-				$where = "AND  ".$columns[$category]." like '%$keyword%'";
-			
-=======
+
 				if($columns[$category] == "registration_date"){
 					$date = explode("/", $keyword);
 					$new_keyword = $date[2]."-".$date[1]."-".$date[0];
-					$where = " and ".$columns[$category]." = '$new_keyword'";
+					$where = " where ".$columns[$category]." = '$new_keyword'";
 				}else{
-					$where = " and ".$columns[$category]." like '%$keyword%'";
+					$where = " where ".$columns[$category]." like '%$keyword%'";
 				}
->>>>>>> 706d079a04e9aa95797bad489480ead82735db78
-			
+
 		}
 		if ($limit > 0) {
 			$limit = " limit $limit offset $offset";
@@ -71,12 +65,8 @@ class Approved_model extends CI_Model
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
-<<<<<<< HEAD
-		WHERE a.status_registration_id ='1' $where  $order_by
-=======
-		where status_registration_id = 1
-		$where  $order_by
->>>>>>> 706d079a04e9aa95797bad489480ead82735db78
+
+		 $where  $order_by
 			
 			";
 
@@ -101,6 +91,8 @@ class Approved_model extends CI_Model
 				$link = "<a href=".site_url('approved/form_approved/'.$row['registration_id'])." class='link_input'> APPROVE </a>";		
 			}else if($row['status_registration_id'] == 2){
 				$link = "<a href=".site_url('approved/form_report/'.$row['registration_id'])." class='link_input'> Cetak Laporan </a>";		
+			}else{
+				$link = "<a href=".site_url('approved/form_report/'.$row['registration_id'])." class='link_input'> Cetak Laporan </a>";	
 			}
 			
 			$data[] = array(

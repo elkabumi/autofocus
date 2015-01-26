@@ -22,6 +22,7 @@ class Transaction_model extends CI_Model
 		// daftar kolom yang valid
 		
 		$columns['code'] 			= 'registration_code';
+		$columns['date'] 			= 'registration_date';
 		$columns['nopol'] 			= 'car_nopol';
 		$columns['customer_name']	= 'customer_name';
 		$columns['insurance_name'] 	= 'insurance_name';
@@ -38,14 +39,20 @@ class Transaction_model extends CI_Model
 		$order_by_column[] = 'customer_name';
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
-		$order_by_column[] = 'status_registration_id';
-		$order_by_column[] = 'status_registration_id';
+		$order_by_column[] = 'registration_id';
+	
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
 			
-				$where = " where ".$columns[$category]." like '%$keyword%'";
+				if($columns[$category] == "registration_date"){
+					$date = explode("/", $keyword);
+					$new_keyword = $date[2]."-".$date[1]."-".$date[0];
+					$where = " and ".$columns[$category]." = '$new_keyword'";
+				}else{
+					$where = " and ".$columns[$category]." like '%$keyword%'";
+				}
 			
 			
 		}
@@ -61,6 +68,7 @@ class Transaction_model extends CI_Model
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
 		left join transactions f on f.registration_id = a.registration_id
+		WHERE a.status_registration_id ='2' or a.status_registration_id = '3'
 		$where  $order_by
 			
 			";
@@ -80,17 +88,14 @@ class Transaction_model extends CI_Model
 			
 			
 			$registration_date = format_new_date($row['registration_date']);
-			$status = show_checkbox_status($row['status_registration_id']);
 			
-			if($row['status_registration_id'] == 1){
-				$link = "<a class='link_input'>Belum Disetujui</a>";
-			}else if($row['status_registration_id'] == 2){
-				$link = "<a href=".site_url('transaction/form/'.$row['registration_id'])." class='link_input'> Transaksi </a>";
-		
-			}else if($row['status_registration_id'] == 3){
-				$link = "<a class='link_input'>Proses Selesai</a>";
-		
+			switch($row['status_registration_id']){
+				case 2: $status = "Progress : 0 %"; break;
+				case 3: $status = "<div class='registration_status3'>Pengerjaan Selesai</div>"; break;
 			}
+			
+			$link = "<a href=".site_url('transaction/form/'.$row['registration_id'])." class='link_input'> Proses </a>";
+		
 			$data[] = array(
 				$row['registration_id'], 
 				$row['registration_code'],
@@ -148,6 +153,11 @@ class Transaction_model extends CI_Model
 	function create($data, $items)
 	{
 		$this->db->trans_start();
+
+		$data_update['status_registration_id'] = 3;
+		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
+		$this->db->update('registrations', $data_update);
+
 		$this->db->insert('transactions', $data);
 		$id = $this->db->insert_id();
 		
@@ -168,8 +178,10 @@ class Transaction_model extends CI_Model
 			$index++;
 		}
 		
-		$this->insert_id = $id;//create registration
+		$this->insert_id = $data['registration_id'];//create registration
 	//	$this->insert_registration($id, $data);
+
+		
 		
 		$this->access->log_insert($id, 'Transaksi');
 		$this->db->trans_complete();
@@ -178,6 +190,12 @@ class Transaction_model extends CI_Model
 	function update($id, $data, $items)
 	{
 		$this->db->trans_start();
+
+			$data_update['status_registration_id'] = 3;
+		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
+		$this->db->update('registrations', $data_update);
+
+
 		$this->db->where('transaction_id', $id); // data yg mana yang akan di update
 		$this->db->update('transactions', $data);
 		

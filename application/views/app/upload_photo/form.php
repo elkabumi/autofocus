@@ -162,13 +162,16 @@ $('#print_spk').click(function(){
       <td>Klaim</td>
       <td>:</td>
       <td><label>
-         <input type="radio" name="i_claim_type" disabled="disabled" readonly="readonly" value="1" id="i_claim_type" <?php if($claim_type == 1){ ?> checked="checked"<?php } ?> />
+      <?php if($claim_type == 1){ ?>
+         <input type="radio" name="i_claim_type" disabled="disabled" readonly="readonly" value="1" id="i_claim_type"  checked="checked"/>
          Menggunakan Asuransi</label>
-     <br />
-       <label>
-         <input name="i_claim_type" type="radio" disabled="disabled"  readonly="readonly" id="i_claim_type" value="0" <?php if($claim_type == 0){ ?> checked="checked"<?php } ?>/>
+     <?php }else if($claim_type == 0){ ?>
+     	<label>
+         <input name="i_claim_type" type="radio" disabled="disabled"  readonly="readonly" id="i_claim_type" value="0" checked="checked"/>
          Pribadi
-       </label></td>
+       </label>
+       <?php } ?>
+       </td>
     </tr>
 
  <tr>
