@@ -18,6 +18,7 @@ class price extends CI_Controller{
 		$this->render->add_view('app/price/list');
 		$this->render->build('Price');
 		$this->render->show('Price');
+		
 	}
 	
 	function table_controller(){
