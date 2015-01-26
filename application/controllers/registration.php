@@ -136,6 +136,7 @@ class Registration extends CI_Controller
 		$list_registration_photo	= $this->input->post('transient_photo');
 		
 		if(!$list_product_id) send_json_error('Simpan gagal. Data panel masih kosong');
+		if(!$list_registration_photo) send_json_error('Simpan gagal. Data Foto masih kosong');
 	
 		
 		$total_price = 0;
