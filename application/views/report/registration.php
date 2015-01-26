@@ -52,12 +52,12 @@
   <tr>
     <td>Check-in Date</td>
     <td>:</td>
-    <td><?=$check_in?></td>
+    <td><?=($check_in)?></td>
   </tr>
     <tr>
     <td>Check-out Date</td>
     <td>:</td>
-    <td><?=$check_out?></td>
+    <td><?=($check_out)?></td>
   </tr>
 </table>
 </div>
@@ -76,15 +76,17 @@
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <?php 
   $no = 1;
+   $total_transaction= 0;
   foreach($data_detail as $item): ?>
   <tr>
    
     <td width="5%"><?=$no?></td>
     <td width="15%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
-    <td width="16%" align="right"><?=$item['detail_transaction_qty']?></td>
-    <td width="40%" align="right"><?=number_format($item['detail_transaction_total_price'], 0)?></td>
+    <td width="16%" align="right"><?=$item['detail_registration_qty']?></td>
+    <td width="40%" align="right"><?=number_format($item['detail_registration_total_price'], 0)?></td>
   </tr>
   <?php 
+  $total_transaction = $total_transaction + $item['detail_registration_total_price'];
     $no++;
   endforeach; 
 

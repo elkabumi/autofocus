@@ -87,8 +87,10 @@ class Upload_photo_model extends CI_Model
 				$link = "<a class='link_input'>Belum Disetujui</a>";
 			}else if($row['status_registration_id'] == 2){
 				$link = "<a href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Upload Foto </a>";
-		
-			}else if($row['status_registration_id'] == 4){	
+			}else if($row['status_registration_id'] == 3){	
+				$link = "<a class='link_input'> View </a>";
+			}
+			else if($row['status_registration_id'] == 4){	
 				$link = "<a class='link_input'> Proses Selesai </a>";
 			}
 			
