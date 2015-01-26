@@ -80,7 +80,7 @@ class Pkb_model extends CI_Model
 		$this->db->select('a.*,b.*,c.customer_name,d.insurance_name,d.insurance_addres,e.stand_name,e.stand_address,f.car_model_merk,f.car_model_name,g.*', 1); // ambil seluruh data
 		$this->db->join('cars b','b.car_id = a.car_id');
 		$this->db->join('customers c','c.customer_id = a.customer_id');
-		$this->db->join('insurances d','d.insurance_id = a.insurance_id');
+		$this->db->join('insurances d','d.insurance_id = a.insurance_id','LEFT');
 		$this->db->join('stands e','e.stand_id = a.stand_id');
 		$this->db->join('car_models f','f.car_model_id = b.car_model_id');
 		$this->db->join('transactions g','g.registration_id = a.registration_id','left');

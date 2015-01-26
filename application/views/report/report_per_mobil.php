@@ -85,8 +85,8 @@
 </tr>
 <tr>
     <td rowspan="3" valign="top" height="15"> <strong>Keterangan </strong></td>
-    <td rowspan="3" valign="middle"><strong>:</strong></td>
-    <td rowspan="3" valign="middle" ><?=$registration_description?></td>
+    <td rowspan="3" valign="top"><strong>:</strong></td>
+    <td rowspan="3" valign="top" ><?=$registration_description?></td>
 </tr>
 </table>
 <br />
@@ -173,65 +173,65 @@
             <td><?=$item['product_name']?></td>
             <td align="center"><?php
             	if($item['transaction_detail_bongkar_komponen'] == '0'){
-					$item['transaction_detail_bongkar_komponen'] = '-';
+					$item['transaction_detail_bongkar_komponen'] = 'On progress';
 				}else{
-					$item['transaction_detail_bongkar_komponen'] = 'v';
+					$item['transaction_detail_bongkar_komponen'] = 'Done';
 				}
-				echo '<h2>'.$item['transaction_detail_bongkar_komponen'].'</h2>';
+				echo ''.$item['transaction_detail_bongkar_komponen'].'';
 				?>
                 
                </td> 
 			<td align="center">
             <?php
             	if($item['transaction_detail_lasketok'] == '0'){
-					$item['transaction_detail_lasketok'] = '-';
+					$item['transaction_detail_lasketok'] = 'On progress';
 				}else{
-					$item['transaction_detail_lasketok'] = 'v';
+					$item['transaction_detail_lasketok'] = 'Done';
 				}
-				echo '<h2>'.$item['transaction_detail_lasketok'].'</h2>';
+				echo ''.$item['transaction_detail_lasketok'].'';
 				?>
             </td>
 			<td align="center">
 			  <?php
             	if($item['transaction_detail_dempul'] == '0'){
-					$item['transaction_detail_dempul'] = '-';
+					$item['transaction_detail_dempul'] = 'On progress';
 				}else{
-					$item['transaction_detail_dempul'] = 'v';
+					$item['transaction_detail_dempul'] = 'Done';
 				}
-				echo '<h2>'.$item['transaction_detail_dempul'].'</h2>';
+				echo ''.$item['transaction_detail_dempul'].'';
 				?>
 			
 			</td>
             <td align="center">
 			  <?php
             	if($item['transaction_detail_cat'] == '0'){
-					$item['transaction_detail_cat'] = '-';
+					$item['transaction_detail_cat'] = 'On progress';
 				}else{
-					$item['transaction_detail_cat'] = 'v';
+					$item['transaction_detail_cat'] = 'Done';
 				}
-				echo '<h2>'.$item['transaction_detail_cat'].'</h2>';
+				echo ''.$item['transaction_detail_cat'].'';
 				?>
 			
 			</td>
              <td align="center">
 			  <?php
             	if($item['transaction_detail_poles'] == '0'){
-					$item['transaction_detail_poles'] = '-';
+					$item['transaction_detail_poles'] = 'On progress';
 				}else{
-					$item['transaction_detail_poles'] = 'v';
+					$item['transaction_detail_poles'] = 'Done';
 				}
-				echo '<h2>'.$item['transaction_detail_poles'].'</h2>';
+				echo ''.$item['transaction_detail_poles'].'';
 				?>
 			
 			</td>
              <td align="center">
 			  <?php
             	if($item['transaction_detail_rakit'] == '0'){
-					$item['transaction_detail_rakit'] = '-';
+					$item['transaction_detail_rakit'] = 'On progress';
 				}else{
-					$item['transaction_detail_rakit'] = 'v';
+					$item['transaction_detail_rakit'] = 'Done';
 				}
-				echo '<h2>'.$item['transaction_detail_rakit'].'</h2>';
+				echo ''.$item['transaction_detail_rakit'].'';
 				?>
 			
 			</td>

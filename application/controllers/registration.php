@@ -128,6 +128,7 @@ class Registration extends CI_Controller
 		$list_product_price_id		= $this->input->post('transient_product_price_id');
 		$list_registration_detail_qty	= $this->input->post('transient_registration_detail_qty');
 		$list_registration_detail_price	 	= $this->input->post('transient_registration_detail_price');
+		
 		$list_registration_detail_total_price	= $this->input->post('transient_registration_detail_total_price');
 		
 		
@@ -156,22 +157,21 @@ class Registration extends CI_Controller
 			);
 			
 			$check = 0;
-			$check_reservation = 0;
-			$product_id_original = $list_product_id[$key];
-			foreach($list_product_id as $key_check => $value)
+			$check_product = 0;
+			$product_price_id_original = $list_product_price_id[$key];
+			foreach($list_product_price_id as $key_check => $value)
 				{
 			
-					if($product_id_original == $list_product_id[$key_check]){
+					if($product_price_id_original == $list_product_price_id[$key_check]){
 						$check++;
 					}
 			
 				}
 			if($check > 1){
 				
-				$get_data_product = $this->po_received_model->get_data_product($product_id_original);
-				send_json_error("Simpan gagal. Produk item tidak boleh sama [ ".$get_data_product[0]. " - ".$get_data_product[1]." ]");
+				$get_data_product = $this->registration_model->get_data_product($product_price_id_original);
+				send_json_error("Simpan gagal. Panel item tidak boleh sama [ ".$get_data_product[0]. " - ".$get_data_product[1]. " ( ".$get_data_product[2]. " - ".$get_data_product[3]." )]");
 			}
-			
 			$total_price += $list_registration_detail_total_price[$key];
 		}
 		}

@@ -1339,6 +1339,7 @@ function createTableFormTransient(args) {
 			"aLengthMenu"		: params.aLengthMenu,
 			"iDisplayLength" 	: 100,
 			"bAutoWidth": false,
+			"bSort"			: false,
 			"fnRowCallback": function( nRow, aData, iDisplayIndex ) { 
 				
 				$('td', nRow).each(function() {

@@ -5,6 +5,7 @@ $(function(){
 		listSource 		: "registration/detail_list_loader/<?=$row_id?>",
 		formSource 		: "registration/detail_form/<?=$row_id?>",
 		controlTarget	: "registration/detail_form_action",
+		
 		onAdd		: function (){perhitungan();},	
 		onTargetLoad: function (){perhitungan();} 
 	});

@@ -26,12 +26,15 @@ $(function(){
 	</tbody>
     
 </table>
-
+<?php
+if($status_registration_id == '3'){
+?>
 <div class="command_table" style="text-align:left;">
   
 	<input type="button" id="edit" value="Edit"/>
    
 </div>
+<?php } ?>
 <div id="editor"></div>
 </form>
 </div>

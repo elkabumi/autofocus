@@ -182,7 +182,7 @@ class Upload_photo_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('b.*', 1);
+		$this->db->select('b.*,a.status_registration_id', 1);
 		$this->db->from('registrations a');
 		$this->db->join('photos b', 'b.registration_id = a.registration_id');
 		
