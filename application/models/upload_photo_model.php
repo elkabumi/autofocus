@@ -61,7 +61,7 @@ class Upload_photo_model extends CI_Model
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
 		left join transactions f on f.registration_id = a.registration_id
-		where status_registration_id = 3 OR status_registration_id = 4
+		where (status_registration_id = 3 OR status_registration_id = 4) AND transaction_progress = '100'  
 		$where  $order_by
 			
 			";
@@ -83,14 +83,14 @@ class Upload_photo_model extends CI_Model
 			$registration_date = format_new_date($row['registration_date']);
 			$status = show_checkbox_status($row['status_registration_id']);
 			switch($row['status_registration_id']){
-				case 3: $status = "<div class='registration_status3'>Pengerjaan Selesai</div>"; break;
-				case 4: $status = "<div class='registration_status4'>Mobil Selesai</div>"; break;
+				case 3: $status = "<div class='registration_status3'>Progress Pengerjaan 100%</div>"; break;
+				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
 			}
 			if($row['status_registration_id'] == 3){	
 				$link = "<a href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Upload Foto </a>";
 			}
 			else if($row['status_registration_id'] == 4){	
-				$link = "<a  href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> View</a>";
+				$link = "<a  href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Edit Foto</a>";
 			}
 			
 			$data[] = array(
@@ -190,7 +190,6 @@ class Upload_photo_model extends CI_Model
 		$this->db->join('photos b', 'b.registration_id = a.registration_id');
 		
 		$this->db->where('a.registration_id', $id);
-		$this->db->where('b.photo_type_id ',1);
 		$query = $this->db->get(); 
 		debug();
 		//query();

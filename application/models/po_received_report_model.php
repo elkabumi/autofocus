@@ -83,9 +83,15 @@ class Po_received_report_model extends CI_Model
 
 			switch($row['status_registration_id']){
 				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
-				case 2: $status = "<div class='registration_status2'>Proses Pengerjaan</div>"; break;
-				case 3: $status = "<div class='registration_status3'>Pengerjaan Selesai</div>"; break;
-				case 4: $status = "<div class='registration_status4'>Mobil Keluar</div>"; break;
+				case 2: $status = "<div class='registration_status2'>Sudah disetujui</div>"; break;
+				case 3: 
+				$data_progress = $this->get_progress_pengerjaan($row['registration_id']);
+				
+				$status = "<div class='registration_status3'>Proses Pengerjaan : $data_progress %</div>";
+
+			 	break;
+				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
+				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
 			}
 			$link_detail = "<a href=".site_url('po_received_report/form/'.$row['registration_id'])." class='link_input'> Detail </a>";
 			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input'> Download PDF</a>";		
@@ -382,6 +388,32 @@ class Po_received_report_model extends CI_Model
 			$result[] = format_html($row);
 		}
 		return $result;
+	}
+	function get_progress_pengerjaan($id)
+	{
+		$sql = "select 
+				transaction_komponen,
+				transaction_lasketok,
+				transaction_dempul,
+				transaction_cat,
+				transaction_poles,
+				transaction_rakit
+				from transactions
+				where registration_id = '$id'
+				";
+		
+		$query = $this->db->query($sql);
+		
+		$result = null;
+		foreach ($query->result_array() as $row) $result = format_html($row);
+
+		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
+		$result['transaction_cat'] + $result['transaction_poles'] + 
+		$result['transaction_rakit'] + $result['transaction_komponen'];
+
+		$progress = $progress / 6 ;
+
+		return $progress;
 	}
 }
 #

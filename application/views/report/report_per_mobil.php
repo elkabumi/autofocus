@@ -117,32 +117,32 @@
     <td><?=format_new_date($transaction_target_date)?></td>
 </tr>
 <tr>
-    <td height="15"><strong>Keterangan bongkar komponen</strong></td>
+    <td height="15"><strong>Keterangan bongkar komponen %</strong></td>
     <td><strong>:</strong></td>
     <td><?=$transaction_komponen?></td>
 </tr>
 <tr>
-    <td height="15"> <strong>Keterangan las/ketok</strong></td>
+    <td height="15"> <strong>Keterangan las/ketok %</strong></td>
     <td><strong>:</strong></td>
     <td><?=$transaction_lasketok?></td>
 </tr>
 <tr>
-    <td height="15" ><strong>Keterangan dempul</strong></td>
+    <td height="15" ><strong>Keterangan dempul %</strong></td>
     <td><strong>:</strong></td>
     <td><?=$transaction_dempul?></td>
 </tr>
 <tr>
-    <td height="15"><strong>Keterangan cat</strong></td>
+    <td height="15"><strong>Keterangan cat %</strong></td>
     <td><strong>:</strong></td>
     <td><?=$transaction_cat?></td>
 </tr>
 <tr>
-    <td width="32%" height="15"><strong>Keterangan poles</strong></td>
+    <td width="32%" height="15"><strong>Keterangan poles %</strong></td>
     <td width="2%">:</td>
     <td width="66%"><?=$transaction_poles?><</td>
 </tr>
 <tr>
- <td width="32%" height="15"><strong>Keterangan rakit</strong></td>
+ <td width="32%" height="15"><strong>Keterangan rakit %</strong></td>
     <td width="2%"><strong>:</strong></td>
     <td width="66%"><?=$transaction_rakit?><-</td>
 </tr>

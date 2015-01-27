@@ -254,32 +254,32 @@ $('#print_spk').click(function(){
        <td><input name="i_target_date"  readonly="readonly"  type="text" id="i_target_date" value="<?= format_new_date($transaction_target_date) ?>" class="date_input"/></td>
      </tr>
      <tr>
-     <td>Keterangan bongkar komponen</td>
+     <td>Keterangan bongkar komponen %</td>
      <td>:</td>
        <td><input name="i_komponen"  readonly="readonly"  type="text" id="i_komponen" value="<?=$transaction_komponen ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan las/ketok</td>
+     <td>Keterangan las/ketok %</td>
      <td>:</td>
        <td><input name="i_lasketok"  readonly="readonly"  type="text" id="i_lasketok" value="<?=$transaction_lasketok ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan dempul</td>
+     <td>Keterangan dempul %</td>
      <td>:</td>
        <td><input name="i_dempul"  readonly="readonly"  type="text" id="i_dempul" value="<?=$transaction_dempul ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan cat</td>
+     <td>Keterangan cat %</td>
      <td>:</td>
        <td><input name="i_cat"  readonly="readonly"  type="text" id="i_cat" value="<?=$transaction_cat ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan poles</td>
+     <td>Keterangan poles %</td>
      <td>:</td>
        <td><input name="i_poles" readonly="readonly"   type="text" id="i_poles" value="<?=$transaction_poles ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan rakit</td>
+     <td>Keterangan rakit %</td>
      <td>:</td>
        <td><input name="i_rakit"   readonly="readonly"  type="text" id="i_rakit" value="<?=$transaction_rakit ?>" /></td>
      </tr>

@@ -39,7 +39,7 @@ class Transaction_status_model extends CI_Model
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
 		$order_by_column[] = 'status_registration_id';
-		$order_by_column[] = 'status_registration_id';
+		
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -80,16 +80,18 @@ class Transaction_status_model extends CI_Model
 			$registration_date = format_new_date($row['registration_date']);
 			
 			$status = 0;
-
+			
 			switch($row['status_registration_id']){
 				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
-				case 2: 
+				case 2: $status = "<div class='registration_status2'>Sudah disetujui</div>"; break;
+				case 3: 
+				$data_progress = $this->get_progress_pengerjaan($row['registration_id']);
+				
+				$status = "<div class='registration_status3'>Proses Pengerjaan : $data_progress %</div>";
 
-				$progress = $this->get_progress_pengerjaan($row['registration_id']);
-
-				$status = "<div class='registration_status2'>Proses Pengerjaan $progress %</div>"; break;
-				case 3: $status = "<div class='registration_status3'>Pengerjaan Selesai</div>"; break;
-				case 4: $status = "<div class='registration_status4'>Mobil Keluar</div>"; break;
+			 	break;
+				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
+				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
 			}
 
 			if($row['status_registration_id'] == 1){ 

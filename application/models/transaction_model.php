@@ -40,6 +40,7 @@ class Transaction_model extends CI_Model
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
 		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_id';
 	
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
@@ -90,8 +91,16 @@ class Transaction_model extends CI_Model
 			$registration_date = format_new_date($row['registration_date']);
 			
 			switch($row['status_registration_id']){
-				case 2: $status = "Progress : 0 %"; break;
-				case 3: $status = "<div class='registration_status3'>Pengerjaan Selesai</div>"; break;
+				case 2: $status = "0 %"; 
+						$progress = "";
+				break;
+				case 3: 
+				$data_progress = $this->get_progress_pengerjaan($row['registration_id']);
+				$progress = "<div class='registration_status3' style='width:$data_progress%;'>&nbsp;</div>"; 
+				$status = $data_progress." %";
+				break;
+				
+				
 			}
 			
 			$link = "<a href=".site_url('transaction/form/'.$row['registration_id'])." class='link_input'> Proses </a>";
@@ -104,6 +113,7 @@ class Transaction_model extends CI_Model
 				$row['customer_name'],
 				$row['insurance_name'],
 				$row['claim_no'],
+				$progress,
 				$status,
 				$link
 			); 
@@ -299,6 +309,35 @@ class Transaction_model extends CI_Model
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
+
+
+	function get_progress_pengerjaan($id)
+	{
+		$sql = "select 
+				transaction_komponen,
+				transaction_lasketok,
+				transaction_dempul,
+				transaction_cat,
+				transaction_poles,
+				transaction_rakit
+				from transactions
+				where registration_id = '$id'
+				";
+		
+		$query = $this->db->query($sql);
+		
+		$result = null;
+		foreach ($query->result_array() as $row) $result = format_html($row);
+
+		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
+		$result['transaction_cat'] + $result['transaction_poles'] + 
+		$result['transaction_rakit'] + $result['transaction_komponen'];
+
+		$progress = $progress / 6 ;
+
+		return $progress;
+	}
+	
 	
 }
 #

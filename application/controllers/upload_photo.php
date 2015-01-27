@@ -85,20 +85,28 @@
 				$list_photo_name	= $this->input->post('transient_photo_name');
 				$list_photo 		= $this->input->post('transient_photo');
 				$list_photo_after	= $this->input->post('transient_photo_after');
+				$list_photo_type_id	= $this->input->post('transient_photo_type_id');
 				
 				$items = array();
 				if($list_photo_id){
 				foreach($list_photo_id as $key => $value)
 				{
-					if($list_photo_after[$key])
-					rename($this->config->item('upload_tmp').$list_photo_after[$key],
-					$this->config->item('upload_storage')."img_after/".$list_photo_after[$key]);	
 					
-					$items[] = array(				
+					if($list_photo_after[$key]){
+						
+						$list_photo_type_id[$key] = '2';
+						rename($this->config->item('upload_tmp').$list_photo_after[$key],
+						$this->config->item('upload_storage')."img_after/".$list_photo_after[$key]);	
+					}else{
+						$list_photo_type_id[$key] = '1';
+					}
+					$items[] = array(
+									
 						'photo_id'  => $list_photo_id[$key],
 						'photo_name'  => $list_photo_name[$key],
 						'photo'  	=> $list_photo[$key],
-						'photo_after'  => $list_photo_after[$key]
+						'photo_after'  => $list_photo_after[$key],
+						'photo_type_id' =>$list_photo_type_id[$key]
 					);
 					
 					
@@ -126,18 +134,14 @@
 					if($value['photo_after'] == ''){
 						$foto_after='';
 					}else{
-						if($value['status_registration_id'] == '4'){
-							$foto_after='<img   width="50px;" height="50px;" src='.base_url().'storage/img_after/'.$value['photo_after'].'';
-
-						}else{
-							$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$value['photo_after'].'';
-
-						}
+						$foto_after='<img   width="50px;" height="50px;" src='.base_url().'storage/img_after/'.$value['photo_after'].'';
+					
 					}
 				$data[$key] = array(
 						form_transient_pair('transient_photo_name', $value['photo_name'],$value['photo_name'],
 										array(
-											'transient_photo_id' => $value['photo_id'])),
+											'transient_photo_id' => $value['photo_id'],
+											'transient_photo_type_id' =>$value['photo_type_id'])),
 						form_transient_pair('transient_photo_v',	$foto, $foto, 
 										array(
 											'transient_photo' => $value['photo'])),
@@ -160,6 +164,7 @@
 						
 				// TRANSIENT CREATE - isi form dengan nilai default / kosong
 					$data['transient_photo_id'] 				= '';
+					$data['transient_photo_type_id'] 				= '';
 					$data['registration_id'] 				= $registration_id;
 					$data['transient_photo_id'] 				= '';
 					$data['transient_photo_name']			= '';	
@@ -170,6 +175,7 @@
 				
 					$data['index']							= $index;
 					$data['registration_id'] 				= $registration_id;
+					$data['transient_photo_type_id'] 		=  array_shift($this->input->post('transient_photo_type_id'));
 					$data['transient_photo_id'] 			= array_shift($this->input->post('transient_photo_id'));
 					$data['transient_photo_name'] 			= array_shift($this->input->post('transient_photo_name'));
 					$data['transient_photo'] 				= array_shift($this->input->post('transient_photo'));
@@ -199,20 +205,23 @@
 			
 			$i_photo_name	= $this->input->post('i_photo_name');
 			$i_photo_id	= $this->input->post('i_photo_id');
+			
+			$i_photo_type_id	= $this->input->post('i_photo_type_id');
 			$i_photo	= $this->input->post('i_photo');
 			$i_photo_after	= $this->input->post('i_photo_after');
 			
 			$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.$i_photo.'';
 			if($i_photo_after == ''){
-				$foto_after ='';
-			}else{
-				$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$i_photo_after.'';
+					$foto_after ='';
+				}else{
+					$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$i_photo_after.'';
 			}
 			$data = array(
 				
 						form_transient_pair('transient_photo_name', $i_photo_name,$i_photo_name,
 										array(
-											'transient_photo_id' => $i_photo_id)),
+											'transient_photo_id' => $i_photo_id,
+											'transient_photo_type_id' => $i_photo_type_id)),
 						form_transient_pair('transient_photo_v',	$foto, $foto, 
 										array(
 											'transient_photo' => $i_photo)),

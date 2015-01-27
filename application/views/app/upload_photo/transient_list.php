@@ -27,7 +27,7 @@ $(function(){
     
 </table>
 <?php
-if($status_registration_id == '3'){
+if($status_registration_id == '3' or $status_registration_id == '4'){
 ?>
 <div class="command_table" style="text-align:left;">
   

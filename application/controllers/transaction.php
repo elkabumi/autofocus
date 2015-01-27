@@ -92,7 +92,7 @@
 				$data['transaction_dempul'] = $result['transaction_dempul'];
 				$data['transaction_cat'] = $result['transaction_cat'];
 				$data['transaction_poles'] = $result['transaction_poles'];
-					$data['transaction_rakit'] = $result['transaction_rakit'];
+				$data['transaction_rakit'] = $result['transaction_rakit'];
 			}
 			}
 				$this->load->helper('form');
@@ -122,12 +122,12 @@
 				$this->form_validation->set_rules('i_last_date','Tim Kerja','trim|required|valid_date|sql_date');
 				$this->form_validation->set_rules('i_actual_date','Registrasi','trim|required|valid_date|sql_date');
 				$this->form_validation->set_rules('i_target_date','Tim Kerja','trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_komponen','Registrasi','trim');
-				$this->form_validation->set_rules('i_lasketok','Tim Kerja','trim');
-				$this->form_validation->set_rules('i_dempul','Registrasi','trim');
-				$this->form_validation->set_rules('i_cat','Tim Kerja','trim');
-				$this->form_validation->set_rules('i_poles','Registrasi','trim');
-				$this->form_validation->set_rules('i_rakit','Tim Kerja','trim');
+				$this->form_validation->set_rules('i_komponen','Keterangan bongkar komponen','max_value[100]');
+				$this->form_validation->set_rules('i_lasketok','Keterangan Las/Ketok','max_value[100]');
+				$this->form_validation->set_rules('i_dempul','Keterangan Dempul','max_value[100]');
+				$this->form_validation->set_rules('i_cat','Keterangan Cat','max_value[100]');
+				$this->form_validation->set_rules('i_poles','Keterangan Poles','max_value[100]');
+				$this->form_validation->set_rules('i_rakit','Keterangan Rakit','max_value[100]');
 		// cek data berdasarkan kriteria
 			if ($this->form_validation->run() == FALSE) send_json_validate();
 				$id = $this->input->post('i_transaction_id');
@@ -137,12 +137,22 @@
 				$data['transaction_plain_last_date'] = $this->input->post('i_last_date');
 				$data['transaction_actual_date'] = $this->input->post('i_actual_date');
 				$data['transaction_target_date'] = $this->input->post('i_target_date');
+				
 				$data['transaction_komponen'] = $this->input->post('i_komponen');
 				$data['transaction_lasketok'] = $this->input->post('i_lasketok');
 				$data['transaction_dempul'] = $this->input->post('i_dempul');
 				$data['transaction_cat'] = $this->input->post('i_cat');
 				$data['transaction_poles'] = $this->input->post('i_poles');
 				$data['transaction_rakit'] = $this->input->post('i_rakit');
+				
+			
+				
+				
+				$sum_progres = $data['transaction_komponen'] + $data['transaction_lasketok'] 
+				+ $data['transaction_dempul'] + $data['transaction_cat'] +$data['transaction_poles'] +$data['transaction_rakit'] ;
+				
+				$data['transaction_progress']  = $sum_progres / 6;
+				//send_json($data['transaction_progress']);
 				$registration_id = $this->input->post('row_id');
 		/*$items2 = $this->transaction_model->employee_group($registration_id);
 		foreach($items2 as $row){
@@ -173,12 +183,15 @@
 			//$get_purchase_price = $this->registration_model->get_purchase_price($list_product_id[$key]);
 				$items[] = array(
 				'detail_registration_id' => $list_detail_registration_id[$key],
+				
 				'transaction_detail_bongkar_komponen' => $list_transaction_detail_bongkar_komponen[$key],
 				'transaction_detail_lasketok' => $list_transaction_detail_lasketok[$key],
 				'transaction_detail_dempul' => $list_transaction_detail_dempul[$key],
 				'transaction_detail_cat' => $list_transaction_detail_cat[$key],
 				'transaction_detail_poles' => $list_transaction_detail_poles[$key],
 				'transaction_detail_rakit' => $list_transaction_detail_rakit[$key],
+				
+				
 				/*'transaction_detail_plain_first_date' => $list_transaction_detail_plain_first_date[$key],
 				'transaction_detail_plain_last_date' => $list_transaction_detail_plain_last_date[$key],
 				'transaction_detail_actual_date' => $list_transaction_detail_actual_date[$key],

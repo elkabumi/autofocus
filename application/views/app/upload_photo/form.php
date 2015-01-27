@@ -291,7 +291,7 @@ $('#print_spk').click(function(){
 	<!-- table contact -->
 	<div class="command_bar">
 	<?php
-		if($status_registration_id == '3'){
+		if($status_registration_id == '3' or $status_registration_id == '4'){
 	?>
         <input type="button" id="enable" value="Edit"/>	
 		<input type="button" id="submit" value="Simpan"/>

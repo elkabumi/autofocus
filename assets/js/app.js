@@ -219,6 +219,7 @@ function createTable(args) {
 			"bServerSide": bServerSide,
 			//"bProcessing": true,
 			//"bServerSide": true,
+			"bSort"	: true,
 			"iDisplayLength"	: 50,
 			"aLengthMenu"		: params.aLengthMenu,
 			"_fnFeatureHtmlFilter" : null,

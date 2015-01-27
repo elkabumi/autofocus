@@ -69,6 +69,57 @@ $(function(){
 		filter_by		: [{id : "p1", label : "Nama"}]
 	});
 	
+	
+	$('input[name="i_komponen"]').change(function(){
+		
+			var komponen = $('input[name="i_komponen"]').val();
+			komponen = parseFloat(komponen);
+			if(komponen > 100){
+				alert("Keterangan bongkar Komponen  tidak boleh lebih dari 100%");
+			}
+		}
+	);
+	$('input[name="i_lasketok"]').change(function(){
+			var lasketok = $('input[name="i_lasketok"]').val();
+			lasketok = parseFloat(lasketok);
+			if(lasketok > 100){
+				alert("Keterangan  Lasketok  tidak boleh lebih dari 100%");
+			}
+		}
+	);
+	$('input[name="i_dempul"]').change(function(){
+			var dempul = $('input[name="i_dempul"]').val();
+			dempul = parseFloat(dempul);
+			if(dempul > 100){
+				alert("Keterangan  Dempul  tidak boleh lebih dari 100%");
+			}
+		}
+	);
+	$('input[name="i_cat"]').change(function(){
+			var cat = $('input[name="i_cat"]').val();
+			cat = parseFloat(cat);
+			if(cat > 100){
+				alert("Keterangan  Cat  tidak boleh lebih dari 100%");
+			}
+		}
+	);
+	$('input[name="i_poles"]').change(function(){
+			var poles = $('input[name="i_poles"]').val();
+			poles = parseFloat(poles);
+			if(poles > 100){
+				alert("Keterangan  Poles  tidak boleh lebih dari 100%");
+			}
+		}
+	);
+	$('input[name="i_rakit"]').change(function(){
+			var rakit = $('input[name="i_rakit"]').val();
+			rakit = parseFloat(rakit);
+			if(rakit > 100){
+				alert("Keterangan  Rakit  tidak boleh lebih dari 100%");
+			}
+		}
+	);
+	
 	$('input[name="i_claim_type"]').change(function(){
 		var asuransi = document.getElementById("asuransi");
 		var no_klaim = document.getElementById("no_klaim");
@@ -100,6 +151,8 @@ $('#print_spk').click(function(){
 	createDatePicker();
 	//updateAll(); 
 });
+
+
 </script>
 <form class="form_class" id="id_form_nya">	
 <div class="form_area">
@@ -241,7 +294,7 @@ $('#print_spk').click(function(){
      <tr>
      <td>Tanggal akhir plain</td>
      <td>:</td>
-       <td><input name="i_last_date" type="text" id="i_last_date" value="<?= format_new_date($transaction_plain_last_date) ?>" class="date_input"/></td>
+       <td><input name="i_last_date"   type="text" id="i_last_date" value="<?= format_new_date($transaction_plain_last_date) ?>" class="date_input"/></td>
      </tr>
      <tr>
      <td>Tanggal Aktual</td>
@@ -254,32 +307,32 @@ $('#print_spk').click(function(){
        <td><input name="i_target_date" type="text" id="i_target_date" value="<?= format_new_date($transaction_target_date) ?>" class="date_input"/></td>
      </tr>
      <tr>
-     <td>Keterangan bongkar komponen</td>
+     <td>Keterangan bongkar komponen %</td>
      <td>:</td>
-       <td><input name="i_komponen" type="text" id="i_komponen" value="<?=$transaction_komponen ?>" /></td>
+       <td><input name="i_komponen"   type="text" id="i_komponen" value="<?=$transaction_komponen ?>"/></td>
      </tr>
      <tr>
-     <td>Keterangan las/ketok</td>
+     <td>Keterangan las/ketok %</td>
      <td>:</td>
        <td><input name="i_lasketok" type="text" id="i_lasketok" value="<?=$transaction_lasketok ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan dempul</td>
+     <td>Keterangan dempul %</td>
      <td>:</td>
        <td><input name="i_dempul" type="text" id="i_dempul" value="<?=$transaction_dempul ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan cat</td>
+     <td>Keterangan cat %</td>
      <td>:</td>
        <td><input name="i_cat" type="text" id="i_cat" value="<?=$transaction_cat ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan poles</td>
+     <td>Keterangan poles %</td>
      <td>:</td>
        <td><input name="i_poles" type="text" id="i_poles" value="<?=$transaction_poles ?>" /></td>
      </tr>
      <tr>
-     <td>Keterangan rakit</td>
+     <td>Keterangan rakit %</td>
      <td>:</td>
        <td><input name="i_rakit" type="text" id="i_rakit" value="<?=$transaction_rakit ?>" /></td>
      </tr>
@@ -290,7 +343,7 @@ $('#print_spk').click(function(){
 	
         <input type="button" id="enable" value="Edit"/>	
 		<input type="button" id="submit" value="Simpan"/>
-        <input type="button" id="cancel" value="Batal"/>
+        <input type="button" id="cancel" value="Close"/>
 	</div>
 </div>
 <!-- table contact -->

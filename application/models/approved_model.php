@@ -40,6 +40,7 @@ class Approved_model extends CI_Model
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
 		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_id';
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -48,9 +49,9 @@ class Approved_model extends CI_Model
 				if($columns[$category] == "registration_date"){
 					$date = explode("/", $keyword);
 					$new_keyword = $date[2]."-".$date[1]."-".$date[0];
-					$where = " where ".$columns[$category]." = '$new_keyword'";
+					$where = " AND ".$columns[$category]." = '$new_keyword'";
 				}else{
-					$where = " where ".$columns[$category]." like '%$keyword%'";
+					$where = " AND ".$columns[$category]." like '%$keyword%'";
 				}
 
 		}
@@ -65,8 +66,8 @@ class Approved_model extends CI_Model
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
-
-		 $where  $order_by
+		WHERE status_registration_id = '1'
+		 $where   $order_by
 			
 			";
 
@@ -85,7 +86,19 @@ class Approved_model extends CI_Model
 			
 			
 			$registration_date = format_new_date($row['registration_date']);
-			$status = show_checkbox_status($row['status_registration_id']);
+			
+			switch($row['status_registration_id']){
+				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
+				case 2: $status = "<div class='registration_status2'>Sudah disetujui</div>"; break;
+				case 3: 
+				$data_progress = $this->get_progress_pengerjaan($row['registration_id']);
+				
+				$status = "<div class='registration_status3'>Proses Pengerjaan : $data_progress %</div>";
+
+			 	break;
+				
+			}
+
 				
 			if($row['status_registration_id'] == 1){ 
 				$link = "<a href=".site_url('approved/form_approved/'.$row['registration_id'])." class='link_input'> APPROVE </a>";		
@@ -103,7 +116,7 @@ class Approved_model extends CI_Model
 				$row['customer_name'],
 				$row['insurance_name'],
 				$row['claim_no'],
-				//$status,
+				$status,
 				$link
 			); 
 		}
@@ -378,6 +391,33 @@ class Approved_model extends CI_Model
 		//$this->access->log_update($id, 'Kategori produk');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
+	}
+
+	function get_progress_pengerjaan($id)
+	{
+		$sql = "select 
+				transaction_komponen,
+				transaction_lasketok,
+				transaction_dempul,
+				transaction_cat,
+				transaction_poles,
+				transaction_rakit
+				from transactions
+				where registration_id = '$id'
+				";
+		
+		$query = $this->db->query($sql);
+		
+		$result = null;
+		foreach ($query->result_array() as $row) $result = format_html($row);
+
+		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
+		$result['transaction_cat'] + $result['transaction_poles'] + 
+		$result['transaction_rakit'] + $result['transaction_komponen'];
+
+		$progress = $progress / 6 ;
+
+		return $progress;
 	}
 	
 }

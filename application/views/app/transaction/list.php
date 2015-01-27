@@ -32,8 +32,10 @@ $(function(){
             <th>Nama Customer</th>
             <th>Asuransi</th>
       		<th>No Klaim</th>
-            <th>Status Progress</th>
+            <th>Progress</th>
+            <th>Status</th>
             <th>Config</th>
+
 		</tr> 
 	</thead> 
 	<tbody> 	
