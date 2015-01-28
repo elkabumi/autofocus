@@ -36,89 +36,88 @@ class Summary_report_model extends CI_Model
 		return $result;
 	}
 	
-	function detail_list_loader2($phase_id, $project_id, $material_type, $transaction_id)
+	function detail_list_loader2($date_1,$date_2)
 	{
 		// buat array kosong
-		$result = array(); 		
-		$this->db->select('a.*,
-							 e.product_category_name, 
-							 f.phase_name, 
-							 g.project_name, 
-							 h.employee_name as create_by_name, 
-							 i.employee_name as inactive_by_name', 1);
-		$this->db->from('transactions a');
-		$this->db->join('product_categories e','e.product_category_id = a.transaction_product_category_id');
-		$this->db->join('phase f','f.phase_id = a.phase_id');
-		$this->db->join('projects g','g.project_id = a.project_id');
-		$this->db->join('employees h','h.employee_id = a.create_by_id', 'left');
-		$this->db->join('employees i','i.employee_id = a.inactive_by_id', 'left');
-		$this->db->where('a.transaction_type_id', 1);
-		
-		if($phase_id != 0){
-			$this->db->where('a.phase_id', $phase_id);
+		$result = array(); 	
+		if($date_1 != 0 and $date_2 !=0){
+			$where = "WHERE a.registration_date between '".$date_1."'  AND '".$date_2."'";
+		}else{
+			$where = '';
 		}
-		
-		if($project_id != 0){
-			$this->db->where('a.project_id', $project_id);
-		}
-		
-		if($material_type != 0){
-			$this->db->where('a.transaction_product_category_id', $material_type);
-		}
-		
-		if($transaction_id != 0){
-			$this->db->where('a.transaction_id', $transaction_id);
-		}
+		$sql = "
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name
+		from registrations a
+		left join customers c on a.customer_id = c.customer_id
+		left join cars d on a.car_id = d.car_id
+		left join insurances e on a.insurance_id = e.insurance_id
+		".$where."";
 		
 		
-		$query = $this->db->get(); debug();
+		
+		$query = $this->db->query($sql); //debug();
+		//query();
 		foreach($query->result_array() as $row)
 		{
-			$row['get_total_qty'] = $this->get_total_qty($row['transaction_id']);
-			$row['get_total_ordered'] = $this->get_total_ordered($row['transaction_id']);
-			//send_json($row['get3']);
 			$result[] = format_html($row);
-			
 		}
 		return $result;
 	}
-	function get_total_qty($transaction_id){
-		
-				$sql = "SELECT SUM( a.transaction_detail_qty ) AS total
-						FROM transaction_details a
-						JOIN transactions b ON b.transaction_id = a.transaction_id
-
-				
-				where a.transaction_id = $transaction_id
-				
+	
+	
+	
+	function get_progress_pengerjaan($id)
+	{
+		$sql = "select 
+				transaction_komponen,
+				transaction_lasketok,
+				transaction_dempul,
+				transaction_cat,
+				transaction_poles,
+				transaction_rakit
+				from transactions
+				where registration_id = '$id'
 				";
-
-		$query = $this->db->query($sql);
-		//query();
-		$result = null;
-		foreach ($query->result_array() as $row)
-		 $result = format_html($row);
-		return $result['total'];
-	}
-	function get_total_ordered($transaction_id){
 		
-				$sql = "SELECT SUM( a.transaction_detail_ordered) AS total
-						FROM transaction_details a
-						JOIN transactions b ON b.transaction_id = a.transaction_id
-
-				
-				where a.transaction_id = $transaction_id
-				
-				";
-
 		$query = $this->db->query($sql);
-		//query();
+		
 		$result = null;
-		foreach ($query->result_array() as $row)
-		 $result = format_html($row);
-		return $result['total'];
+		foreach ($query->result_array() as $row) $result = format_html($row);
+
+		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
+		$result['transaction_cat'] + $result['transaction_poles'] + 
+		$result['transaction_rakit'] + $result['transaction_komponen'];
+
+		$progress = $progress / 6 ;
+
+		return $progress;
 	}
+function report($where)
+	{		
+		
+		$query = "
+				select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.transaction_progress
+				from registrations a
+				left join customers c on a.customer_id = c.customer_id
+				left join cars d on a.car_id = d.car_id
+				left join insurances e on a.insurance_id = e.insurance_id
+				left join transactions f on a.registration_id = f.registration_id
+				".$where."";
+		
+		$query = $this->db->query($query);		
+	   	if ($query->num_rows() == 0)
+            return array();
+
+        $data = $query->result_array();
+
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
+	}
+	
 }
+
 	
 
 	

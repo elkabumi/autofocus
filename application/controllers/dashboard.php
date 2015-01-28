@@ -51,7 +51,6 @@ class Dashboard extends CI_Controller{
 		if($id==0){
 			$data['row_id']				= '';
 			$data['customer_number']			= format_code('customers','customer_number','C',7);
-			
 			$data['customer_name']			= '';
 			$data['customer_ktp_number']	= '';
 			$data['customer_description']	= '';
@@ -102,7 +101,7 @@ class Dashboard extends CI_Controller{
 		$data['customer_phone'] 					= $this->input->post('i_phone');
 		$data['customer_email'] 					= $this->input->post('i_email');
 		$data['customer_address'] 				= $this->input->post('i_address');
-		$data['salesman_id'] 				= ($this->input->post('i_salesman_id')) ? $this->input->post('i_salesman_id') : null;
+		$data['salesman_id'] 					= ($this->input->post('i_salesman_id')) ? $this->input->post('i_salesman_id') : null;
 		
 		if(empty($id)){	
 			$data['customer_number']			= format_code('customers','customer_number','C',7);

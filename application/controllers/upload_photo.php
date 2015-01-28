@@ -95,8 +95,12 @@
 					if($list_photo_after[$key]){
 						
 						$list_photo_type_id[$key] = '2';
-						rename($this->config->item('upload_tmp').$list_photo_after[$key],
-						$this->config->item('upload_storage')."img_after/".$list_photo_after[$key]);	
+						if(file_exists($this->config->item('upload_tmp').$list_photo_after[$key])){
+							rename($this->config->item('upload_tmp').$list_photo_after[$key],
+							$this->config->item('upload_storage')."img_after/".$list_photo_after[$key]);	
+						}	
+						
+							
 					}else{
 						$list_photo_type_id[$key] = '1';
 					}

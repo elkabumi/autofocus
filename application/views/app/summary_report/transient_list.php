@@ -4,24 +4,14 @@
 	<thead>
 		<tr>
 			
-			<th>Phase</th>
-			<th>Project Name</th>
-			<th>PO Type</th>
-            <th>PO Number</th>
-            <th>PO Date</th>
-
-             
-             <th>Received Date </th>
-             <th>Delivery Date</th>
-             <th>Total Qty PO</th>
-             <th>Total Qty Odered</th>
-           
-             <!--<th>Site ID</th>-->
-             <th>Delta Qty PO</th>
-             <th>% Complete</th>
-             <th>Status Item PO</th>
-             <th>Created Date</th>
-             <th>Information</th>
+			 <th>Kode Transaksi</th>
+            <th>Tanggal</th>
+    		<th>Nopol</th>
+            <th>Nama Customer</th>
+            <th>Asuransi</th>
+      		<th>No Klaim</th>
+            
+            <th>Status</th>
            
 		</tr> 
 	</thead> 

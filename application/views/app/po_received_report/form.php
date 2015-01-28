@@ -266,7 +266,7 @@ $('#print_spk').click(function(){
      <tr>
      <td>Keterangan dempul %</td>
      <td>:</td>
-       <td><input name="i_dempul"  readonly="readonly"  type="text" id="i_dempul" value="<?=$transaction_dempul ?>" /></td>
+       <td><input name="i_dempul"  readonly="readonly"  type="text" id="i_dempul" value="<?=$transaction_dempul ?>"  size="10"/></td>
      </tr>
      <tr>
      <td>Keterangan cat %</td>
@@ -289,10 +289,8 @@ $('#print_spk').click(function(){
 	<div class="command_bar">
 	<!--
         <input type="button" id="enable" value="Edit"/>	
-		<input type="button" id="submit" value="Simpan"/>
-        <input type="button" id="cancel" value="Batal"/>
-        -->
-    <a href="<?=site_url('po_received_report/report/'.$row_id.'')?>" style="text-align: center;
+		<input type="button" id="submit" value="Simpan"/>  -->
+        <a href="<?=site_url('po_received_report/report/'.$row_id.'')?>" style="text-align: center;
 	font-size: 12px;
 	font-weight:bold;
 	width: 70px;
@@ -307,9 +305,13 @@ $('#print_spk').click(function(){
 	border:1px solid #1CBB9B;
 	color:#fff;
 	text-shadow:0 -1px 0 rgba(0, 0, 0, 0.2);">Download PDF </a>
-	</div>
+	
 
-</div>
+
+        <input type="button" id="cancel" value="Close"/>
+      
+    </div>
+    </div>
 <!-- table contact -->
 
 </form>
