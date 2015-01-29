@@ -97,7 +97,7 @@ function report($where)
 	{		
 		
 		$query = "
-				select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.transaction_progress
+				select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.*
 				from registrations a
 				left join customers c on a.customer_id = c.customer_id
 				left join cars d on a.car_id = d.car_id
