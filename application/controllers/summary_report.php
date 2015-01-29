@@ -67,8 +67,14 @@ class Summary_report extends CI_Controller
 				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
 			}
 
-			
-				$registration_date = format_new_date($value['registration_date']);
+			if($value['transaction_total']){
+				$laba = $value['total_registration'] - $value['transaction_total'];
+			}else{
+				$value['transaction_total'] = 0;
+				$laba = 0;
+			}
+
+			$registration_date = format_new_date($value['registration_date']);
 			$data[$key] = array(
 		
 					form_transient_pair('transient_registration_code', $value['registration_code']),
@@ -77,6 +83,9 @@ class Summary_report extends CI_Controller
 					form_transient_pair('transient_customer_name', $value['customer_name']),
 					form_transient_pair('transient_insurance_name', $value['insurance_name']),
 					form_transient_pair('transient_claim_no', $value['claim_no']),
+					form_transient_pair('transient_total_registration', tool_money_format($value['total_registration']), $value['total_registration']),
+					form_transient_pair('transient_transaction_total', tool_money_format($value['transaction_total']), $value['transaction_total']),
+					form_transient_pair('transient_laba', tool_money_format($laba), $laba),
 					form_transient_pair('transient_status', $status)
 					
 				);

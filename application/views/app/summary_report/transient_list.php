@@ -10,7 +10,9 @@
             <th>Nama Customer</th>
             <th>Asuransi</th>
       		<th>No Klaim</th>
-            
+      		<th>Total Biaya Estimasi</th>
+            <th>Total Biaya Pengerjaan</th>
+            <th>Laba</th>
             <th>Status</th>
            
 		</tr> 
