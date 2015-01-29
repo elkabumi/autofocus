@@ -38,6 +38,9 @@ class Transaction_status_model extends CI_Model
 		$order_by_column[] = 'customer_name';
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
+		$order_by_column[] = 'registration_total';
+		$order_by_column[] = 'total_transaction';
+		$order_by_column[] = 'total_transaction';
 		$order_by_column[] = 'status_registration_id';
 		
 		
@@ -54,11 +57,12 @@ class Transaction_status_model extends CI_Model
 		};	
 
 		$sql = "
-		select a.* , c.customer_name, d.car_nopol, e.insurance_name
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name, f.transaction_total
 		from registrations a
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
+		left join transactions f on f.registration_id = a.registration_id
 		$where  $order_by
 			
 			";
@@ -94,6 +98,13 @@ class Transaction_status_model extends CI_Model
 				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
 			}
 
+			if($row['transaction_total']){
+				$laba = $row['total_registration'] - $row['transaction_total'];
+			}else{
+				$row['transaction_total'] = 0;
+				$laba = 0;
+			}
+
 			if($row['status_registration_id'] == 1){ 
 				$link = "<a href=".site_url('transaction_status/form_transaction_status/'.$row['registration_id'])." class='link_input'> APPROVE </a>";		
 			}else if($row['status_registration_id'] == 2){
@@ -108,6 +119,9 @@ class Transaction_status_model extends CI_Model
 				$row['customer_name'],
 				$row['insurance_name'],
 				$row['claim_no'],
+				tool_money_format($row['total_registration']),
+				tool_money_format($row['transaction_total']),
+				tool_money_format($laba),
 				$status
 			); 
 		}

@@ -46,11 +46,12 @@ class Summary_report_model extends CI_Model
 			$where = '';
 		}
 		$sql = "
-		select a.* , c.customer_name, d.car_nopol, e.insurance_name
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name, f.transaction_total
 		from registrations a
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
+		left join transactions f on f.registration_id = a.registration_id
 		".$where."";
 		
 		
