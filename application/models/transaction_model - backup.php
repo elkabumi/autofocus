@@ -230,7 +230,7 @@ class Transaction_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*,a.detail_registration_id AS i_detail_registration_id, c.product_id, c.product_code, c.product_name,e.transaction_id,f.*', 1);
+		$this->db->select('a.*, c.product_id, c.product_code, c.product_name,e.transaction_id,f.transaction_detail_id,f.transaction_detail_plain_first_date,f.transaction_detail_plain_last_date,f.transaction_detail_actual_date,f.transaction_detail_target_date,f.transaction_detail_description,f.transaction_id,f.transaction_detail_bongkar_komponen,f.transaction_detail_lasketok,f.transaction_detail_dempul,f.transaction_detail_cat,f.transaction_detail_poles,f.transaction_detail_rakit,f.transaction_detail_total,f.transaction_detail_date', 1);
 		$this->db->from('detail_registrations a');
 		$this->db->join('registrations d', 'd.registration_id = a.registration_id');
 		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
@@ -241,7 +241,6 @@ class Transaction_model extends CI_Model
 		$this->db->where('a.registration_id', $id);
 		//$this->db->group_by('e.transaction_id');
 		$query = $this->db->get(); debug();
-		
 		
 		foreach($query->result_array() as $row)
 		{

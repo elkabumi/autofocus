@@ -145,7 +145,6 @@
 				$data['transaction_poles'] = $this->input->post('i_poles');
 				$data['transaction_rakit'] = $this->input->post('i_rakit');
 				
-				
 			
 				
 				
@@ -168,15 +167,6 @@
 				$list_transaction_detail_cat	= $this->input->post('transient_transaction_detail_cat');
 				$list_transaction_detail_poles	= $this->input->post('transient_transaction_detail_poles');
 				$list_transaction_detail_rakit	= $this->input->post('transient_transaction_detail_rakit');
-				
-				$list_transaction_cek_bongkar_komponen	= $this->input->post('transient_transaction_cek_bongkar_komponen');
-				$list_transaction_cek_lasketok	= $this->input->post('transient_transaction_cek_lasketok');
-				$list_transaction_cek_dempul	= $this->input->post('transient_transaction_cek_dempul');
-				$list_transaction_cek_cat	= $this->input->post('transient_transaction_cek_cat');
-				$list_transaction_cek_poles	= $this->input->post('transient_transaction_cek_poles');
-				$list_transaction_cek_rakit	= $this->input->post('transient_transaction_cek_rakit');
-	
-	
 		/*$list_transaction_detail_plain_first_date = $this->input->post('transient_transaction_detail_plain_first_date');
 		$list_transaction_detail_plain_last_date = $this->input->post('transient_transaction_detail_plain_last_date');
 		$list_transaction_detail_actual_date = $this->input->post('transient_transaction_detail_actual_date');
@@ -200,13 +190,6 @@
 				'transaction_detail_cat' => $list_transaction_detail_cat[$key],
 				'transaction_detail_poles' => $list_transaction_detail_poles[$key],
 				'transaction_detail_rakit' => $list_transaction_detail_rakit[$key],
-				
-				'transaction_cek_bongkar_komponen' => $list_transaction_cek_bongkar_komponen[$key],
-				'transaction_cek_lasketok' => $list_transaction_cek_lasketok[$key],
-				'transaction_cek_dempul' => $list_transaction_cek_dempul[$key],
-				'transaction_cek_cat' => $list_transaction_cek_cat[$key],
-				'transaction_cek_poles' => $list_transaction_cek_poles[$key],
-				'transaction_cek_rakit' => $list_transaction_cek_rakit[$key],
 				
 				
 				/*'transaction_detail_plain_first_date' => $list_transaction_detail_plain_first_date[$key],
@@ -241,40 +224,19 @@
 				foreach($data as $key => $value)
 				{
 				$data[$key] = array(
-					form_transient_pair('transient_detail_registration_id', $value['product_name'],$value['i_detail_registration_id'],
-							array(
-									'transient_product_name' => $value['product_name'])),
-						form_transient_pair('transient_transaction_cek_bongkar_komponen',show_checkbox_status($value['transaction_cek_bongkar_komponen']),$value['transaction_cek_bongkar_komponen'],
-											array(
-											'transient_transaction_detail_bongkar_komponen' => $value['transaction_detail_bongkar_komponen'])),
-						
-						form_transient_pair('transient_transaction_cek_lasketok',show_checkbox_status($value['transaction_cek_lasketok']),$value['transaction_cek_lasketok'],
-											array(
-											'transient_transaction_detail_lasketok' => $value['transaction_detail_lasketok'])),
-					
-						form_transient_pair('transient_transaction_cek_dempul', show_checkbox_status($value['transaction_cek_dempul']),$value['transaction_cek_dempul'],
-											array(
-											'transient_transaction_detail_dempul' => $value['transaction_detail_dempul'])),
-					
-						form_transient_pair('transient_transaction_cek_cat', show_checkbox_status($value['transaction_cek_cat']),$value['transaction_cek_cat'],
-											array(
-											'transient_transaction_detail_cat' => $value['transaction_detail_cat'])),
-											
-						form_transient_pair('transient_transaction_cek_poles', show_checkbox_status($value['transaction_cek_poles']),$value['transaction_cek_poles'],
-											array(
-											'transient_transaction_detail_poles' => $value['transaction_detail_poles'])),
-							
-						form_transient_pair('transient_transaction_cek_rakit', show_checkbox_status($value['transaction_cek_rakit']),$value['transaction_cek_rakit'],
-											array(
-											'transient_transaction_detail_rakit' => $value['transaction_detail_rakit'])),
-						
-						
+					form_transient_pair('transient_detail_registration_id', $value['product_name'],$value['detail_registration_id'],
+				array(
+						'transient_product_name' => $value['product_name'])),
+						form_transient_pair('transient_transaction_detail_bongkar_komponen',show_checkbox_status($value['transaction_detail_bongkar_komponen']),$value['transaction_detail_bongkar_komponen']),
+						form_transient_pair('transient_transaction_detail_lasketok',show_checkbox_status($value['transaction_detail_lasketok']),$value['transaction_detail_lasketok']),
+						form_transient_pair('transient_transaction_detail_dempul', show_checkbox_status($value['transaction_detail_dempul']),$value['transaction_detail_dempul']),
+						form_transient_pair('transient_transaction_detail_cat', show_checkbox_status($value['transaction_detail_cat']),$value['transaction_detail_cat']),
+						form_transient_pair('transient_transaction_detail_poles', show_checkbox_status($value['transaction_detail_poles']),$value['transaction_detail_poles']),
+						form_transient_pair('transient_transaction_detail_rakit', show_checkbox_status($value['transaction_detail_rakit']),$value['transaction_detail_rakit']),
 						/*form_transient_pair('transient_transaction_detail_plain_first_date', $value['transaction_detail_plain_first_date']),
 						form_transient_pair('transient_transaction_detail_plain_last_date', $value['transaction_detail_plain_last_date']),
 						form_transient_pair('transient_transaction_detail_actual_date', $value['transaction_detail_actual_date']),
 						form_transient_pair('transient_transaction_detail_target_date', $value['transaction_detail_target_date']),*/
-						
-						
 						form_transient_pair('transient_transaction_detail_date', format_new_date($value['transaction_detail_date'])),
 						form_transient_pair('transient_transaction_detail_description', $value['transaction_detail_description']),
 						form_transient_pair('transient_transaction_detail_total', tool_money_format($value['transaction_detail_total']),$value['transaction_detail_total'])
@@ -282,147 +244,6 @@
 				}
 				send_json(make_datatables_list($data));
 			}
-			
-			function detail_form($registration = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
-			{
-				$this->load->library('render');
-				$index = $this->input->post('transient_index');
-				if (strlen(trim($index)) == 0) {
-					// TRANSIENT CREATE - isi form dengan nilai default / kosong
-					$data['index'] = '';
-					$data['transaction_type_id'] = '';
-					$data['transaction_detail_plain_first_date'] = '';
-					$data['transaction_detail_plain_last_date'] = '';
-					$data['transaction_detail_actual_date'] = '';
-					$data['transaction_detail_target_date'] = '';
-					$data['transaction_detail_description'] = '';
-				} else {
-					$data['index'] = $index;
-					$data['product_name'] = array_shift($this->input->post('transient_product_name'));
-					$data['detail_registration_id'] = array_shift($this->input->post('transient_detail_registration_id'));
-					
-					$data['transaction_cek_bongkar_komponen'] = array_shift($this->input->post('transient_transaction_cek_bongkar_komponen'));
-					$data['transaction_cek_lasketok'] = array_shift($this->input->post('transient_transaction_cek_lasketok'));
-					$data['transaction_cek_dempul'] = array_shift($this->input->post('transient_transaction_cek_dempul'));
-					$data['transaction_cek_cat'] = array_shift($this->input->post('transient_transaction_cek_cat'));
-					$data['transaction_cek_poles'] = array_shift($this->input->post('transient_transaction_cek_poles'));
-					$data['transaction_cek_rakit'] = array_shift($this->input->post('transient_transaction_cek_rakit'));
-					
-					
-					$data['transaction_detail_bongkar_komponen'] = array_shift($this->input->post('transient_transaction_detail_bongkar_komponen'));
-					$data['transaction_detail_lasketok'] = array_shift($this->input->post('transient_transaction_detail_lasketok'));
-					$data['transaction_detail_dempul'] = array_shift($this->input->post('transient_transaction_detail_dempul'));
-					$data['transaction_detail_cat'] = array_shift($this->input->post('transient_transaction_detail_cat'));
-					$data['transaction_detail_poles'] = array_shift($this->input->post('transient_transaction_detail_poles'));
-					$data['transaction_detail_rakit'] = array_shift($this->input->post('transient_transaction_detail_rakit'));
-					
-					/*$data['transaction_detail_plain_first_date'] = array_shift($this->input->post('transient_transaction_detail_plain_first_date'));
-					$data['transaction_detail_plain_last_date'] = array_shift($this->input->post('transient_transaction_detail_plain_last_date'));
-					$data['transaction_detail_actual_date'] = array_shift($this->input->post('transient_transaction_detail_actual_date'));
-					$data['transaction_detail_target_date'] = array_shift($this->input->post('transient_transaction_detail_target_date'));*/
-					$data['transaction_detail_date'] = array_shift($this->input->post('transient_transaction_detail_date'));
-					$data['transaction_detail_description'] = array_shift($this->input->post('transient_transaction_detail_description'));
-					$data['transaction_detail_total'] = array_shift($this->input->post('transient_transaction_detail_total'));
-				}
-					$this->load->helper('form');
-					$this->render->add_form('app/transaction/transient_form', $data);
-					$this->render->show_buffer();
-			}
-			
-			
-			function detail_form_action()
-			{
-				$this->load->library('form_validation');
-				//$this->form_validation->set_rules('i_detail_registration_id', 'Harga', 'trim|required');
-				$this->form_validation->set_rules('i_product_name', 'Panel', 'trim|required');
-				/*
-				$this->form_validation->set_rules('c_bongkar_komponen', 'Bongkar', 'trim');
-				$this->form_validation->set_rules('c_lasketok', 'Las', 'trim');
-				$this->form_validation->set_rules('c_dempul', 'Dempul', 'trim');
-				$this->form_validation->set_rules('c_cat', 'Cat', 'trim');
-				$this->form_validation->set_rules('c_poles', 'Poles', 'trim');
-				$this->form_validation->set_rules('c_rakit', 'Rakit', 'trim');
-				*/
-				/*$this->form_validation->set_rules('i_first_date', 'Awal Plain', 'trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_last_date', 'Akhir Plain', 'trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_actual_date', 'Actual', 'trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_target_date', 'Target', 'trim|required|valid_date|sql_date');*/
-				
-				$this->form_validation->set_rules('i_date', 'Target', 'trim|valid_date|sql_date');
-				$this->form_validation->set_rules('i_description', 'Keterangan', 'trim');
-				$this->form_validation->set_rules('i_total', 'Total', 'trim');
-				$index = $this->input->post('i_index');
-			// cek data berdasarkan kriteria
-			if ($this->form_validation->run() == FALSE) send_json_validate();
-				$no = $this->input->post('i_index');
-				$detail_registration_id = $this->input->post('i_detail_registration_id');
-				$product_name = $this->input->post('i_product_name');
-			
-				$transaction_detail_bongkar_komponen = $this->input->post('i_bongkar_komponen');
-				$transaction_detail_lasketok = $this->input->post('i_las');
-				$transaction_detail_dempul	= $this->input->post('i_dem');
-				$transaction_detail_cat	= $this->input->post('i_ca');
-				$transaction_detail_poles	= $this->input->post('i_pol');
-				$transaction_detail_rakit	= $this->input->post('i_rak');
-				
-				$transaction_cek_bongkar_komponen = $this->input->post('c_bongkar_komponen');
-				$transaction_cek_lasketok = $this->input->post('c_lasketok');
-				$transaction_cek_dempul	= $this->input->post('c_dempul');
-				$transaction_cek_cat	= $this->input->post('c_cat');
-				$transaction_cek_poles	= $this->input->post('c_poles');
-				$transaction_cek_rakit	= $this->input->post('c_rakit');
-				
-			
-				/*$transaction_detail_plain_first_date = $this->input->post('i_first_date');
-				$transaction_detail_plain_last_date = $this->input->post('i_last_date');
-				$transaction_detail_actual_date = $this->input->post('i_actual_date');
-				$transaction_detail_target_date = $this->input->post('i_target_date');*/
-				$transaction_detail_date = $this->input->post('i_date');
-				$transaction_detail_description = $this->input->post('i_description');
-				$transaction_detail_total	= $this->input->post('i_total');
-				//send_json_error($no);
-				$data = array(
-				form_transient_pair('transient_detail_registration_id', $product_name, $detail_registration_id,
-				array(
-						'transient_product_name' => $product_name)),
-						
-				form_transient_pair('transient_transaction_cek_bongkar_komponen', show_checkbox_status($transaction_cek_bongkar_komponen),$transaction_cek_bongkar_komponen,
-									array(
-											'transient_transaction_detail_bongkar_komponen' => $transaction_detail_bongkar_komponen)),
-				
-				form_transient_pair('transient_transaction_cek_lasketok', show_checkbox_status($transaction_cek_lasketok),$transaction_cek_lasketok,
-									array(
-											'transient_transaction_detail_lasketok' => $transaction_detail_lasketok)),
-				
-				form_transient_pair('transient_transaction_cek_dempul', show_checkbox_status($transaction_cek_dempul),$transaction_cek_dempul,
-									array(
-											'transient_transaction_detail_dempul' => $transaction_detail_dempul)),
-				
-				form_transient_pair('transient_transaction_cek_cat', show_checkbox_status($transaction_cek_cat),$transaction_cek_cat,
-									array(
-											'transient_transaction_detail_cat' => $transaction_detail_cat)),
-				
-				form_transient_pair('transient_transaction_cek_poles', show_checkbox_status($transaction_cek_poles),$transaction_cek_poles,
-									array(
-											'transient_transaction_detail_poles' => $transaction_detail_poles)),
-				
-				form_transient_pair('transient_transaction_cek_rakit', show_checkbox_status($transaction_cek_rakit),$transaction_cek_rakit,
-									array(
-										 	'transient_transaction_detail_rakit' => $transaction_detail_rakit)),
-											
-				/*form_transient_pair('transient_transaction_detail_plain_first_date', $transaction_detail_plain_first_date),
-				form_transient_pair('transient_transaction_detail_plain_last_date',$transaction_detail_plain_last_date),
-				form_transient_pair('transient_transaction_detail_actual_date', $transaction_detail_actual_date),
-				form_transient_pair('transient_transaction_detail_target_date', $transaction_detail_target_date),*/
-				form_transient_pair('transient_transaction_detail_date', format_new_date($transaction_detail_date)),
-				form_transient_pair('transient_transaction_detail_description',$transaction_detail_description),
-				form_transient_pair('transient_transaction_detail_total',tool_money_format($transaction_detail_total),$transaction_detail_total)
-				);
-			send_json_transient($index, $data);
-		}
-			
-			
-			
 			function detail_list_loader2($transaction_id=0)
 			{
 				if($transaction_id == 0)send_json(make_datatables_list(null));
@@ -441,6 +262,97 @@
 				}
 				send_json(make_datatables_list($data));
 			}
+			function detail_form($registration = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
+			{
+				$this->load->library('render');
+				$index = $this->input->post('transient_index');
+				if (strlen(trim($index)) == 0) {
+					// TRANSIENT CREATE - isi form dengan nilai default / kosong
+					$data['index'] = '';
+					$data['transaction_type_id'] = '';
+					$data['transaction_detail_plain_first_date'] = '';
+					$data['transaction_detail_plain_last_date'] = '';
+					$data['transaction_detail_actual_date'] = '';
+					$data['transaction_detail_target_date'] = '';
+					$data['transaction_detail_description'] = '';
+				} else {
+					$data['index'] = $index;
+					$data['product_name'] = array_shift($this->input->post('transient_product_name'));
+					$data['detail_registration_id'] = array_shift($this->input->post('transient_detail_registration_id'));
+					$data['transaction_detail_bongkar_komponen'] = array_shift($this->input->post('transient_transaction_detail_bongkar_komponen'));
+					$data['transaction_detail_lasketok'] = array_shift($this->input->post('transient_transaction_detail_lasketok'));
+					$data['transaction_detail_dempul'] = array_shift($this->input->post('transient_transaction_detail_dempul'));
+					$data['transaction_detail_cat'] = array_shift($this->input->post('transient_transaction_detail_cat'));
+					$data['transaction_detail_poles'] = array_shift($this->input->post('transient_transaction_detail_poles'));
+					$data['transaction_detail_rakit'] = array_shift($this->input->post('transient_transaction_detail_rakit'));
+					/*$data['transaction_detail_plain_first_date'] = array_shift($this->input->post('transient_transaction_detail_plain_first_date'));
+					$data['transaction_detail_plain_last_date'] = array_shift($this->input->post('transient_transaction_detail_plain_last_date'));
+					$data['transaction_detail_actual_date'] = array_shift($this->input->post('transient_transaction_detail_actual_date'));
+					$data['transaction_detail_target_date'] = array_shift($this->input->post('transient_transaction_detail_target_date'));*/
+					$data['transaction_detail_date'] = array_shift($this->input->post('transient_transaction_detail_date'));
+					$data['transaction_detail_description'] = array_shift($this->input->post('transient_transaction_detail_description'));
+					$data['transaction_detail_total'] = array_shift($this->input->post('transient_transaction_detail_total'));
+				}
+					$this->load->helper('form');
+					$this->render->add_form('app/transaction/transient_form', $data);
+					$this->render->show_buffer();
+			}
+			function detail_form_action()
+			{
+				$this->load->library('form_validation');
+				$this->form_validation->set_rules('i_detail_registration_id', 'Harga', 'trim|required');
+				$this->form_validation->set_rules('i_product_name', 'Panel', 'trim|required');
+				$this->form_validation->set_rules('c_bongkar_komponen', 'Bongkar', 'trim');
+				$this->form_validation->set_rules('c_lasketok', 'Las', 'trim');
+				$this->form_validation->set_rules('c_dempul', 'Dempul', 'trim');
+				$this->form_validation->set_rules('c_cat', 'Cat', 'trim');
+				$this->form_validation->set_rules('c_poles', 'Poles', 'trim');
+				$this->form_validation->set_rules('c_rakit', 'Rakit', 'trim');
+				/*$this->form_validation->set_rules('i_first_date', 'Awal Plain', 'trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_last_date', 'Akhir Plain', 'trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_actual_date', 'Actual', 'trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_target_date', 'Target', 'trim|required|valid_date|sql_date');*/
+				$this->form_validation->set_rules('i_date', 'Target', 'trim|valid_date|sql_date');
+				$this->form_validation->set_rules('i_description', 'Keterangan', 'trim');
+				$this->form_validation->set_rules('i_total', 'Total', 'trim');
+				$index = $this->input->post('i_index');
+			// cek data berdasarkan kriteria
+			if ($this->form_validation->run() == FALSE) send_json_validate();
+				$no = $this->input->post('i_index');
+				$detail_registration_id = $this->input->post('i_detail_registration_id');
+				$product_name = $this->input->post('i_product_name');
+				$transaction_detail_bongkar_komponen = $this->input->post('c_bongkar_komponen');
+				$transaction_detail_lasketok = $this->input->post('c_lasketok');
+				$transaction_detail_dempul	= $this->input->post('c_dempul');
+				$transaction_detail_cat	= $this->input->post('c_cat');
+				$transaction_detail_poles	= $this->input->post('c_poles');
+				$transaction_detail_rakit	= $this->input->post('c_rakit');
+				/*$transaction_detail_plain_first_date = $this->input->post('i_first_date');
+				$transaction_detail_plain_last_date = $this->input->post('i_last_date');
+				$transaction_detail_actual_date = $this->input->post('i_actual_date');
+				$transaction_detail_target_date = $this->input->post('i_target_date');*/
+				$transaction_detail_date = $this->input->post('i_date');
+				$transaction_detail_description = $this->input->post('i_description');
+				$transaction_detail_total	= $this->input->post('i_total');
+				//send_json_error($no);
+				$data = array(
+				form_transient_pair('transient_detail_registration_id', $product_name, $detail_registration_id),
+				form_transient_pair('transient_transaction_detail_bongkar_komponen', show_checkbox_status($transaction_detail_bongkar_komponen),$transaction_detail_bongkar_komponen),
+				form_transient_pair('transient_transaction_detail_lasketok', show_checkbox_status($transaction_detail_lasketok),$transaction_detail_lasketok),
+				form_transient_pair('transient_transaction_detail_dempul', show_checkbox_status($transaction_detail_dempul),$transaction_detail_dempul),
+				form_transient_pair('transient_transaction_detail_cat', show_checkbox_status($transaction_detail_cat),$transaction_detail_cat),
+				form_transient_pair('transient_transaction_detail_poles', show_checkbox_status($transaction_detail_poles),$transaction_detail_poles),
+				form_transient_pair('transient_transaction_detail_rakit', show_checkbox_status($transaction_detail_rakit),$transaction_detail_rakit),
+				/*form_transient_pair('transient_transaction_detail_plain_first_date', $transaction_detail_plain_first_date),
+				form_transient_pair('transient_transaction_detail_plain_last_date',$transaction_detail_plain_last_date),
+				form_transient_pair('transient_transaction_detail_actual_date', $transaction_detail_actual_date),
+				form_transient_pair('transient_transaction_detail_target_date', $transaction_detail_target_date),*/
+				form_transient_pair('transient_transaction_detail_date', format_new_date($transaction_detail_date)),
+				form_transient_pair('transient_transaction_detail_description',$transaction_detail_description),
+				form_transient_pair('transient_transaction_detail_total',tool_money_format($transaction_detail_total),$transaction_detail_total)
+				);
+			send_json_transient($index, $data);
+		}
 		function form_transaction_action($is_delete = 0){
 				$id = $this->input->post('row2_id');
 				$error = $this->transaction_model->transaction($id);
