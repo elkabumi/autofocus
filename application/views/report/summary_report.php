@@ -19,7 +19,9 @@
                                                     <th>Nama Customer</th>
                                                     <th>Asuransi</th>
                                                     <th>No Klaim</th>
-                                                    
+                                                    <th>Total Estimasi Biaya</th>
+                                                    <th>Total Biaya Pengerjaan</th>
+                                                    <th>Laba</th>
                                                     <th>Status</th>
            
                                             </tr>
@@ -27,20 +29,29 @@
   
 		<?php $no=1;
            foreach($detail as $item):
-		   
+		   if($item['transaction_total']){
+				$laba = $item['total_registration'] - $item['transaction_total'];
+			}else{
+				$value['transaction_total'] = 0;
+				$laba = 0;
+			}
 		   $registration_date = format_new_date($item['registration_date']);
 		 
 		 
 		 ?>
         								  <tr>
           		
-                                               <th><?=$no?>.</th>
+                                               <th><?=$no?></th>
                                                <th align="center"><?=$item['registration_code']?></th>
                                                <th><?=$registration_date?></th>
                                                <th><?=$item['car_nopol']?></th>
                                                <th><?=$item['customer_name']?></th>
                                                <th><?=$item['insurance_name']?></th>
                                                <th><?=$item['claim_no']?></th>
+                                              
+                                               <th><?=tool_money_format($item['total_registration'])?></th>
+                                               <th><?=tool_money_format($item['transaction_total'])?></th>
+                                               <th><?=tool_money_format($laba)?></th>
                                            
          <?php
 													  
