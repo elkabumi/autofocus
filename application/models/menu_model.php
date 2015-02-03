@@ -8,6 +8,7 @@ class Menu_model extends CI_Model
 		$this->db->select('m.*, p.permit_crud_mode');
 		$this->db->from('side_menus m');
 		$this->db->join('permits p', 'm.module_id = p.permit_module_id AND p.permit_group_id = ' . $group_id, 'left');
+		$this->db->where('menu_active', 1);
 		$this->db->order_by('m.menu_weight');
 		$this->db->order_by('m.menu_id');
 		//$this->db->where('m.menu_active', 't');
