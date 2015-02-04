@@ -64,7 +64,7 @@ class product extends CI_Controller{
 		
 		$this->form_validation->set_rules('i_code','Item Code', 'trim|required|max_length[15]');
 		$this->form_validation->set_rules('i_name','Item Name', 'trim|required|max_length[200]');
-		$this->form_validation->set_rules('i_category_id','Item Category', 'trim|required');
+		
 		$this->form_validation->set_rules('i_insurance_id','Asuransi', 'trim|required');
 		$this->form_validation->set_rules('i_date','Create Date', 'trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_description','Description', 'trim|max_length[100]');
@@ -76,9 +76,9 @@ class product extends CI_Controller{
 		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
 		//$data['product_price'] 				= $this->input->post('i_price');
 		$data['product_name'] 				= $this->input->post('i_name');
-		$data['product_category_id'] 		= $this->input->post('i_category_id');
+		$data['product_category_id'] 		= 0;
 		$data['product_qty'] 				= '';
-		$data['product_category_id'] 		= $this->input->post('i_category_id');
+		
 		$data['product_description'] 		= $this->input->post('i_description');
 		$data['product_date'] 				= $this->input->post('i_date');
 		

@@ -1,6 +1,6 @@
 <?php
 
-class product_model extends CI_Model{
+class Workshop_service_model extends CI_Model{
 
 	function __construct(){
 		
@@ -17,20 +17,21 @@ class product_model extends CI_Model{
 		// map value dari combobox ke table
 		// daftar kolom yang valid
 		
-		$columns['product_code'] 			= 'product_code';
-		$columns['product_name'] 			= 'product_name';
+		$columns['workshop_service_name'] 			= 'workshop_service_name';
 	
 		
 		
 		$sort_column_index = $params['sort_column'];
 		$sort_dir = $params['sort_dir'];
 		
-		$order_by_column[] = 'product_id';
-		$order_by_column[] = 'product_code';
-		$order_by_column[] = 'product_name';
-		$order_by_column[] = 'product_date';
-		$order_by_column[] = 'product_active_status';
-		$order_by_column[] = 'product_active_status';
+		$order_by_column[] = 'workshop_service_id';
+		
+		$order_by_column[] = 'workshop_service_name';
+		$order_by_column[] = 'workshop_service_price';
+		$order_by_column[] = 'workshop_service_job_price';
+		$order_by_column[] = 'workshop_service_date';
+		$order_by_column[] = 'workshop_service_active_status';
+		$order_by_column[] = 'workshop_service_active_status';
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -46,8 +47,7 @@ class product_model extends CI_Model{
 
 		$sql = "
 		select a.* , c.employee_name as created_name, d.employee_name as inactive_name
-		from products a
-		
+		from workshop_services a
 		left join employees c on a.created_by_id = c.employee_id
 		left join employees d on a.inactive_by_id = d.employee_id
 		$where  $order_by
@@ -68,30 +68,30 @@ class product_model extends CI_Model{
 			$row = format_html($row);
 			
 			$status = "Created by ".$row['created_name'];	
-			$product_date = format_new_date($row['product_date']);
-			$active = show_checkbox_status($row['product_active_status']);
+			$workshop_service_date = format_new_date($row['workshop_service_date']);
+			$active = show_checkbox_status($row['workshop_service_active_status']);
 				
-			if($row['product_active_status'] == 0){
+			if($row['workshop_service_active_status'] == 0){
 				
 				
 				$div1 = "<span class='inactive'>";
 				$div2 = "</div>";
-				$row['product_id'] = $row['product_id'];
-				$row['product_code'] = $div1.$row['product_code'].$div2;
-				$row['product_name'] = $div1.$row['product_name'].$div2;
+				$row['workshop_service_id'] = $row['workshop_service_id'];
 				
-				$product_date = $div1.$product_date.$div2;
+				$row['workshop_service_name'] = $div1.$row['workshop_service_name'].$div2;
+				
+				$workshop_service_date = $div1.$workshop_service_date.$div2;
 				$active	=$div1.$active.$div2;
 				$status = $div1."Inactive by ".$row['inactive_name'].$div2;	
 			
 			}
 			
 			$data[] = array(
-				$row['product_id'], 
-				$row['product_code'],
-				$row['product_name'],
-				
-				$product_date,
+				$row['workshop_service_id'], 
+				$row['workshop_service_name'],
+				$row['workshop_service_price'],
+				$row['workshop_service_job_price'],
+				$workshop_service_date,
 				$active,
 				$status
 			); 
@@ -103,8 +103,8 @@ class product_model extends CI_Model{
 	
 	function read_id($id){
 		$this->db->select('*', 1);
-		$this->db->where('product_id', $id);
-		$query = $this->db->get('products', 1);
+		$this->db->where('workshop_service_id', $id);
+		$query = $this->db->get('workshop_services', 1);
 		$result = null;
 		foreach($query->result_array() as $row)
 		{
@@ -115,58 +115,21 @@ class product_model extends CI_Model{
 	
 	function create($data){
 		$this->db->trans_start();
-		$this->db->insert('products', $data);
+		$this->db->insert('workshop_services', $data);
 		$id = $this->db->insert_id();
-		$insurance_id = $data['insurance_id'];
 		
 		
-		$this->db->select('a.insurance_id, b.product_type_id, c.pst_id', 1);
-		$this->db->from('insurances a');
-		$this->db->join('product_types b','b.insurance_id = a.insurance_id');
-		$this->db->join('product_sub_type c','c.insurance_id = a.insurance_id');
-		$this->db->where('a.insurance_id', $insurance_id);
-		$query = $this->db->get(); debug();
 		
-		foreach($query->result_array() as $row)
-		{
-			$item['product_type_id'] = $row['product_type_id'];
-			$item['pst_id'] = $row['pst_id'];
-			$item['product_id'] =$id ;
-			$item['product_price'] = 0 ;
-			$this->db->insert('product_prices', $item);
-		}
-		
-		/*
-		// cek menggunakan stok atau tidak
-			$use_stock = $this->get_use_stock($data['product_category_id']);
-			if($use_stock == 1){
-
-				$this->db->select('*', 1);
-				$this->db->from('stands');
-				$query_stand = $this->db->get(); debug();
-
-				foreach($query_stand->result_array() as $row_stand)
-				{
-
-					$data_stock['product_id'] = $id;
-					$data_stock['product_stock_qty'] = 0;
-					$data_stock['stand_id'] = $row_stand['stand_id'];
-					$this->db->insert('product_stocks', $data_stock);
-				}
-
-			}
-			*/
-		
-		$this->access->log_insert($id, "produk [".$data['product_name']."]");
+		$this->access->log_insert($id, "produk [".$data['workshop_service_name']."]");
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
 	
 	function update($id, $data){
 		$this->db->trans_start();
-		$this->db->where('product_id', $id);
-		$this->db->update('products', $data);
-		$this->access->log_update($id, "produk[".$data['product_name']."]");
+		$this->db->where('workshop_service_id', $id);
+		$this->db->update('workshop_services', $data);
+		$this->access->log_update($id, "produk[".$data['workshop_service_name']."]");
 		
 		$this->db->trans_complete();
 		return $this->db->trans_status();
@@ -174,11 +137,11 @@ class product_model extends CI_Model{
 	function delete($id){
 		$this->db->trans_start();
 		
-		$data['product_active_status'] = 0;
+		$data['workshop_service_active_status'] = 0;
 		$data['inactive_by_id'] =  $this->access->info['employee_id'];
 		
-		$this->db->where('product_id', $id);
-		$this->db->update('products', $data);
+		$this->db->where('workshop_service_id', $id);
+		$this->db->update('workshop_services', $data);
 		
 		$this->access->log_delete($id, "Produk");
 		$this->db->trans_complete();
@@ -187,11 +150,11 @@ class product_model extends CI_Model{
 	function active($id){
 		$this->db->trans_start();
 		
-		$data['product_active_status'] = 1;
+		$data['workshop_service_active_status'] = 1;
 		$data['inactive_by_id'] =  $this->access->info['employee_id'];
 		
-		$this->db->where('product_id', $id);
-		$this->db->update('products', $data);
+		$this->db->where('workshop_service_id', $id);
+		$this->db->update('workshop_services', $data);
 		
 		$this->access->log_update($id, "Produk");
 		$this->db->trans_complete();
@@ -201,13 +164,13 @@ class product_model extends CI_Model{
 
 	function get_use_stock($id)
 	{
-		$sql = "SELECT product_category_use_stock from product_categories where product_category_id = $id";
+		$sql = "SELECT workshop_service_category_use_stock from workshop_service_categories where workshop_service_category_id = $id";
 		$query = $this->db->query($sql);
 		//query();
 		$result = null ; 
 		foreach($query->result_array() as $row)	$result = format_html($row);
 		
-		return $result['product_category_use_stock'];
+		return $result['workshop_service_category_use_stock'];
 		
 	}
 	

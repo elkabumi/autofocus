@@ -7,15 +7,7 @@ $(function(){
 		nextPage		: "product"
 	});
 	
-	createLookUp({
-		table_id		: "#lookup_table_product_category",
-		table_width		: 400,
-		listSource 		: "lookup/product_category_table_control",
-		dataSource		: "lookup/product_category_lookup_id",
-		column_id 		: 0,
-		component_id	: "#lookup_product_category",
-		filter_by		: [{id : "p1", label : "Nama"}]
-	});
+
 	createLookUp({
 		table_id		: "#lookup_table_insurance",
 		table_width		: 400,
@@ -49,14 +41,7 @@ $(function(){
 
       
    
-     <tr>
-     <td>Item Category</td>
-        <td><span class="lookup" id="lookup_product_category">
-				<input type="hidden" name="i_category_id" class="com_id" value="<?=$product_category_id?>" /><input type="text" class="com_input" />
-                <div class="iconic_base iconic_search com_popup"></div>
-				</span>	
-       </td>
-     </tr>
+   
 	<tr>
      <td width="196" >Insurance name</td>
         <td><span class="lookup" id="lookup_insurance">
@@ -90,24 +75,6 @@ $(function(){
 </div>
 </form>
 
-<div id="">
-	<table id="lookup_table_product_category" cellpadding="0" cellspacing="0" border="0" class="display" > 
-		<thead>
-			<tr>
-			<th>ID</th>
-				<th>Nama</th>
-            
-			</tr> 
-		</thead> 
-		<tbody> 	
-		</tbody>
-	</table>
-	<div id="panel">
-		<input type="button" id="choose" value="Pilih Data"/>
-		<input type="button" id="refresh" value="Refresh"/>
-		<input type="button" id="cancel" value="Cancel" />
-	</div>	
-</div>
 <div id="">
 	<table id="lookup_table_insurance" cellpadding="0" cellspacing="0" border="0" class="display" > 
 		<thead>
