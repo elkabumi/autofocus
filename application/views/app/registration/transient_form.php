@@ -67,7 +67,7 @@ $(function(){
      <td width="199" >Harga
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_registration_detail_price" type="text" id="i_registration_detail_price" value="<?=$registration_detail_price ?>" readonly="readonly" /></td>
+     <td width="704" ><input name="i_registration_detail_price" type="text" id="i_registration_detail_price" value="<?= $registration_detail_price ?>" readonly="readonly" /></td>
     </tr>
      <!-- <tr>
   <td width="199" >Jumlah

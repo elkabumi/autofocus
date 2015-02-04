@@ -201,8 +201,8 @@ class Registration extends CI_Controller
 		foreach($list_registration_photo_name as $key => $value)
 		{
 			if($list_registration_photo[$key])
-		//	rename($this->config->item('upload_tmp').$list_registration_photo[$key],
-		//	$this->config->item('upload_storage')."img_m_in/".$list_registration_photo[$key]);	
+			rename($this->config->item('upload_tmp').$list_registration_photo[$key],
+			$this->config->item('upload_storage')."img_m_in/".$list_registration_photo[$key]);	
 			
 			$item2[] = array(				
 				'photo_name'  => $list_registration_photo_name[$key],
@@ -316,7 +316,7 @@ class Registration extends CI_Controller
 			$data['product_price_id']	= array_shift($this->input->post('transient_product_price_id'));
 			$data['product_name'] = array_shift($this->input->post('transient_product_name'));
 			//$data['registration_detail_qty'] 	= array_shift($this->input->post('transient_registration_detail_qty'));
-			$data['detail_registration_price'] = array_shift($this->input->post('transient_registration_detail_price'));
+			$data['registration_detail_price'] = array_shift($this->input->post('transient_registration_detail_price'));
 			//$data['registration_detail_qty'] = array_shift($this->input->post('transient_registration_detail_qty'));
 			//$data['registration_detail_total_price'] = array_shift($this->input->post('transient_registration_detail_total_price'));
 			
