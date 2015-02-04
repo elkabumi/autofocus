@@ -353,7 +353,7 @@ class Approved_model extends CI_Model
 		
 		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get(); debug();
-		
+		query();
 		foreach($query->result_array() as $row)
 		{
 			$result[] = format_html($row);

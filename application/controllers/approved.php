@@ -33,8 +33,7 @@ class Approved extends CI_Controller{
 			$result = $this->approved_model->read_id($id);
 			if($result){
 				$data = $result;
-				$data['row_id'] = '';//$id;
-				$data['row2_id'] = $id;
+				$data['row_id'] = $id;
 				$data['check_in'] = format_new_date($data['check_in']);
 				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
 		
