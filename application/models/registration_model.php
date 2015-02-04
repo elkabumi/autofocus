@@ -454,6 +454,27 @@ class Registration_model extends CI_Model
         return $data;
     }
 	
+	function get_data_sperpart($id) {
+		
+		$query = "SELECT *
+					FROM registration_spareparts
+					WHERE registration_id = '$id'
+					"
+					;
+		
+        $query = $this->db->query($query);
+       // query();
+        if ($query->num_rows() == 0)
+            return array();
+
+        $data = $query->result_array();
+
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
+    }
+	
 	function get_purchase_price($id)
 	{
 		$sql = "select product_purchase_price

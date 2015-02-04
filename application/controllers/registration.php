@@ -560,15 +560,17 @@ class Registration extends CI_Controller
 			{
 				$data = $result;
 				$data['row_id'] = $id;		
-				$data['car_nopol'] = $result['car_nopol'];	
+				$data['car_nopol'] = $result['car_nopol'];
+				$data['insurance_pph'] = $result['insurance_pph'];	
 				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
 				
 			}
 		//$data='';
 			
 		$data_detail = $this->registration_model->get_data_detail($id);
+		$data_sperpart = $this->registration_model->get_data_sperpart($id);
 	   
-	   $this->global_model->create_report_registration('Laporan Regitrasi', 'report/registration.php', $data, $data_detail, 'header.php');
+	   $this->global_model->create_report_registration('Laporan Regitrasi', 'report/registration.php', $data, $data_detail,$data_sperpart,'header.php');
 	}
 	}
 	
