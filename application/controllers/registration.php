@@ -315,11 +315,12 @@ class Registration extends CI_Controller
 			$data['product_code']	= array_shift($this->input->post('transient_product_code'));
 			$data['product_price_id']	= array_shift($this->input->post('transient_product_price_id'));
 			$data['product_name'] = array_shift($this->input->post('transient_product_name'));
+
 			//$data['registration_detail_qty'] 	= array_shift($this->input->post('transient_registration_detail_qty'));
 			$data['registration_detail_price'] = array_shift($this->input->post('transient_registration_detail_price'));
 			//$data['registration_detail_qty'] = array_shift($this->input->post('transient_registration_detail_qty'));
 			//$data['registration_detail_total_price'] = array_shift($this->input->post('transient_registration_detail_total_price'));
-			
+		
 		}		
 		$this->render->add_form('app/registration/transient_form', $data);
 		$this->render->show_buffer();
