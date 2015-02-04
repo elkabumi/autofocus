@@ -16,7 +16,7 @@ function ajaxFileUpload()
 		});
  
 		$.ajaxFileUpload({
-				url:'<?=site_url('user/do_upload')?>',
+				url:'<?=site_url('registration/do_upload')?>',
 				secureuri:false,
 				fileElementId:'fileToUpload',
 				dataType: 'json',
@@ -50,7 +50,7 @@ function ajaxFileUpload()
 <table cellpadding="2" class="form_layout">
 	<tr>
   
-     <td width="222" req="req" >nama foto
+     <td width="222" req="req" >Nama Foto
      </td>
      <td width="633" >
     <input name="i_photo_name" type="text" id="i_photo_name" value="<?=$photo_name ?>" />
@@ -58,27 +58,27 @@ function ajaxFileUpload()
       </td>
     </tr>
 	<tr>
-     <td width="222" req="req" >photo Before
+     <td width="222" req="req" >Foto Mobil Masuk
      </td>
     <td valign="top">
       <?php
-	   if($registration_id == "" || $photo == ""){
+	   if($photo_file == ""){
 	   ?><div id="foto_hidden2" style="width:100px; height:70px; border:1px solid #999; text-align:center; padding-top:40px;"><b>FOTO</b></div>
 	   <?php
 	   }
 	   ?>
     <div class="img" >
     <?php if($registration_id == ""){?>
- <img id="imagex" src="<?=base_url().'tmp/'.$photo?>"  width="100px"  height:"70px";  alt="" />
+ <img id="imagex" src="<?=base_url().'tmp/'.$photo_file?>"  width="100px"  height:"70px";  alt="" />
  <?php   }else{ ?>
- <img id="imagex" src="<?=base_url().'storage/img/'.$photo?>"  width="100px"  height:"70px";  alt="" />
+ <img id="imagex" src="<?=base_url().'storage/img_m_in/'.$photo_file?>"  width="100px"  height:"70px";  alt="" />
  <?php } ?>
- <input type="hidden" name="i_photo" id="photo" value="<?=$photo?>" />
- <input type="hidden" name="i_oldphoto" value="<?=$photo?>" />
+ <input type="hidden" name="i_photo_file" id="photo" value="<?=$photo_file?>" />
+
  <div class="desc"></div>
 </div>
 	  <input id="fileToUpload" type="file" size="10" name="fileToUpload" class="input">
-<input type="button" id="buttonUpload" onclick="ajaxFileUpload();return false;" value="Upload" />	</td>
+<input type="button" id="buttonUpload" onclick="ajaxFileUpload();return false;" value="Upload" />	<?=$photo_file?></td>
   </tr>
 
 </table>

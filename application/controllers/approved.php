@@ -82,21 +82,23 @@ class Approved extends CI_Controller{
 		$this->render->show('Cetak Laporan');
 	}
 	
-	function detail_list_loader($registration_id=0)
+	function detail_list_loader($row_id=0)
 	{
-		if($registration_id == 0)send_json(make_datatables_list(null)); 
+		if($row_id == 0)send_json(make_datatables_list(null)); 
 				
-		$data = $this->approved_model->detail_list_loader($registration_id);
+		$data = $this->approved_model->detail_list_loader($row_id);
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
 		
 		$data[$key] = array(
-				form_transient_pair('transient_product_id', $value['product_code'], $value['product_id']),
+				form_transient_pair('transient_product_price_id', $value['product_code'], $value['product_price_id'],
+								array('transient_detail_registration_id'=>$value['detail_registration_id'],
+										'transient_product_code' => $value['product_code']
+				)),
 				form_transient_pair('transient_product_name', $value['product_name']),
-				form_transient_pair('transient_registration_detail_price', tool_money_format($value['detail_registration_price']), $value['detail_registration_price']),
-				form_transient_pair('transient_registration_detail_qty', $value['detail_registration_qty'], $value['detail_registration_qty']),
-				form_transient_pair('transient_registration_detail_total_price', tool_money_format($value['detail_registration_total_price']), $value['detail_registration_total_price'])
+				form_transient_pair('transient_detail_registration_price', tool_money_format($value['detail_registration_price']), $value['detail_registration_price']),
+				form_transient_pair('transient_detail_registration_detail_approved_price', tool_money_format($value['detail_registration_approved_price']), $value['detail_registration_approved_price'])
 		);
 		
 		
@@ -104,6 +106,84 @@ class Approved extends CI_Controller{
 		}		
 		send_json(make_datatables_list($data)); 
 	}
+	
+	
+	function detail_form($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
+	{		
+		$this->load->library('render');
+		$index = $this->input->post('transient_index');
+		if (strlen(trim($index)) == 0) {
+					
+			// TRANSIENT CREATE - isi form dengan nilai default / kosong
+			$data['index']							='';
+			$data['registration_id'] 				= $registration_id;
+			$data['product_price_id']	='';
+			$data['product_name']	='';
+			$data['product_code']	='';
+			$data['detail_registration_id'] ='';
+			$data['detail_registration_price'] ='';
+			$data['detail_registration_approved_price'] ='';
+			
+		
+		} else {
+			
+			$data['index']							= $index;
+			$data['registration_id'] 				= $registration_id;
+			$data['product_price_id']	= array_shift($this->input->post('transient_product_price_id'));
+			$data['product_name']	= array_shift($this->input->post('transient_product_name'));
+			$data['product_code']	= array_shift($this->input->post('transient_product_code'));
+			$data['detail_registration_id'] = array_shift($this->input->post('transient_detail_registration_id'));
+			$data['detail_registration_price'] = array_shift($this->input->post('transient_detail_registration_price'));
+			$data['detail_registration_approved_price'] = array_shift($this->input->post('transient_detail_registration_detail_approved_price'));
+			
+		}	
+		
+		$this->load->helper('form');
+			
+				
+		$this->render->add_form('app/approved/transient_form', $data);
+		$this->render->show_buffer();
+	}
+	
+	
+		
+	function detail_form_action()
+	{		
+		$this->load->library('form_validation');
+		//$this->form_validation->set_rules('product_id', 'photo after', 'trim|required');
+		$index = $this->input->post('i_index');		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+		
+		$this->load->model('global_model');	
+		
+		$no 		= $this->input->post('i_index');
+		
+		$product_price_id 		= $this->input->post('i_product_price_id');
+		$product_code 	= $this->input->post('i_product_code');
+		$product_name 	= $this->input->post('i_product_name');
+		$detail_registration_id 	= $this->input->post('i_detail_registration_id');
+		$detail_registration_price 	= $this->input->post('i_detail_registration_price');
+		$detail_registration_approved_price 	= $this->input->post('i_detail_registration_approved_price');
+				
+		
+		
+		$data = array(
+				form_transient_pair('transient_product_price_id', $product_code, $product_price_id,
+								array('transient_detail_registration_id'=>$detail_registration_id,
+										'transient_product_code' => $product_code
+				)),
+				form_transient_pair('transient_product_name', $product_name),
+				form_transient_pair('transient_detail_registration_price', tool_money_format($detail_registration_price), $detail_registration_price),
+				form_transient_pair('transient_detail_registration_detail_approved_price', tool_money_format($detail_registration_approved_price), $value['detail_registration_approved_price'])
+				
+		);
+		 
+		send_json_transient($index, $data);
+	}
+	
+	
+	
 	function detail_list_loader2($registration_id=0)
 	{
 		if($registration_id == 0)
@@ -115,7 +195,7 @@ class Approved extends CI_Controller{
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
-		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.form_transient_pair('transient_photo', $value['photo']).'';
+		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_m_in/'.form_transient_pair('transient_photo', $value['photo_file']).'';
 		$data[$key] = array(
 				form_transient_pair('transient_photo_name', $value['photo_name']),
 				$foto

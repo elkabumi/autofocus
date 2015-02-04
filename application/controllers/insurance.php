@@ -39,6 +39,7 @@ class insurance extends CI_Controller{
 
 			$data['insurance_description'] = '';
 			$data['insurance_phone'] = '';
+			$data['insurance_pph'] = '';
 			$data['insurance_addres'] = '';	
 		
 		}else{
@@ -101,6 +102,7 @@ class insurance extends CI_Controller{
 		$this->form_validation->set_rules('i_phone','Phone','trim|required');
 		$this->form_validation->set_rules('i_date','Date','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_description','Description','trim|max_length[100]');
+		$this->form_validation->set_rules('i_pph', 'PPh', 'trim|required|numeric');
 		
 		// cek data berdasarkan kriteria
 		if ($this->form_validation->run() == FALSE) send_json_validate(); 
@@ -109,10 +111,11 @@ class insurance extends CI_Controller{
 		
 		$id = $this->input->post('row_id');
 		$data['insurance_name'] 			= $this->input->post('i_name');
+		$data['insurance_pph'] 			= $this->input->post('i_pph');
 		$data['insurance_addres'] 			= $this->input->post('i_addres');	
 		$data['insurance_phone']			= $this->input->post('i_phone');
 		$data['insurance_date']				= $this->input->post('i_date');
-		$data['insurance_description']				= $this->input->post('i_description');
+		$data['insurance_description']			= $this->input->post('i_description');
 	
 		$data['created_by_id']				= $this->access->info['employee_id'];	
 		

@@ -66,11 +66,13 @@ $(function(){
 		if($(this).val() == 1){
 			asuransi.style.display = 'table';
 			no_klaim.style.display = 'table';
-	
+			pribadi.style.display = 'none';
+			pph.style.display = 'table';
 		}else{
 			asuransi.style.display = 'none';
 			no_klaim.style.display = 'none';
-			
+			pribadi.style.display = 'table';
+			pph.style.display = 'none';	
 		}
 		
 });
@@ -176,6 +178,30 @@ $(function(){
 				
 				
       </tr>
+             <tr>
+     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pph" style="width:100%;">
+        <tr>
+          <td width="17%">PPh %</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_insurance_pph" name="i_insurance_pph" value="<?=$insurance_pph?>" readonly="readonly" /></td>
+        </tr>
+      </table></td>
+      
+				
+				
+      </tr>
+            <tr>
+     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pribadi" style="width:100%;">
+        <tr>
+          <td width="17%">Bayar Dp</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp"  value="<?=$registration_dp ?>" readonly="readonly"/></td>
+        </tr>
+      </table></td>
+				
+				
+      </tr>
+
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>

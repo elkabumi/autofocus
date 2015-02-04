@@ -56,25 +56,55 @@ $(function(){
 		dataSource		: "lookup/insurance_lookup_id",
 		column_id 		: 0,
 		component_id	: "#lookup_insurance",
-		filter_by		: [{id : "p1", label : "Nama"}]
+		filter_by		: [{id : "p1", label : "Nama"}],
+		onSelect		: load_insurance_pph
 	});
 	
+		
+		
+		
+		
 	$('input[name="i_claim_type"]').change(function(){
 		var asuransi = document.getElementById("asuransi");
 		var no_klaim = document.getElementById("no_klaim");
+		var pribadi = document.getElementById("pribadi");
+		var pph = document.getElementById("pph");
 		
 		if($(this).val() == 1){
 			asuransi.style.display = 'table';
 			no_klaim.style.display = 'table';
+			pribadi.style.display = 'none';
+			pph.style.display = 'table';
 	
 		}else{
 			asuransi.style.display = 'none';
 			no_klaim.style.display = 'none';
+			pribadi.style.display = 'table';
+			pph.style.display = 'none';
 			
 		}
 		
-});
-	
+	});
+	function load_insurance_pph()
+	{
+		var id 	= $('input[name="i_insurance_id"]').val();
+		
+		if(id == ""){
+			return;
+		}
+		var data ='id='+id; 
+		
+		$.ajax({
+			type: 'POST',
+			url: '<?=site_url('registration/load_insurance_pph')?>',
+			data: data,
+			dataType: 'json',
+			success: function(data){	
+				$('input[name="i_insurance_pph"]').val(data.content['insurance_pph']);	
+			}
+			
+		});
+	}
 	createDatePicker();
 	//updateAll(); 
 });
@@ -175,6 +205,30 @@ $(function(){
           <td width="17%">No Klaim</td>
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" /></td>
+        </tr>
+      </table></td>
+      
+				
+				
+      </tr>
+       <tr>
+     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pph" style="width:100%;">
+        <tr>
+          <td width="17%">PPh %</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_insurance_pph" name="i_insurance_pph" value="<?=$insurance_pph?>" readonly="readonly" /></td>
+        </tr>
+      </table></td>
+      
+				
+				
+      </tr>
+            <tr>
+     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pribadi" style="width:100%;">
+        <tr>
+          <td width="17%">Bayar Dp</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp" /></td>
         </tr>
       </table></td>
 				

@@ -5,6 +5,9 @@ $(function(){
 		listSource 		: "approved/detail_list_loader/<?=$row2_id?>",
 		formSource 		: "approved/detail_form/<?=$row2_id?>",
 		controlTarget	: "approved/detail_form_action",
+		
+		
+		
 		onAdd		: function (){perhitungan();},	
 		onTargetLoad: function (){perhitungan();} 
 	});
@@ -12,11 +15,11 @@ $(function(){
 	function perhitungan()
 	{
 		var registration_total = 0;
-		$('input[name="transient_registration_detail_total_price[]"]').each(function()
+		$('input[name="transient_registration_detail_approved_price[]"]').each(function()
 		{
-			registration_total += parseFloat($(this).val());
+			registration_approved_total += parseFloat($(this).val());
 		});
-		$('input#registration_total').val(formatMoney(registration_total));
+		$('input#registration_total').val(formatMoney(registration_approved_total));
 		$('input#i_registration_final_total_price').val(registration_total);
 		$('input#i_registration_total_price').val(registration_total);
 		
@@ -32,8 +35,7 @@ $(function(){
 			<th>Kode</th>
 			<th>Jenis Perbaikan</th>
 			<th>Harga</th>
-            <th>Jumlah</th>
-            <th>Total</th>
+			<th>Harga Approved</th>            
 		</tr> 
 	</thead> 
 	<tbody> 	
@@ -45,13 +47,16 @@ $(function(){
 	 <table align="right">
           <tr>
             <td><span class="summary_total"> Total</span></td>
-            <td><input id="registration_total" value="<?= $total_registration?>" type="text" readonly="readonly" class="format_money" size="50" />
+            <td><input id="registration_total" value="<?= $approved_total_registration 	?>" type="text" readonly="readonly" class="format_money" size="50" />
            </td>
           </tr>
         </table>	
    
-   
+   <input type="button" id="add" value="Tambah"/>
+	<input type="button" id="edit" value="Revisi"/>
+ <input type="button" id="delete" value="Hapus"/>
 </div>
 <div id="editor"></div>
+
 </form>
 </div>

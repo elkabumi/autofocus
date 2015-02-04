@@ -38,15 +38,18 @@ $(function(){
 		var bongkar = $('input[name="i_bongkar_komponen"]').val();
 		var total = $('input[name="i_total"]').val();
 		var cek1 = $('input[name="i_cek1"]').val();
+		var c_bongkar = $('input[name="c_bongkar_komponen"]').val();
 		
 		if(cek1 == 0){
 			var pembayaran = parseFloat(total) + parseFloat(bongkar);
 			$('input[name="i_cek1"]').val(1);
 			$('input[name="i_total"]').val(pembayaran);
+			
 		}else{
 			var pembayaran = parseFloat(total) - parseFloat(bongkar);
 			$('input[name="i_cek1"]').val(0);
 			$('input[name="i_total"]').val(pembayaran);
+		
 		}
 	});
 	$('input[name="c_lasketok"]').change(function(){
@@ -165,7 +168,12 @@ $sql = "select * from transaction_types";
 			<?php	}?>
        size="15"  />
       <input name="c_bongkar_komponen" type="checkbox" id="c_bongkar_komponen" value="1" <?php if($transaction_cek_bongkar_komponen != 0){ ?> checked="checked" <?php }?> />
-      <input type="hidden" name="i_cek1" value="<?=$transaction_detail_bongkar_komponen?>"/></td>
+      <input type="hidden" name="i_cek1" value=<?php if($transaction_cek_bongkar_komponen == '0'){ ?>
+		"0" 
+		<?php }else{ ?>
+       "<?=$transaction_detail_bongkar_komponen;?>"
+		
+			<?php	}?>/></td>
      </tr>
 		<?
 		
@@ -186,7 +194,12 @@ $sql = "select * from transaction_types";
        size="15"  />
        
       <input name="c_lasketok" type="checkbox" id="c_lasketok" value="1" <?php if($transaction_cek_lasketok != 0){ ?> checked="checked" <?php }?> />
-      <input type="hidden" name="i_cek2" value="<?=$transaction_detail_bongkar_komponen?>"/></td>
+      <input type="hidden" name="i_cek2" value=<?php if($transaction_cek_lasketok == '0'){ ?>
+		"0" 
+		<?php }else{ ?>
+       "<?=$transaction_detail_lasketok;?>"
+		
+			<?php	}?>/></td>
      </tr>
 		<?
 		
@@ -207,7 +220,12 @@ $sql = "select * from transaction_types";
        size="15"  />
       
       <input name="c_dempul" type="checkbox" id="c_dempul" value="1" <?php if($transaction_cek_dempul != 0){ ?> checked="checked" <?php }?> />
-      <input type="hidden" name="i_cek3" value="<?=$transaction_detail_dempul?>"/></td>
+      <input type="hidden" name="i_cek3" value=<?php if($transaction_cek_dempul == '0'){ ?>
+		"0" 
+		<?php }else{ ?>
+       "<?=$transaction_detail_dempul;?>"
+		
+			<?php	}?>/></td>
      </tr>
         <?
 		
@@ -228,7 +246,12 @@ $sql = "select * from transaction_types";
        size="15"  />
       
       <input name="c_cat" type="checkbox" id="c_cat" value="1" <?php if($transaction_cek_cat != 0){ ?> checked="checked" <?php }?> />
-      <input type="hidden" name="i_cek4" value="<?=$transaction_cek_cat?>"/></td>
+      <input type="hidden" name="i_cek4" value=<?php if($transaction_cek_cat == '0'){ ?>
+		"0" 
+		<?php }else{ ?>
+       "<?=$transaction_detail_cat;?>"
+		
+			<?php	}?>/></td>
      </tr>
         <?
 		
@@ -247,7 +270,12 @@ $sql = "select * from transaction_types";
 			<?php	}?>
        size="15"  />
          <input name="c_poles" type="checkbox" id="c_poles" value="1" <?php if($transaction_cek_poles != 0){ ?> checked="checked" <?php }?> />
-      <input type="hidden" name="i_cek5" value="<?=$transaction_detail_poles?>"/></td>
+      <input type="hidden" name="i_cek5" value=<?php if($transaction_cek_poles == '0'){ ?>
+		"0" 
+		<?php }else{ ?>
+       "<?=$transaction_detail_poles;?>"
+		
+			<?php	}?>/></td>
      </tr>
         <?
 		break;
@@ -265,7 +293,12 @@ $sql = "select * from transaction_types";
 			<?php	}?>
        size="15"  />
       <input name="c_rakit" type="checkbox" id="c_rakit" value="1" <?php if($transaction_cek_rakit != 0){ ?> checked="checked" <?php }?> />
-      <input type="hidden" name="i_cek6" value="<?=$transaction_detail_rakit?>"/></td>
+      <input type="hidden" name="i_cek6"value=<?php if($transaction_cek_rakit == '0'){ ?>
+		"0" 
+		<?php }else{ ?>
+       "<?=$transaction_detail_rakit;?>"
+		
+			<?php	}?>/></td>
      </tr>
 		<?
 		 }

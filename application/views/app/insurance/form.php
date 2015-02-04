@@ -11,6 +11,9 @@ $(function(){
 	$('#enable').click(function(){
 			if(alert("Silahkan kilik tombol save untuk konfirmasi penyimpanan")){
 	}
+	
+
+	
 	});
 	createDatePicker();
 	//updateAll(); 
@@ -26,7 +29,10 @@ $(function(){
      
 	 <input type="hidden" name="row_id" value="<?=$row_id?>" /></td>
    </tr>
-   
+   <tr>
+     <td>PPh %</td>
+       <td><input name="i_pph" type="text" id="i_pph" value="<?=$insurance_pph ?>" size="70" /></td>
+     </tr>
     <tr>
      <td>Alamat</td>
        <td><input name="i_addres" type="text" id="i_addres" value="<?=$insurance_addres ?>" size="70" /></td>

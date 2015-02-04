@@ -34,6 +34,9 @@ class Registration extends CI_Controller
 		$data['registration_estimation_date'] = '';
 		$data['registration_description'] = '';
 		$data['registration_total_price'] = '';
+		$data['registration_dp'] = '';
+		$data['sparepart_total_registration'] = '';
+		$data['insurance_pph'] 				= '';
 		$data['own_retention']				= '';
 		$data['pic_asuransi']				= '';
 		$data['spk_date']					= '';
@@ -50,8 +53,13 @@ class Registration extends CI_Controller
 		$this->render->add_view('app/registration/transient_list');
 		$this->render->build('Data Panel');
 		
+		$this->render->add_view('app/registration/transient_list3');
+		$this->render->build('SpareParts');
+		
 		$this->render->add_view('app/registration/transient_list2');
 		$this->render->build('Photo Before');
+		
+	
 		
 		//$this->render->add_view('app/registration/form_end', $data);
 		//$this->render->build('Pembayaran');
@@ -111,6 +119,9 @@ class Registration extends CI_Controller
 		$data['incident_date'] 				= "";
 		$data['claim_type']					= $this->input->post('i_claim_type');
 		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
+		
+		$data['registration_dp']			= $this->input->post('i_registration_dp');
+		$data['insurance_pph'] 				= $this->input->post('i_insurance_pph');
 		$data['claim_no'] 					= $this->input->post('i_claim_no');
 		$data['check_in'] 					= $this->input->post('i_check_in');
 		$data['registration_estimation_date'] 					= $this->input->post('i_registration_estimation_date');
@@ -126,17 +137,21 @@ class Registration extends CI_Controller
 		
 		$list_product_id		= $this->input->post('transient_product_id');
 		$list_product_price_id		= $this->input->post('transient_product_price_id');
-		$list_registration_detail_qty	= $this->input->post('transient_registration_detail_qty');
 		$list_registration_detail_price	 	= $this->input->post('transient_registration_detail_price');
-		
-		$list_registration_detail_total_price	= $this->input->post('transient_registration_detail_total_price');
+
 		
 		
 		$list_registration_photo_name	 	= $this->input->post('transient_photo_name');
 		$list_registration_photo	= $this->input->post('transient_photo');
 		
+		$list_rs_part_number	 	= $this->input->post('transient_rs_part_number');
+		$list_rs_qty		= $this->input->post('transient_rs_qty');
+		$list_rs_name	 	= $this->input->post('transient_rs_name');
+		$list_rs_repair		= $this->input->post('transient_rs_repair');
+				
+				
 		if(!$list_product_id) send_json_error('Simpan gagal. Data panel masih kosong');
-		if(!$list_registration_photo) send_json_error('Simpan gagal. Data Foto masih kosong');
+	//	if(!$list_registration_photo) send_json_error('Simpan gagal. Data Foto masih kosong');
 	
 		
 		$total_price = 0;
@@ -152,9 +167,9 @@ class Registration extends CI_Controller
 				'detail_registration_type_id' => '1',
 				'employee_id' => $this->access->info['employee_id'],
 				'product_price_id' => $list_product_price_id[$key],
-				'detail_registration_qty'  => $list_registration_detail_qty[$key],
+			
 				'detail_registration_price'  => $list_registration_detail_price[$key],
-				'detail_registration_total_price'  => $list_registration_detail_total_price[$key]
+				'detail_registration_approved_price'  => $list_registration_detail_price[$key]
 			);
 			
 			$check = 0;
@@ -173,23 +188,25 @@ class Registration extends CI_Controller
 				$get_data_product = $this->registration_model->get_data_product($product_price_id_original);
 				send_json_error("Simpan gagal. Panel item tidak boleh sama [ ".$get_data_product[0]. " - ".$get_data_product[1]. " ( ".$get_data_product[2]. " - ".$get_data_product[3]." )]");
 			}
-			$total_price += $list_registration_detail_total_price[$key];
+			$total_price += $list_registration_detail_price[$key];
 		}
 		}
 		
 		$data['total_registration'] = $total_price;
+		$data['approved_total_registration'] = $total_price;
+		
 		
 		$item2 = array();
 		if($list_registration_photo_name){
 		foreach($list_registration_photo_name as $key => $value)
 		{
 			if($list_registration_photo[$key])
-			rename($this->config->item('upload_tmp').$list_registration_photo[$key],
-			$this->config->item('upload_storage')."img_before/".$list_registration_photo[$key]);	
+		//	rename($this->config->item('upload_tmp').$list_registration_photo[$key],
+		//	$this->config->item('upload_storage')."img_m_in/".$list_registration_photo[$key]);	
 			
 			$item2[] = array(				
 				'photo_name'  => $list_registration_photo_name[$key],
-				'photo'  => $list_registration_photo[$key]
+				'photo_file'  => $list_registration_photo[$key]
 				
 			);
 			
@@ -199,20 +216,47 @@ class Registration extends CI_Controller
 		}
 
 		
+		$total_rs_repair=0;
+		$item3 = array();
+		if($list_rs_part_number){
+		foreach($list_rs_part_number as $key => $value)
+		{
+			//$get_purchase_price = $this->registration_model->get_purchase_price($list_product_id[$key]);
+			
+			$item3[] = array(				
+				//'product_id'  => $list_product_id[$key],
+				'rs_qty' => $list_rs_qty[$key],
+				'rs_part_number'  => $list_rs_part_number[$key],
+				'rs_name'  => $list_rs_name[$key],
+				'rs_repair'  => $list_rs_repair[$key],
+				'rs_approved_repair'  => $list_rs_repair[$key]
+			);
+			
+		
+			$total_rs_repair += $list_rs_repair[$key];
+		
+		}
+		}
+		
+		$data['sparepart_total_registration'] = $total_rs_repair;
+		$data['approved_sparepart_total_registration'] = $total_rs_repair;
+		
 		
 		if(empty($id)) // jika tidak ada id maka create
 		{ 
 			//$data['registration_code'] 			= format_code('registrations','registration_code','PU',7);
 				
-			$error = $this->registration_model->create($data, $items,$item2);
+			$error = $this->registration_model->create($data, $items,$item2,$item3);
 			send_json_action($error, "Data telah ditambah", "Data gagal ditambah", $this->registration_model->insert_id);
 		}
 		else // id disebutkan, lakukan proses UPDATE
 		{
-			$error = $this->registration_model->update($id, $data, $items,$item2);
+			$error = $this->registration_model->update($id, $data, $items,$item2,$item3);
 			send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
 		}		
 	}
+	
+	
 	function detail_list_loader($registration_id=0)
 	{
 		if($registration_id == 0)send_json(make_datatables_list(null)); 
@@ -230,9 +274,13 @@ class Registration extends CI_Controller
 					'transient_product_code' => $value['product_code']
 				)),
 				form_transient_pair('transient_product_name', $value['product_name']),
-				form_transient_pair('transient_registration_detail_price', tool_money_format($value['registration_detail_price']), $value['registration_detail_price']),
-				form_transient_pair('transient_registration_detail_qty', $value['registration_detail_qty'], $value['registration_detail_qty']),
+				form_transient_pair('transient_registration_detail_price', tool_money_format($value['detail_registration_price']), $value['detail_registration_price'])
+				
+				
+				
+				/*form_transient_pair('transient_registration_detail_qty', $value['registration_detail_qty'], $value['registration_detail_qty']),
 				form_transient_pair('transient_registration_detail_total_price', tool_money_format($value['registration_detail_total_price']), $value['registration_detail_total_price'])
+		*/
 		);
 		
 		
@@ -241,31 +289,7 @@ class Registration extends CI_Controller
 		send_json(make_datatables_list($data)); 
 	}
 	
-	
-	function detail_list_loader2($registration_id=0)
-	{
-		if($registration_id == 0)
-		
-		send_json(make_datatables_list(null)); 
-				
-		$data = $this->registration_model->detail_list_loader2($registration_id);
-		
-		$sort_id = 0;
-		foreach($data as $key => $value) 
-		{	
-		$data[$key] = array(
-				form_transient_pair('transient_photo_name', $value['photo_name']),
-				form_transient_pair('transient_photo', $value['photo'])
-				
-		);
-		
-		
-	
-		}		
-		send_json(make_datatables_list($data)); 
-	}
-	
-	
+
 	function detail_form($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
 	{		
 		$this->load->library('render');
@@ -291,15 +315,162 @@ class Registration extends CI_Controller
 			$data['product_code']	= array_shift($this->input->post('transient_product_code'));
 			$data['product_price_id']	= array_shift($this->input->post('transient_product_price_id'));
 			$data['product_name'] = array_shift($this->input->post('transient_product_name'));
-			$data['registration_detail_qty'] 	= array_shift($this->input->post('transient_registration_detail_qty'));
-			$data['registration_detail_price'] = array_shift($this->input->post('transient_registration_detail_price'));
-			$data['registration_detail_qty'] = array_shift($this->input->post('transient_registration_detail_qty'));
-			$data['registration_detail_total_price'] = array_shift($this->input->post('transient_registration_detail_total_price'));
+			//$data['registration_detail_qty'] 	= array_shift($this->input->post('transient_registration_detail_qty'));
+			$data['detail_registration_price'] = array_shift($this->input->post('transient_registration_detail_price'));
+			//$data['registration_detail_qty'] = array_shift($this->input->post('transient_registration_detail_qty'));
+			//$data['registration_detail_total_price'] = array_shift($this->input->post('transient_registration_detail_total_price'));
 			
 		}		
 		$this->render->add_form('app/registration/transient_form', $data);
 		$this->render->show_buffer();
 	}
+	
+	
+	function detail_form_action()
+	{		
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('i_product_id', 'Produk', 'trim|required');
+		$this->form_validation->set_rules('i_registration_detail_price', 'Harga', 'trim|required|numeric');
+		$index = $this->input->post('i_index');		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+		
+		$this->load->model('global_model');	
+		
+		$no 		= $this->input->post('i_index');
+		$product_id 	= $this->input->post('i_product_id');
+		$product_price_id 		= $this->input->post('i_product_price_id');
+		$product_code 	= $this->input->post('i_product_code');
+		$registration_detail_price 	= $this->input->post('i_registration_detail_price');
+		
+				
+		$get_data_product = $this->registration_model->get_data_product($product_price_id);
+		$product_lengkap = $get_data_product[1]." (".$get_data_product[2]." - ".$get_data_product[3].")";
+		//send_json_error($no);
+		
+		$data = array(
+				form_transient_pair('transient_product_id', $product_code, $product_id,array(
+                    'transient_product_price_id' => $product_price_id,
+					'transient_product_code' => $product_code
+				)),
+				form_transient_pair('transient_product_name', $product_lengkap),
+				form_transient_pair('transient_registration_detail_price', tool_money_format($registration_detail_price), $registration_detail_price),
+				
+		);
+		 
+		send_json_transient($index, $data);
+	}
+	
+	function detail_list_loader2($registration_id=0)
+	{
+		if($registration_id == 0)
+		
+		send_json(make_datatables_list(null)); 
+				
+		$data = $this->registration_model->detail_list_loader2($registration_id);
+		
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		$data[$key] = array(
+				form_transient_pair('transient_photo_name', $value['photo_name']),
+				form_transient_pair('transient_photo', $value['photo'])
+				
+		);
+		
+		
+	
+		}		
+		send_json(make_datatables_list($data)); 
+	}
+	
+	
+	function detail_list_loader3($registration_id=0)
+	{
+		if($registration_id == 0)send_json(make_datatables_list(null)); 
+				
+		$data = $this->registration_model->detail_list_loader3($registration_id);
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		
+		$data[$key] = array(
+				form_transient_pair('transient_rs_part_number', $value['rs_part_number'], $value['rs_part_number']
+				),
+				form_transient_pair('transient_rs_name', $value['rs_name']),
+				form_transient_pair('transient_rs_qty',$value['rs_qty']),
+				form_transient_pair('transient_rs_repair', tool_money_format($value['rs_repair']), $value['rs_repair'])
+		);
+		
+		
+		
+		}		
+		send_json(make_datatables_list($data)); 
+	}
+	function detail_form3($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
+	{		
+		$this->load->library('render');
+		$index = $this->input->post('transient_index');
+		if (strlen(trim($index)) == 0) {
+					
+			// TRANSIENT CREATE - isi form dengan nilai default / kosong
+			$data['index']			= '';
+			$data['registration_id'] 				= $registration_id;
+			$data['rs_qty']	= '';	
+			$data['rs_part_number'] = '';
+			$data['rs_name'] = '';			
+			$data['rs_repair'] 	= '';
+		
+		} else {
+			
+			$data['index']			= $index;
+			$data['registration_id'] 				= $registration_id;
+			$data['rs_qty']	= array_shift($this->input->post('transient_rs_qty'));
+			$data['rs_part_number'] = array_shift($this->input->post('transient_rs_part_number'));
+			$data['rs_name'] = array_shift($this->input->post('transient_rs_name'));
+			$data['rs_repair'] 	= array_shift($this->input->post('transient_rs_repair'));
+		
+		}		
+		$this->render->add_form('app/registration/transient_form3', $data);
+		$this->render->show_buffer();
+	}
+	
+	
+	function detail_form_action3()
+	{		
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('i_rs_no', 'No parts', 'trim|required');
+		$this->form_validation->set_rules('i_rs_name', 'Nama parts', 'trim|required');
+		$this->form_validation->set_rules('i_rs_qty', 'Qty', 'trim|required|numeric');
+		$this->form_validation->set_rules('i_rs_repair', 'Repairer', 'trim|required|numeric');
+		$index = $this->input->post('i_index');		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+		
+		$this->load->model('global_model');	
+		
+		$no 		= $this->input->post('i_index');
+		$rs_no 	= $this->input->post('i_rs_no');
+		$rs_name 		= $this->input->post('i_rs_name');
+		$rs_qty 	= $this->input->post('i_rs_qty');
+		$rs_repair 	= $this->input->post('i_rs_repair');
+	
+		//send_json_error($no);
+		
+	$data = array(
+				form_transient_pair('transient_rs_part_number', $rs_no, $rs_no
+				),
+				form_transient_pair('transient_rs_name', $rs_name),
+				form_transient_pair('transient_rs_qty',$rs_qty),
+				form_transient_pair('transient_rs_repair', tool_money_format($rs_repair), $rs_repair)
+		);
+		 
+		send_json_transient($index, $data);
+	}
+	
+	
+	
+	
 	
 	
 	function detail_form2($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
@@ -312,13 +483,14 @@ class Registration extends CI_Controller
 			$data['index']			= '';
 			$data['registration_id'] 				= $registration_id;
 			$data['photo_name']	= '';	
-			$data['photo'] = '';
+			$data['photo_file'] = '';
 		} else {
 			
 			$data['index']			= $index;
 			$data['registration_id'] 				= $registration_id;
 			$data['photo_name'] = array_shift($this->input->post('transient_photo_name'));
-			$data['photo'] = array_shift($this->input->post('transient_photo'));
+			$data['photo_file'] = array_shift($this->input->post('transient_photo'));
+
 			
 		}		
 		$this->render->add_form('app/registration/transient_form2', $data);
@@ -329,7 +501,7 @@ class Registration extends CI_Controller
 	{		
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('i_photo_name', 'nama foto', 'trim|required');
-		$this->form_validation->set_rules('i_photo','foto', 'trim|required');
+		$this->form_validation->set_rules('i_photo_file','foto', 'trim|required');
 	
 		$index = $this->input->post('i_index');		
 		// cek data berdasarkan kriteria
@@ -339,15 +511,15 @@ class Registration extends CI_Controller
 		$no 		= $this->input->post('i_index');
 		
 		$photo_name	= $this->input->post('i_photo_name');
-		$photo	= $this->input->post('i_photo');
+		$photo_file	= $this->input->post('i_photo_file');
 		
 		
-		$foto='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.form_transient_pair('transient_photo', $photo,$photo).'';
-		form_transient_pair('transient_photo', $photo,$photo);
+		$foto='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.form_transient_pair('transient_photo', $photo_file,$photo_file).'';
+		form_transient_pair('transient_photo', $photo_file,$photo_file);
 		$data = array(
 	
 				form_transient_pair('transient_photo_name', $photo_name, $photo_name),
-				form_transient_pair('transient_photo',	$foto,$photo),
+				form_transient_pair('transient_photo',	$foto,$photo_file),
 				
 					
 					
@@ -357,46 +529,7 @@ class Registration extends CI_Controller
 	}
 	
 	
-	function detail_form_action()
-	{		
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('i_product_id', 'Produk', 'trim|required');
-		$this->form_validation->set_rules('i_registration_detail_price', 'Harga', 'trim|required|numeric');
-		$this->form_validation->set_rules('i_registration_detail_qty', 'Jumlah', 'trim|required|numeric');
-		$this->form_validation->set_rules('i_registration_detail_total_price', 'Total', 'trim|required|numeric');
-		$index = $this->input->post('i_index');		
-		// cek data berdasarkan kriteria
-		if ($this->form_validation->run() == FALSE) send_json_validate(); 
-		
-		$this->load->model('global_model');	
-		
-		$no 		= $this->input->post('i_index');
-		$product_id 	= $this->input->post('i_product_id');
-		$product_price_id 		= $this->input->post('i_product_price_id');
-		$product_code 	= $this->input->post('i_product_code');
-		$registration_detail_price 	= $this->input->post('i_registration_detail_price');
-		$registration_detail_qty 	= $this->input->post('i_registration_detail_qty');
-		$registration_detail_total_price 	= $this->input->post('i_registration_detail_total_price');
-				
-		$get_data_product = $this->registration_model->get_data_product($product_price_id);
-		$product_lengkap = $get_data_product[1]." (".$get_data_product[2]." - ".$get_data_product[3].")";
-		//send_json_error($no);
-		
-		$data = array(
-				form_transient_pair('transient_product_id', $product_code, $product_id),
-				form_transient_pair('transient_product_name', $product_lengkap),
-				form_transient_pair('transient_registration_detail_price', tool_money_format($registration_detail_price), $registration_detail_price),
-				form_transient_pair('transient_registration_detail_qty', $registration_detail_qty, $registration_detail_qty),
-				form_transient_pair('transient_registration_detail_total_price', tool_money_format($registration_detail_total_price), $registration_detail_total_price,
-				array(
-                    'transient_product_price_id' => $product_price_id,
-					'transient_product_code' => $product_code
-				))
-		);
-		 
-		send_json_transient($index, $data);
-	}
-	
+
 	function load_product_price()
 	{
 		$id 	= $this->input->post('product_price_id');
@@ -464,6 +597,21 @@ class Registration extends CI_Controller
 			send_json($output);
 			//$this->load->view('upload_success', $data);
 		}
+	}
+	
+	function load_insurance_pph()
+	{
+		$id 	= $this->input->post('id');
+		
+		$query = $this->registration_model->load_insurance_pph($id);
+		$data = array();
+		
+		foreach($query->result_array() as $row)
+		{
+			$data['insurance_pph'] = $row['insurance_pph'];
+			
+		}
+		send_json_message('PO received', $data);
 	}
 	
 }

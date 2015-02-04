@@ -13,7 +13,7 @@ $(function(){
 	function perhitungan()
 	{
 		var registration_total = 0;
-		$('input[name="transient_registration_detail_total_price[]"]').each(function()
+		$('input[name="transient_registration_detail_price[]"]').each(function()
 		{
 			registration_total += parseFloat($(this).val());
 		});
@@ -31,8 +31,7 @@ $(function(){
 			<th>Kode</th>
 			<th>Jenis Perbaikan</th>
 			<th>Harga</th>
-            <th>Jumlah</th>
-            <th>Total</th>
+         
 		</tr> 
 	</thead> 
 	<tbody> 	

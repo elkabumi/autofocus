@@ -102,7 +102,7 @@ class Registration_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data, $items,$item2)
+	function create($data, $items,$item2,$item3)
 	{
 		$this->db->trans_start();
 		$this->db->insert('registrations', $data);
@@ -123,11 +123,19 @@ class Registration_model extends CI_Model
 		foreach($item2 as $row2)
 		{			
 			$row2['registration_id'] = $id;
-			$row2['photo_after'] = '';
 			$row2['photo_type_id'] = 1;
 			
 			$this->db->insert('photos', $row2);
 			$index2++;
+		}
+		$index3 = 0;
+		foreach($item3 as $row3)
+		{			
+			$row3['registration_id'] = $id;
+
+			
+			$this->db->insert('registration_spareparts', $row3);
+			$index3++;
 		}
 		
 		$this->insert_id = $id;
@@ -327,6 +335,22 @@ class Registration_model extends CI_Model
 		}
 		return $result;
 	}
+	function detail_list_loader3($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('b.*', 1);
+		$this->db->from('registrations a');
+		$this->db->join('registration_spareparts b', 'b.registration_id = a.registration_id');
+		
+		$this->db->where('a.registration_id', $id);
+		$query = $this->db->get(); debug();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
 	
 	function get_debit_name($id)
 	{
@@ -457,7 +481,17 @@ class Registration_model extends CI_Model
 		foreach ($query->result_array() as $row) $result = format_html($row);
 		return $result['product_stock_qty'];
 	}
-	
+	function load_insurance_pph($id)
+	{
+		$sql = "
+			select  insurance_pph FROM insurances WHERE insurance_id = '$id'
+		";
+		
+		
+		$query = $this->db->query($sql); 
+		//query();	
+		return $query;
+	}
 
 }
 #

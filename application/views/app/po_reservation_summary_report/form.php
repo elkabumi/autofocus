@@ -64,7 +64,7 @@ $(function(){
 <div class="form_area_frame">
 <table width="100%" cellpadding="4" class="form_layout">
     <tr>
-        <td width="27%">Material Type</td>
+        <td width="27%">Nama Cabang</td>
 		<td width="73%"><?php echo  form_dropdown('i_stand_id', $stand_id)  ?>
           				<input type="hidden" name="row_id" value="<?=$row_id?>" />
     	</td>
