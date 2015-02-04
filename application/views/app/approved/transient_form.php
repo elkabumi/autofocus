@@ -20,7 +20,7 @@ $(function(){
 	 </td>
 		<td width="10" req="req">:</td>
 		<td width="704" req="req"><span class="lookup" id="lookup_product_price">
-        <input type="hidden" name="i_product_price_id" class="com_id" value="<?=$product_price_id?>" />
+        <input type="hidden" name="i_product_price_id" class="com_id" value="<?=$transient_product_price_id?>" />
          <div class="iconic_base iconic_search com_popup"></div>
          <span class="com_desc"></span>
         <input type="text" class="com_input" size="6" name="module" />
@@ -34,20 +34,19 @@ $(function(){
      <td width="199" >Harga
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_detail_registration_price" type="text" id="i_detail_registration_price" value="<?=$detail_registration_price ?>" readonly="readonly" />
+     <td width="704" ><input name="i_detail_registration_price" type="text" id="i_detail_registration_price" value="<?=$transient_reg_price ?>" readonly="readonly" />
      
-     <input name="i_detail_registration_id" type="hidden" id="i_detail_registration_id" value="<?=$detail_registration_id ?>" readonly="readonly" />
-       <input name="i_product_code" type="hidden" id="i_product_code" value="<?=$product_code ?>" readonly="readonly" />
-     
-       <input name="i_product_name" type="hidden" id="i_product_name" value="<?=$product_name ?>" readonly="readonly" />
-     
+     <input name="i_detail_registration_id" type="hidden" id="i_detail_registration_id" value="<?=$transient_detail_registration_id ?>" readonly="readonly" />
+       <input name="i_product_code" type="hidden" id="i_product_code" value="<?=$transient_product_code ?>" readonly="readonly" />
+     	 <input name="i_product_name" type="hidden" id="i_product_name" value="<?=$transient_product_name ?>" readonly="readonly" />
+        
      </td>
     </tr>
    <tr>
      <td width="199" >Harga Approved
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_detail_registration_approved_price" type="text" id="i_detail_registration_approved_price" value="<?=$detail_registration_approved_price ?>"/></td>
+     <td width="704" ><input name="i_detail_registration_approved_price" type="text" id="i_detail_registration_approved_price" value="<?=$transient_reg_aproved_price ?>"/></td>
     </tr>   
 	
 </table>

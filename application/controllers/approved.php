@@ -95,7 +95,7 @@ class Approved extends CI_Controller{
 				$data[$key] = array(
 						form_transient_pair('transient_product_code', $value['product_code'],$value['product_code'],
 										array(
-											'transient_product_price_ide' => $value['product_price_id'],
+											'transient_product_price_id' => $value['product_price_id'],
 											'transient_detail_registration_id' =>$value['detail_registration_id'])),
 											
 						form_transient_pair('transient_product_name', $value['product_name'],$value['product_name']),
@@ -118,28 +118,29 @@ class Approved extends CI_Controller{
 						
 				// TRANSIENT CREATE - isi form dengan nilai default / kosong
 					$data['transient_product_code'] 				= '';
-					$data['transient_photo_type_id'] 				= '';
-					$data['registration_id'] 				= $registration_id;
-					$data['transient_photo_id'] 				= '';
-					$data['transient_photo_name']			= '';	
-					$data['transient_photo']				 = '';
-					$data['transient_photo_after'] 			=  '';
+					$data['transient_product_price_id'] 				= '';
+					$data['transient_detail_registration_id'] 				= $registration_id;
+					$data['transient_product_name'] 				= '';
+					$data['transient_reg_price']			= '';	
+					$data['transient_reg_aproved_price']				 = '';
+			
 					
 			} else {
 				
-					$data['index']							= $index;
-					$data['registration_id'] 				= $registration_id;
-					$data['transient_photo_type_id'] 		=  array_shift($this->input->post('transient_photo_type_id'));
-					$data['transient_photo_id'] 			= array_shift($this->input->post('transient_photo_id'));
-					$data['transient_photo_name'] 			= array_shift($this->input->post('transient_photo_name'));
-					$data['transient_photo'] 				= array_shift($this->input->post('transient_photo'));
-					$data['transient_photo_after']			= array_shift($this->input->post('transient_photo_after'));
+					$data['index']								= $index;
+					$data['registration_id'] 					= $registration_id;
+					$data['transient_product_code'] 			= array_shift($this->input->post('transient_product_code'));
+					$data['transient_product_price_id'] 		= array_shift($this->input->post('transient_product_price_id'));
+					$data['transient_detail_registration_id'] 	= array_shift($this->input->post('transient_detail_registration_id'));
+					$data['transient_product_name'] 			= array_shift($this->input->post('transient_product_name'));
+					$data['transient_reg_price'] 				= array_shift($this->input->post('transient_reg_price'));
+					$data['transient_reg_aproved_price']		= array_shift($this->input->post('transient_reg_aproved_price'));
 			}		
 			
 			$this->load->helper('form');
 			
 		
-			$this->render->add_form('app/upload_photo/transient_form', $data);
+			$this->render->add_form('app/approved/transient_form', $data);
 			$this->render->show_buffer();
 		}
 
@@ -147,7 +148,7 @@ class Approved extends CI_Controller{
 		function detail_form_action()
 		{		
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('i_photo_after', 'photo after', 'trim|required');
+			//$this->form_validation->set_rules('i_photo_after', 'photo after', 'trim|required');
 		
 			$index = $this->input->post('i_index');		
 			// cek data berdasarkan kriteria
