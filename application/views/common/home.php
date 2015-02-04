@@ -22,7 +22,7 @@ background-color: #515EA6;
 <form id="id_form_nya">
 <div class="form_area">
 <div class="form_area_frame">
-<table class="form_layout" cellspacing="6">
+<table class="form_layout" cellspacing="10" style="border-spacing:10px !important; padding:50px;" >
 	<tr>
 	<td><img src="<?=base_url()?>assets/images/smicon_person.png" align="left" /></td>
      <td width="150"><b>Nama pengguna</b></td>

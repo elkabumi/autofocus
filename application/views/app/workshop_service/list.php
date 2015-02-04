@@ -2,15 +2,15 @@
 $(function(){
 	var otable = createTable({
 		id 		: "#table",
-		listSource 	: "product/table_controller",
-		formTarget 	: "product/form",
-		actionTarget: "product/form_action",
-		activeTarget		: "product/active",
+		listSource 	: "workshop_service/table_controller",
+		formTarget 	: "workshop_service/form",
+		actionTarget: "workshop_service/form_action",
+		activeTarget		: "workshop_service/active",
 		column_id	: 0,
 		
 		filter_by 	: [ 
-		{id : "product_code", label : "Product Code"}, 
-		{id : "product_name", label : "Product Name"}],
+	
+		{id : "workshop_service_name", label : "Nama Pengerjaan"}],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
 	otable.fnSetColumnVis(0, false, false);
@@ -21,9 +21,9 @@ $(function(){
 	<thead>
 		<tr>
 			<th>ID</th>
-            <th>Item Code</th>
-            <th>Item Name </th>
-		
+            <th>Nama Pengerjaan</th>
+		  	<th>Harga</th>
+		  	<th>Harga Borongan</th>
             <th>Create Date</th>
             <th>Active Status</th>
             <th>Information</th>
