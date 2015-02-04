@@ -24,7 +24,7 @@ $(function(){
          <div class="iconic_base iconic_search com_popup"></div>
          <span class="com_desc"></span>
         <input type="text" class="com_input" size="6" name="module" />
-        <input type="text" name="i_index" value="<?=$index?>" />
+        <input type="hidden" name="i_index" value="<?=$index?>" />
         <input type="hidden" name="i_product_id" value="" />
         <input type="hidden" name="i_product_code" value="" />
         
