@@ -7,7 +7,6 @@ $(function(){
 		backPage		: "approved",
 		nextPage		: "approved"
 	});
-	
 	createLookUp({
 		table_id		: "#lookup_table_period",
 		table_width		: 400,
@@ -56,32 +55,60 @@ $(function(){
 		dataSource		: "lookup/insurance_lookup_id",
 		column_id 		: 0,
 		component_id	: "#lookup_insurance",
-		filter_by		: [{id : "p1", label : "Nama"}]
+		filter_by		: [{id : "p1", label : "Nama"}],
+		onSelect		: load_insurance_pph
 	});
 	
+		
+		
+		
+		
 	$('input[name="i_claim_type"]').change(function(){
 		var asuransi = document.getElementById("asuransi");
 		var no_klaim = document.getElementById("no_klaim");
+		var pribadi = document.getElementById("pribadi");
+		var pph = document.getElementById("pph");
 		
 		if($(this).val() == 1){
 			asuransi.style.display = 'table';
 			no_klaim.style.display = 'table';
 			pribadi.style.display = 'none';
 			pph.style.display = 'table';
+	
 		}else{
 			asuransi.style.display = 'none';
 			no_klaim.style.display = 'none';
 			pribadi.style.display = 'table';
-			pph.style.display = 'none';	
+			pph.style.display = 'none';
+			
 		}
 		
-});
-	
+	});
+	function load_insurance_pph()
+	{
+		var id 	= $('input[name="i_insurance_id"]').val();
+		
+		if(id == ""){
+			return;
+		}
+		var data ='id='+id; 
+		
+		$.ajax({
+			type: 'POST',
+			url: '<?=site_url('registration/load_insurance_pph')?>',
+			data: data,
+			dataType: 'json',
+			success: function(data){	
+				$('input[name="i_insurance_pph"]').val(data.content['insurance_pph']);	
+			}
+			
+		});
+	}
 	createDatePicker();
 	//updateAll(); 
 });
-</script>
 
+</script>
 <form class="form_class" id="id_form_nya">	
 <div class="form_area">
 <div class="form_area_frame">
@@ -95,7 +122,6 @@ $(function(){
          <input type="hidden" name="i_period_id" class="com_id" value="<?=$period_id?>" />
          <input type="text" class="com_input" size="6" /> 
          <input type="hidden" name="row_id" value="<?=$row_id?>" />
-         
          <div class="iconic_base iconic_search com_popup"></div>
        </span></td> 
 		</tr>
@@ -154,7 +180,7 @@ $(function(){
     </tr>
 
  <tr>
-      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="asuransi" style="width:100%;">
+      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
         <tr>
           <td width="17%">Asuransi</td>
           <td width="1%">:</td>
@@ -165,6 +191,11 @@ $(function(){
 				  <div class="iconic_base iconic_search com_popup"></div>
 				</span></td>
         </tr>
+        <tr>
+          <td width="17%">PIC Asuransi</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_pic_asuransi" name="i_pic_asuransi" value="<?=$pic_asuransi?>" /></td>
+        </tr>
       </table></td>
      </tr>   
       <tr>
@@ -172,13 +203,14 @@ $(function(){
         <tr>
           <td width="17%">No Klaim</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" value="<?= $claim_no ?>" /></td>
+          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" value="<?=$claim_no?>"/></td>
         </tr>
       </table></td>
+      
 				
 				
       </tr>
-             <tr>
+       <tr>
      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pph" style="width:100%;">
         <tr>
           <td width="17%">PPh %</td>
@@ -195,13 +227,27 @@ $(function(){
         <tr>
           <td width="17%">Bayar Dp</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp"  value="<?=$registration_dp ?>" readonly="readonly"/></td>
+          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp" value="<?=$registration_dp?>" /></td>
         </tr>
       </table></td>
 				
 				
       </tr>
-
+       <tr>
+          <td width="17%">No SPK</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no"  value="<?=$spk_no?>" /></td>
+        </tr>
+        <tr>
+          <td width="17%">No PKB</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" value="<?=$pkb_no?>" /></td>
+        </tr>
+          <tr>
+          <td width="17%">Own Retention (OR)</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
+        </tr>
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>
@@ -211,6 +257,11 @@ $(function(){
       <td>Tanggal Estimasi Keluar   	  </td>
       <td>:</td>
       <td><input type="text" name="i_registration_estimation_date" class="date_input" size="15" value="<?=$registration_estimation_date?>" /></td>
+    </tr>
+     <tr>
+      <td>Tanggal SPK  </td>
+      <td>:</td>
+      <td><input type="text" name="i_spk_date" class="date_input" size="15" value="<?=$spk_date?>" /></td>
     </tr>
        <tr>
     <td width="158" valign="top">Keterangan</td>
@@ -223,8 +274,8 @@ $(function(){
      </div>
 	
 	<div class="command_bar">
-		<input type="button" id="submit" value="Simpan Persetujuan"/>
-		<input type="button" id="enable" value="Edit"/>
+		<input type="button" id="submit" value="Simpan Registrasi"/>
+		<input type="button" id="enable" value="Setujui"/>
 	
 		<input type="button" id="cancel" value="Batal"/>
 	</div>

@@ -2,7 +2,7 @@
 $(function(){
 	createLookUp({
 		table_id		: "#lookup_table_product_price",
-		listSource 		: "lookup/product_price_table_control/",
+		listSource 		: "lookup/product_price_table_control/" + $('input[name="i_insurance_id"]').val(),
 		dataSource		: "lookup/product_price_lookup_id",
 		component_id	: "#lookup_product_price",
 		filter_by		: [{id : "p1", label : "Jenis Perbaikan"}]
@@ -24,7 +24,7 @@ $(function(){
          <div class="iconic_base iconic_search com_popup"></div>
          <span class="com_desc"></span>
         <input type="text" class="com_input" size="6" name="module" />
-        <input type="text" name="i_index" value="<?=$index?>" />
+        <input type="hidden" name="i_index" value="<?=$index?>" />
        
         
        </span></td>
@@ -35,9 +35,9 @@ $(function(){
      <td width="10" >:</td>
      <td width="704" ><input name="i_detail_registration_price" type="text" id="i_detail_registration_price" value="<?=$transient_reg_price ?>" readonly="readonly" />
      
-     <input name="i_detail_registration_id" type="text" id="i_detail_registration_id" value="<?=$transient_detail_registration_id ?>" readonly="readonly" />
-     <input name="i_product_code" type="text" id="i_product_code" value="<?=$transient_product_code ?>" readonly="readonly" />
-     <input name="i_product_name" type="text" id="i_product_name" value="<?=$transient_product_name ?>" readonly="readonly" />
+     <input name="i_detail_registration_id" type="hidden" id="i_detail_registration_id" value="<?=$transient_detail_registration_id ?>" readonly="readonly" />
+     <input name="i_product_code" type="hidden" id="i_product_code" value="<?=$transient_product_code ?>" readonly="readonly" />
+     <input name="i_product_name" type="hidden" id="i_product_name" value="<?=$transient_product_name ?>" readonly="readonly" />
         
      </td>
     </tr>

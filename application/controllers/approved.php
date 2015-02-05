@@ -36,7 +36,7 @@ class Approved extends CI_Controller{
 				$data['row_id'] = $id;
 				$data['check_in'] = format_new_date($data['check_in']);
 				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
-		
+				$data['spk_date'] = format_new_date($data['spk_date']);
 			
 			}
 		
@@ -66,6 +66,7 @@ class Approved extends CI_Controller{
 				$data['row_id'] = $id;
 				$data['row2_id'] = $id;
 				$data['check_in'] = format_new_date($data['check_in']);
+
 				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
 		
 			
@@ -99,7 +100,7 @@ class Approved extends CI_Controller{
 											'transient_product_price_id' => $value['product_price_id'],
 											'transient_detail_registration_id' =>$value['detail_registration_id'])),
 											
-						form_transient_pair('transient_product_name', $value['product_name'],$value['product_name']),
+						form_transient_pair('transient_product_name', $value['product_name']." (".$value['product_type_name']." - ".$value['pst_name'].")", $value['product_name']),
 						form_transient_pair('transient_reg_price',	$value['detail_registration_price'],$value['detail_registration_price']),
 						form_transient_pair('transient_reg_aproved_price',	$value['detail_registration_approved_price'],$value['detail_registration_approved_price'])
 						
@@ -161,7 +162,10 @@ class Approved extends CI_Controller{
 			$transient_product_code 		= $this->input->post('i_product_code');
 			$transient_product_price_id 	= $this->input->post('i_product_price_id');
 			$transient_detail_registration_id 	= $this->input->post('i_detail_registration_id');
-			$transient_product_name 		= $this->input->post('i_product_name');
+
+			$get_data_product  = $this->approved_model->get_data_product($this->input->post('i_product_price_id'));
+
+			$transient_product_name 		= $get_data_product['product_name']." (".$get_data_product['product_type_name']."-".$get_data_product['pst_name'].")";
 			$transient_reg_price 	 		= $this->input->post('i_detail_registration_price');
 			$transient_reg_aproved_price 	= $this->input->post('i_detail_registration_approved_price');
 				
@@ -212,11 +216,103 @@ class Approved extends CI_Controller{
 	
 	function form_approved_action($is_delete = 0){
 		
-		$id = $this->input->post('row2_id');
-			
+		$this->load->library('form_validation');
+		
+		// bila operasinya DELETE -----------------------------------------------------------------------------------------		
+		if($is_delete)
+		{
+			$this->load->model('approved_model');
+			$id = $this->input->post('row_id');
+			$is_process_error = $this->approved_model->delete($id);
+			send_json_action($is_process_error, "Data telah dihapus", "Data gagal dihapus");
+		}
+		
+		// bila bukan delete, berarti create atau update ------------------------------------------------------------------
 	
-			$error = $this->approved_model->approved($id);
-			send_json_action($error, "Simpan Berhasil, Data telah disetujui", "Data gagal direvisi");
+		// definisikan kriteria data
+		$this->form_validation->set_rules('i_code','Kode','trim|min_length[3]|max_length[50]|required');
+		$this->form_validation->set_rules('i_period_id','Periode','trim|required|integer');
+		$this->form_validation->set_rules('i_stand_id','Cabang','trim|required|integer');
+		$this->form_validation->set_rules('i_customer_id','Customer','trim|required|integer');
+		$this->form_validation->set_rules('i_car_id','Mobil','trim|required|integer');
+		$this->form_validation->set_rules('i_claim_type','Tipe Klaim','trim|required');
+		$this->form_validation->set_rules('i_own_retention','OR','trim|required|is_numeric');
+		$this->form_validation->set_rules('i_check_in','Tanggal Masuk','trim|required|valid_date|sql_date');
+		$this->form_validation->set_rules('i_registration_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
+		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required');
+		$this->form_validation->set_rules('i_pkb_no','No PKB','trim|required');
+		$this->form_validation->set_rules('i_spk_date','Tanggal SPK','trim|required|valid_date|sql_date');
+		//$this->form_validation->set_rules('i_registration_description','Keterangan','trim|required');
+		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+
+		$id = $this->input->post('row_id');
+		$data['registration_code'] 			= $this->input->post('i_code');
+		$data['period_id'] 					= $this->input->post('i_period_id');
+		$data['stand_id'] 					= $this->input->post('i_stand_id');
+		$data['customer_id'] 				= $this->input->post('i_customer_id');
+		$data['car_id'] 					= $this->input->post('i_car_id');
+		$data['employee_id']				= $this->access->info['employee_id'];
+		$data['incident_date'] 				= "";
+		$data['claim_type']					= $this->input->post('i_claim_type');
+		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
+		
+		$data['registration_dp']			= $this->input->post('i_registration_dp');
+		$data['insurance_pph'] 				= $this->input->post('i_insurance_pph');
+		$data['claim_no'] 					= $this->input->post('i_claim_no');
+		$data['check_in'] 					= $this->input->post('i_check_in');
+		$data['registration_estimation_date'] 					= $this->input->post('i_registration_estimation_date');
+		$data['check_out'] 					= "";
+		$data['registration_date'] 			= date("Y-m-d");
+		$data['status_registration_id'] 		= 2;
+		$data['registration_description']	= $this->input->post('i_registration_description');
+		$data['own_retention']				= $this->input->post('i_own_retention');
+		$data['pic_asuransi']				= $this->input->post('i_pic_asuransi');
+		$data['spk_date']					= $this->input->post('i_spk_date');
+		$data['spk_no']						= $this->input->post('i_spk_no');
+		$data['pkb_no']						= $this->input->post('i_pkb_no');
+		
+		$list_detail_registration_id	 	= $this->input->post('transient_reg_price');
+	
+		$list_product_price_id		= $this->input->post('transient_product_price_id');
+		$list_registration_detail_price	 	= $this->input->post('transient_reg_price');
+		$list_registration_detail_approved_price	 	= $this->input->post('transient_reg_aproved_price');
+		
+		
+	
+		
+		$total_price = 0;
+		$approved_total_price = 0;
+
+		$items = array();
+		if($list_detail_registration_id){
+		foreach($list_detail_registration_id as $key => $value)
+		{
+			//$get_purchase_price = $this->approved_model->get_purchase_price($list_product_id[$key]);
+			
+			$items[] = array(				
+				//'product_id'  => $list_product_id[$key],
+				'detail_registration_id' => $list_detail_registration_id[$key],
+				'detail_registration_type_id' => '1',
+				'employee_id' => $this->access->info['employee_id'],
+				'product_price_id' => $list_product_price_id[$key],
+				'detail_registration_price'  => $list_registration_detail_price[$key],
+				'detail_registration_approved_price'  => $list_registration_detail_approved_price[$key]
+			);
+			
+			$total_price += $list_registration_detail_price[$key];
+			$approved_total_price += $list_registration_detail_approved_price[$key];
+		}
+		}
+		
+		$data['total_registration'] = $total_price;
+		$data['approved_total_registration'] = $approved_total_price;
+		
+
+			$error = $this->approved_model->update($id, $data, $items);
+			send_json_action($error, "Data telah desetujui", "Data gagal direvisi");
+			
 		
 		
 	}

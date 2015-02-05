@@ -147,64 +147,28 @@ class Approved_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data, $items,$item2)
+	
+	function update($id, $data, $items)
 	{
 		$this->db->trans_start();
-		$this->db->insert('approveds', $data);
-		$id = $this->db->insert_id();
+		$this->db->where('registration_id', $id); // data yg mana yang akan di update
+		$this->db->update('registrations', $data);
+		
 		
 		//Insert items
+		$this->db->where('registration_id', $id);
+		$this->db->delete('detail_registrations');
 		$index = 0;
 		foreach($items as $row)
 		{			
-			$row['approved_id'] = $id;
-			$this->db->insert('product_types', $row);
+			$row['registration_id'] = $id;
+			$this->db->insert('detail_registrations', $row); 
 			$index++;
 		}
 		
-		$index2 = 0;
-		foreach($item2 as $row2)
-		{			
-			$row2['approved_id'] = $id;
-			$this->db->insert('product_sub_type', $row2);
-			$index2++;
-		}
 		
-		$this->insert_id = $id;//create registration
-	//	$this->insert_registration($id, $data);
-		
-		$this->access->log_insert($id, 'PO Received');
-		$this->db->trans_complete();
-		return $this->db->trans_status();
-	}// end of function 
-	function update($id, $data, $items,$item2)
-	{
-		$this->db->trans_start();
-		$this->db->where('approved_id', $id); // data yg mana yang akan di update
-		$this->db->update('approveds', $data);
-		
-		//Insert items
-		$this->db->where('approved_id', $id);
-		$this->db->delete('product_types');
-		$index = 0;
-		foreach($items as $row)
-		{			
-			$row['approved_id'] = $id;
-			$this->db->insert('product_types', $row); 
-			$index++;
-		}
-		
-		$this->db->where('approved_id', $id);
-		$this->db->delete('product_sub_type');
-		$index = 0;
-		$index2 = 0;
-		foreach($item2 as $row2)
-		{			
-			$row2['approved_id'] = $id;
-			$this->db->insert('product_sub_type', $row2);
-			$index2++;
-		}
-		$this->access->log_update($id, 'PO Received');
+	
+		$this->access->log_update($id, 'Approved');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
@@ -346,14 +310,16 @@ class Approved_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*, c.product_id, c.product_code, c.product_name', 1);
+		$this->db->select('a.*, c.product_id, c.product_code, c.product_name, d.product_type_name, e.pst_name', 1);
 		$this->db->from('detail_registrations a');
 		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
 		$this->db->join('products c', 'c.product_id = b.product_id');
+		$this->db->join('product_types d', 'd.product_type_id = b.product_type_id');
+		$this->db->join('product_sub_type e', 'e.pst_id = b.pst_id');
 		
 		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get(); debug();
-		query();
+		//query();
 		foreach($query->result_array() as $row)
 		{
 			$result[] = format_html($row);
@@ -420,5 +386,22 @@ class Approved_model extends CI_Model
 		return $progress;
 	}
 	
+	function get_data_product($id)
+	{
+		
+		$sql = "select b.*, c.product_id, c.product_code, c.product_name, d.product_type_name, e.pst_name
+				from product_prices b 
+				join products c on c.product_id = b.product_id
+				join product_types d on d.product_type_id = b.product_type_id
+				join product_sub_type e on e.pst_id = b.pst_id
+				where product_price_id = '$id'
+				";
+		
+		$query = $this->db->query($sql);
+	//	query();
+		$result = null;
+		foreach ($query->result_array() as $row) $result = format_html($row);
+		return $result;
+	}
 }
 #
