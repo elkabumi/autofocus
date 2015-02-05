@@ -315,8 +315,12 @@ class Registration extends CI_Controller
 			$data['product_code']	= array_shift($this->input->post('transient_product_code'));
 			$data['product_price_id']	= array_shift($this->input->post('transient_product_price_id'));
 			$data['product_name'] = array_shift($this->input->post('transient_product_name'));
+
+			//$data['registration_detail_qty'] 	= array_shift($this->input->post('transient_registration_detail_qty'));
 			$data['registration_detail_price'] = array_shift($this->input->post('transient_registration_detail_price'));
-	
+			//$data['registration_detail_qty'] = array_shift($this->input->post('transient_registration_detail_qty'));
+			//$data['registration_detail_total_price'] = array_shift($this->input->post('transient_registration_detail_total_price'));
+		
 		}		
 		$this->render->add_form('app/registration/transient_form', $data);
 		$this->render->show_buffer();
@@ -556,15 +560,17 @@ class Registration extends CI_Controller
 			{
 				$data = $result;
 				$data['row_id'] = $id;		
-				$data['car_nopol'] = $result['car_nopol'];	
+				$data['car_nopol'] = $result['car_nopol'];
+				$data['insurance_pph'] = $result['insurance_pph'];	
 				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
 				
 			}
 		//$data='';
 			
 		$data_detail = $this->registration_model->get_data_detail($id);
+		$data_sperpart = $this->registration_model->get_data_sperpart($id);
 	   
-	   $this->global_model->create_report_registration('Laporan Regitrasi', 'report/registration.php', $data, $data_detail, 'header.php');
+	   $this->global_model->create_report_registration('Laporan Regitrasi', 'report/registration.php', $data, $data_detail,$data_sperpart,'header.php');
 	}
 	}
 	

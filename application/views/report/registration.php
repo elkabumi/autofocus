@@ -61,13 +61,58 @@
   </tr>
 </table>
 </div>
+<div class="table_content"><b>Sperpart</b></div>
 <div class="table_title">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
    
     <td width="5%">No</td>
-    <td width="15%">Deskripsi</td>
-    <td width="16%" align="right">Qty</td>
+    <td width="15%">Qty</td>
+    <td width="30%">Part No</td>
+    <td width="45%">Nama Part</td>
+	<td width="60%" align="right">Jumlah</td>
+  </tr>
+  </table>
+  </div>
+  <div class="table_content">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <?php 
+  $no = 1;
+   $total_sperpart= 0;
+  foreach($data_sperpart as $item): ?>
+  <tr>
+   
+    <td width="5%"><?=$no?></td>
+    <td width="15%"><?=$item['rs_qty']?></td>
+    <td width="30%"><?=$item['rs_part_number']?></td>
+    <td width="45%"><?=$item['rs_name']?></td>
+    <td width="60%" align="right"><?=number_format($item['rs_repair'], 0)?></td>
+  </tr>
+  <?php 
+  $total_sperpart = $total_sperpart + $item['rs_repair'];
+    $no++;
+  endforeach; 
+
+  ?>
+  </table>
+  </div>
+ 
+<div class="table_footer">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td width="15%"></td>
+    <td width="52%" align="right"><strong>Total Parts (Rp)</strong></td>
+    <td width="33%" align="right"><?=number_format($total_sperpart, 0)?></td>
+  </tr>
+  </table>
+</div>
+<div class="table_content"><b>Jasa</b></div>
+<div class="table_title">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   
+    <td width="5%">No</td>
+    <td width="15%">Nama jasa</td>
     <td width="40%" align="right">Jumlah</td>
   </tr>
   </table>
@@ -81,12 +126,11 @@
   <tr>
    
     <td width="5%"><?=$no?></td>
-    <td width="15%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
-    <td width="16%" align="right"><?=$item['detail_registration_qty']?></td>
-    <td width="40%" align="right"><?=number_format($item['detail_registration_total_price'], 0)?></td>
+    <td width="15%"><?=$item['product_name']?></td>
+    <td width="40%" align="right"><?=number_format($item['detail_registration_price'], 0)?></td>
   </tr>
   <?php 
-  $total_transaction = $total_transaction + $item['detail_registration_total_price'];
+  $total_transaction = $total_transaction + $item['detail_registration_price'];
     $no++;
   endforeach; 
 
@@ -94,14 +138,29 @@
   </table>
   </div>
 <div class="table_footer">
+<?
+$discount = $total_transaction * $insurance_pph / 100;
+$total_after_discount = $total_transaction - $discount;
+
+?>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
    <tr>
     <td width="15%"></td>
-    <td width="52%" align="right"><strong>TOTAL</strong></td>
-    <td width="33%" align="right"><?=number_format($total_transaction, 0)?></td>
+    <td width="52%" align="right"><strong>Labaur Cost(Inclusive of taxes)(Rp)</strong></td>
+    <td style="border-top:1px solid #999" width="33%" align="right"><?=number_format($total_transaction, 0)?></td>
   </tr>
   <tr>
-  <td width="100%" align="left"><?= "(".Terbilang($total_transaction).".Rupiah)" ?></td>
+    <td width="15%"></td>
+    <td width="52%" align="right"><strong>-5.00/5.00% Labaur Discount (Rp)</strong></td>
+    <td style="border-bottom:1px solid #999" width="33%" align="right"><?=number_format($discount)?></td>
+  </tr>
+  <tr>
+    <td width="15%"></td>
+    <td width="52%" align="right"><strong>Gross Labaur after Discount (Rp)</strong></td>
+    <td width="33%" align="right"><?=number_format($total_after_discount, 0)?></td>
+  </tr>
+  <tr>
+  <td width="100%" align="left"><?= "(".Terbilang($total_after_discount).".Rupiah)" ?></td>
   </tr>
   <div class="tanda_tangan">
   <table width="100%">

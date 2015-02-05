@@ -307,7 +307,7 @@ class Global_model extends CI_Model
 			readfile('report_new/'.$title.'.pdf');
 	    }
 	}
-	function create_report_registration($title, $content, $data = '', $data_detail = '', $header){
+	function create_report_registration($title, $content, $data = '', $data_detail = '',$data_sperpart ='', $header){
 		
 	    $this->load->library('html2pdf');
 	    $this->html2pdf->folder('report_new/');
@@ -321,7 +321,7 @@ class Global_model extends CI_Model
 	   	
 
 	    $mydata = $this->load->view($header,$data,TRUE) ;
-	    $mydata .= $this->load->view($content, array('data' => $data, 'data_detail' => $data_detail) ,TRUE) ;
+	    $mydata .= $this->load->view($content, array('data' => $data, 'data_detail' => $data_detail,'data_sperpart' => $data_sperpart) ,TRUE) ;
 	    $mydata .= $this->load->view('footer.php',$data,TRUE) ;
 	    //Load html view
 	    $this->html2pdf->html($mydata);

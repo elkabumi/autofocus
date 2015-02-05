@@ -95,7 +95,7 @@ $(function(){
          <input type="hidden" name="i_period_id" class="com_id" value="<?=$period_id?>" />
          <input type="text" class="com_input" size="6" /> 
          <input type="hidden" name="row_id" value="<?=$row_id?>" />
-          <input type="hidden" name="row2_id" value="<?=$row2_id?>" />
+         
          <div class="iconic_base iconic_search com_popup"></div>
        </span></td> 
 		</tr>
