@@ -2,8 +2,8 @@
 $(function(){
 	createTableFormTransient({
 		id 				: "#transient_contact2",
-		listSource 		: "approved/detail_list_loader2/<?=$row2_id?>",
-		formSource 		: "approved/detail_form2/<?=$row2_id?>",
+		listSource 		: "approved/detail_list_loader2/<?=$row_id?>",
+		formSource 		: "approved/detail_form2/<?=$row_id?>",
 		controlTarget	: "approved/detail_form_action2",
 		
 	});

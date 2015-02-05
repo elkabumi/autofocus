@@ -33,8 +33,7 @@ class Approved extends CI_Controller{
 			$result = $this->approved_model->read_id($id);
 			if($result){
 				$data = $result;
-				$data['row_id'] = '';//$id;
-				$data['row2_id'] = $id;
+				$data['row_id'] = $id;
 				$data['check_in'] = format_new_date($data['check_in']);
 				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
 		
@@ -47,11 +46,13 @@ class Approved extends CI_Controller{
 		$this->render->add_form('app/approved/form', $data);
 		$this->render->build('Transaksi Penjualan User');
 		
-		$this->render->add_view('app/approved/transient_list', $data);
+		$this->render->add_view('app/approved/transient_list');
 		$this->render->build('Data Panel');
 		
 		$this->render->add_view('app/approved/transient_list2');
 		$this->render->build('Photo Before');
+		
+		
 		$this->render->show('approved');
 	}
 	
@@ -94,7 +95,7 @@ class Approved extends CI_Controller{
 				{
 				$data[$key] = array(
 						form_transient_pair('transient_product_code', $value['product_code'],$value['product_code'],
-										array(
+									array(
 											'transient_product_price_id' => $value['product_price_id'],
 											'transient_detail_registration_id' =>$value['detail_registration_id'])),
 											
@@ -117,6 +118,7 @@ class Approved extends CI_Controller{
 			if (strlen(trim($index)) == 0) {
 						
 				// TRANSIENT CREATE - isi form dengan nilai default / kosong
+					$data['index']			= '';
 					$data['transient_product_code'] 				= '';
 					$data['transient_product_price_id'] 				= '';
 					$data['transient_detail_registration_id'] 				= $registration_id;
@@ -137,7 +139,7 @@ class Approved extends CI_Controller{
 					$data['transient_reg_aproved_price']		= array_shift($this->input->post('transient_reg_aproved_price'));
 			}		
 			
-			$this->load->helper('form');
+		
 			
 		
 			$this->render->add_form('app/approved/transient_form', $data);
@@ -148,44 +150,38 @@ class Approved extends CI_Controller{
 		function detail_form_action()
 		{		
 			$this->load->library('form_validation');
-			//$this->form_validation->set_rules('i_photo_after', 'photo after', 'trim|required');
-		
+			$this->form_validation->set_rules('i_product_code', 'Produk', 'trim|required');
 			$index = $this->input->post('i_index');		
 			// cek data berdasarkan kriteria
 			if ($this->form_validation->run() == FALSE) send_json_validate(); 
 		
-			
-			$no 		= $this->input->post('i_index');
-			
-			
-			$i_photo_name	= $this->input->post('i_photo_name');
-			$i_photo_id	= $this->input->post('i_photo_id');
-			
-			$i_photo_type_id	= $this->input->post('i_photo_type_id');
-			$i_photo	= $this->input->post('i_photo');
-			$i_photo_after	= $this->input->post('i_photo_after');
-			
-			$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_before/'.$i_photo.'';
-			if($i_photo_after == ''){
-					$foto_after ='';
-				}else{
-					$foto_after='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$i_photo_after.'';
-			}
-			$data = array(
+		
+		
+			$no 							= $this->input->post('i_index');
+			$transient_product_code 		= $this->input->post('i_product_code');
+			$transient_product_price_id 	= $this->input->post('i_product_price_id');
+			$transient_detail_registration_id 	= $this->input->post('i_detail_registration_id');
+			$transient_product_name 		= $this->input->post('i_product_name');
+			$transient_reg_price 	 		= $this->input->post('i_detail_registration_price');
+			$transient_reg_aproved_price 	= $this->input->post('i_detail_registration_approved_price');
 				
-						form_transient_pair('transient_photo_name', $i_photo_name,$i_photo_name,
-										array(
-											'transient_photo_id' => $i_photo_id,
-											'transient_photo_type_id' => $i_photo_type_id)),
-						form_transient_pair('transient_photo_v',	$foto, $foto, 
-										array(
-											'transient_photo' => $i_photo)),
-						form_transient_pair('transient_photo_after_v',	$foto_after,$foto_after,
-											 array(
-											'transient_photo_after' => $i_photo_after)),
+			
+			
+			$data = array(
+					form_transient_pair('transient_product_code', $transient_product_code,$transient_product_code,
+									array(
+											'transient_product_price_id' => $transient_product_price_id,
+											'transient_detail_registration_id' =>$transient_detail_registration_id)),
+											
+						form_transient_pair('transient_product_name', $transient_product_name,$transient_product_name),
+						form_transient_pair('transient_reg_price',	$transient_reg_price,$transient_reg_price),
+						form_transient_pair('transient_reg_aproved_price',	$transient_reg_aproved_price,$transient_reg_aproved_price)
+					
 			);
-			 
-			send_json_transient($index, $data);
+		 
+		send_json_transient($index, $data);
+
+		
 		}
 	
 	
