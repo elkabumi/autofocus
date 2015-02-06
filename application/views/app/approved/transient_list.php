@@ -29,9 +29,9 @@ $(function(){
 </table>
 
 <div class="command_table" style="text-align:left;">
-   <input type="button" id="add" value="Tambah"/>
+ <!--  <input type="button" id="add" value="Tambah"/>-->
 	<input type="button" id="edit" value="Revisi"/>
-    <input type="button" id="delete" value="Hapus"/>
+  <!--   <input type="button" id="delete" value="Hapus"/>-->
    
 </div>
 

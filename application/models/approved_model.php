@@ -148,7 +148,7 @@ class Approved_model extends CI_Model
 		return $this->db->trans_status();
 	}
 	
-	function update($id, $data, $items)
+	function update($id, $data, $items, $item2)
 	{
 		$this->db->trans_start();
 		$this->db->where('registration_id', $id); // data yg mana yang akan di update
@@ -166,6 +166,17 @@ class Approved_model extends CI_Model
 			$index++;
 		}
 		
+		
+				//Insert items
+		$this->db->where('rs_id ', $id);
+		$this->db->delete('registration_spareparts');
+		$index2 = 0;
+		foreach($item2 as $row2)
+		{			
+			$row2['registration_id'] = $id;
+			$this->db->insert('registration_spareparts', $row2); 
+			$index2++;
+		}
 		
 	
 		$this->access->log_update($id, 'Approved');
@@ -346,6 +357,25 @@ class Approved_model extends CI_Model
 		}
 		return $result;
 	}
+	
+		function detail_list_loader3($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('b.*', 1);
+		$this->db->from('registrations a');
+		$this->db->join('registration_spareparts b', 'b.registration_id = a.registration_id');
+		
+		$this->db->where('a.registration_id', $id);
+		$query = $this->db->get(); debug();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	
+	
 	function approved($id)
 	{
 		$this->db->trans_start();
