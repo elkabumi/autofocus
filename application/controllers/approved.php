@@ -46,8 +46,15 @@ class Approved extends CI_Controller{
 		$this->render->add_form('app/approved/form', $data);
 		$this->render->build('Transaksi Penjualan User');
 		
+		
+		
 		$this->render->add_view('app/approved/transient_list');
 		$this->render->build('Data Panel');
+		
+		
+		$this->render->add_view('app/approved/transient_list3');
+		$this->render->build('Data Parts');
+		
 		
 		$this->render->add_view('app/approved/transient_list2');
 		$this->render->build('Photo Before');
@@ -111,7 +118,55 @@ class Approved extends CI_Controller{
 		}		
 		send_json(make_datatables_list($data)); 
 		}
+	function detail_list_loader2($registration_id=0)
+	{
+		if($registration_id == 0)
 		
+		send_json(make_datatables_list(null)); 
+				
+		$data = $this->approved_model->detail_list_loader2($registration_id);
+		
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_m_in/'.form_transient_pair('transient_photo', $value['photo_file']).'';
+		$data[$key] = array(
+				form_transient_pair('transient_photo_name', $value['photo_name']),
+				$foto
+				
+		);
+		
+		
+	
+		}		
+		send_json(make_datatables_list($data)); 
+	}	
+	function detail_list_loader3($registration_id=0)
+	{
+		if($registration_id == 0)send_json(make_datatables_list(null)); 
+				
+		$data = $this->approved_model->detail_list_loader3($registration_id);
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		
+		$data[$key] = array(
+				form_transient_pair('transient_rs_part_number', $value['rs_part_number'], $value['rs_part_number'],
+					array('transient_rs_id'=> $value['rs_id'])
+				),
+				form_transient_pair('transient_rs_name', $value['rs_name']),
+				form_transient_pair('transient_rs_qty',$value['rs_qty']),
+				form_transient_pair('transient_rs_repair', tool_money_format($value['rs_repair']), $value['rs_repair']),
+				form_transient_pair('transient_rs_approved_repair',	tool_money_format($value['rs_approved_repair']),$value['rs_approved_repair'])
+				
+		);
+		
+		
+		
+		}		
+		send_json(make_datatables_list($data)); 
+	}
+			
 		function detail_form($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
 		{		
 			$this->load->library('render');
@@ -187,32 +242,84 @@ class Approved extends CI_Controller{
 
 		
 		}
-	
-	
-	
-	function detail_list_loader2($registration_id=0)
-	{
-		if($registration_id == 0)
-		
-		send_json(make_datatables_list(null)); 
+	function detail_form3($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
+		{		
+			$this->load->library('render');
+			$index = $this->input->post('transient_index');
+			if (strlen(trim($index)) == 0) {
+						
+				// TRANSIENT CREATE - isi form dengan nilai default / kosong
+					$data['index']			= '';
+					$data['registration_id'] 					= $registration_id;
+					$data['transient_rs_part_number'] 				= '';
+					$data['transient_rs_id'] 				= '';
+					
+					$data['transient_rs_name'] 				= '';
+					$data['transient_rs_qty']			= '';	
+					$data['transient_rs_repair']				 = '';
+					$data['transient_rs_approved_repair']				 = '';
+					
+			} else {
 				
-		$data = $this->approved_model->detail_list_loader2($registration_id);
+					$data['index']								= $index;
+					$data['registration_id'] 					= $registration_id;
+					$data['transient_rs_part_number'] 			= array_shift($this->input->post('transient_rs_part_number'));
+					$data['transient_rs_id'] 		= array_shift($this->input->post('transient_rs_id'));
+					$data['transient_rs_name'] 	= array_shift($this->input->post('transient_rs_name'));
+					$data['transient_rs_qty'] 			= array_shift($this->input->post('transient_rs_qty'));
+					$data['transient_rs_repair'] 				= array_shift($this->input->post('transient_rs_repair'));
+					$data['transient_rs_approved_repair']		= array_shift($this->input->post('transient_rs_approved_repair'));
+			}		
+			
 		
-		$sort_id = 0;
-		foreach($data as $key => $value) 
-		{	
-		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_m_in/'.form_transient_pair('transient_photo', $value['photo_file']).'';
-		$data[$key] = array(
-				form_transient_pair('transient_photo_name', $value['photo_name']),
-				$foto
+			
+		
+			$this->render->add_form('app/approved/transient_form3', $data);
+			$this->render->show_buffer();
+		}
+		function detail_form_action3()
+		{		
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('i_rs_name', 'nama Parts', 'trim|required');
+			$this->form_validation->set_rules('i_rs_approved_repair','Harga Approved Parts','trim|required|is_numeric');
+		
+			$index = $this->input->post('i_index');		
+			// cek data berdasarkan kriteria
+			if ($this->form_validation->run() == FALSE) send_json_validate(); 
+		
+		
+		
+			$no 							= $this->input->post('i_index');
+			$transient_rs_part_number 		= $this->input->post('i_rs_no');
+			$transient_rs_id 				= $this->input->post('i_rs_id');
+			$transient_rs_name 				= $this->input->post('i_rs_name');
+			$transient_rs_qty 	 			= $this->input->post('i_rs_qty');
+			$transient_rs_repair 			= $this->input->post('i_rs_repair');
+			$transient_rs_approved_repair 	= $this->input->post('i_rs_approved_repair');
 				
-		);
+			
+			
+			$data = array(
+					form_transient_pair('transient_rs_part_number', $transient_rs_part_number, $transient_rs_part_number,
+										array('transient_rs_id'=> $transient_rs_id)
+							),
+				form_transient_pair('transient_rs_name', $transient_rs_name),
+				form_transient_pair('transient_rs_qty',$transient_rs_qty),
+				form_transient_pair('transient_rs_repair', tool_money_format($transient_rs_repair), $transient_rs_repair),
+				form_transient_pair('transient_rs_approved_repair',	tool_money_format($transient_rs_approved_repair),$transient_rs_approved_repair)
+				
+				
+			);
+		 
+		send_json_transient($index, $data);
+
 		
+		}
 		
 	
-		}		
-		send_json(make_datatables_list($data)); 
-	}
+	
+	
+	
 	
 	function form_approved_action($is_delete = 0){
 		
@@ -280,6 +387,13 @@ class Approved extends CI_Controller{
 		$list_registration_detail_approved_price	 	= $this->input->post('transient_reg_aproved_price');
 		
 		
+		$list_rs_id			= $this->input->post('transient_rs_id');
+		
+		$list_rs_part_number	 	= $this->input->post('transient_rs_part_number');
+		$list_rs_name	 	= $this->input->post('transient_rs_name');
+		$list_rs_qty	 	= $this->input->post('transient_rs_qty');
+		$list_rs_repair	 	= $this->input->post('transient_rs_repair');
+		$list_rs_approved_repair	 	= $this->input->post('transient_rs_approved_repair');
 	
 		
 		$total_price = 0;
@@ -309,8 +423,38 @@ class Approved extends CI_Controller{
 		$data['total_registration'] = $total_price;
 		$data['approved_total_registration'] = $approved_total_price;
 		
+		
+		
+		$total_rs_repair =0;
+		$approved_rs_repair =0;
+		
+		$item2 = array();
+		if($list_rs_id){
+		foreach($list_rs_id as $key => $value)
+		{
+			//$get_purchase_price = $this->approved_model->get_purchase_price($list_product_id[$key]);
+			
+			$item2[] = array(				
+				//'product_id'  => $list_product_id[$key],
+				'rs_id' => $list_rs_id[$key],
+				'rs_part_number ' => $list_rs_part_number[$key],
+				'rs_name' => $list_rs_name[$key],
+				'rs_qty' => $list_rs_qty[$key],
+				'rs_repair'  => $list_rs_repair[$key],
+				'rs_approved_repair'  => $list_rs_approved_repair[$key]
+			);
+			
+			$total_rs_repair += $list_rs_repair[$key];
+			$approved_rs_repair += $list_rs_approved_repair[$key];
+		}
+		}
+		
+		$data['sparepart_total_registration'] = $total_rs_repair;
+		$data['approved_sparepart_total_registration'] = $approved_rs_repair;
 
-			$error = $this->approved_model->update($id, $data, $items);
+		
+		
+			$error = $this->approved_model->update($id, $data, $items,$item2);
 			send_json_action($error, "Data telah desetujui", "Data gagal direvisi");
 			
 		

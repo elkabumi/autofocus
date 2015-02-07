@@ -1,6 +1,6 @@
 <script type="text/javascript">	
 $(function(){
-ss
+
 	
 });
 </script>
@@ -11,27 +11,34 @@ ss
      <td width="199" >No Parts
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_rs_no" type="text" id="i_rs_no" value="<?=$rs_part_number ?>"/>
+     <td width="704" ><input readonly="readonly" name="i_rs_no" type="text" id="i_rs_no" value="<?=$transient_rs_part_number ?>"/>
      <input type="hidden" name="i_index" value="<?=$index?>" />
+     <input type="hidden" name="i_rs_id" value="<?=$transient_rs_id?>" />
      </td>
     </tr>
     <tr>
      <td width="199" >Nama Parts
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_rs_name" type="text" id="i_rs_name" value="<?=$rs_name ?>" /></td>
+     <td width="704" ><input   readonly="readonly"name="i_rs_name" type="text" id="i_rs_name" value="<?=$transient_rs_name ?>" /></td>
     </tr>
     <tr>
      <td width="199" >Qty
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_rs_qty" type="text" id="i_rs_qty" value="<?=$rs_qty ?>" /></td>
+     <td width="704" ><input  readonly="readonly" name="i_rs_qty" type="text" id="i_rs_qty" value="<?=$transient_rs_qty ?>" /></td>
     </tr>
     <tr>
      <td width="199" >Harga Parts
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_rs_repair" type="text" id="i_rs_repair" value="<?=$rs_repair ?>" /></td>
+     <td width="704" ><input   readonly="readonly" name="i_rs_repair" type="text" id="i_rs_repair" value="<?=$transient_rs_repair ?>" /></td>
+    </tr>
+    <tr>
+     <td width="199" >Harga Approved Parts
+     </td>
+     <td width="10" >:</td>
+     <td width="704" ><input name="i_rs_approved_repair" type="text" id="i_rs_repair" value="<?=$transient_rs_approved_repair ?>" /></td>
     </tr>
 	
 </table>
