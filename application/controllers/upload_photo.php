@@ -45,8 +45,8 @@
 				$data['transaction_plain_last_date'] = $result['transaction_plain_last_date'];
 				$data['transaction_actual_date'] = $result['transaction_actual_date'];
 				$data['transaction_target_date'] = $result['transaction_target_date'];
-	
 				$data['status_registration_id'] = $result['status_registration_id'];
+				
 			}
 				}
 			$this->load->helper('form');
@@ -54,6 +54,10 @@
 			$this->render->build('Registrasi');
 		
 			$this->render->add_view('app/upload_photo/transient_list', $data);	
+			$this->render->build('Foto');
+			
+			$this->render->add_view('app/upload_photo/transient_list_cat', $data);
+			$this->render->build('Cat dan Bahan');
 			
 			$this->render->build('Upload Photo');
 			$this->render->add_js('ajaxfileupload');
@@ -108,7 +112,7 @@
 					}
 					$items[] = array(
 									
-						'photo_id'  => $list_photo_id[$key],
+						
 						'photo_name'  => $list_photo_name[$key],
 						'photo_file'  	=> $list_photo_file[$key],
 						'photo_type_id' =>$list_photo_type_id[$key]
@@ -170,6 +174,28 @@
 		}		
 		send_json(make_datatables_list($data)); 
 		}
+		function detail_list_loader_cat($registration_id=0)
+		{
+		if($registration_id == 0)send_json(make_datatables_list(null)); 
+				
+		$data = $this->upload_photo_model->detail_list_loader_cat($registration_id);
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		
+		$data[$key] = array(
+				form_transient_pair('transient_tm_name', $value['tm_name'], $value['tm_name']
+				),
+				form_transient_pair('transient_tm_qty', $value['tm_qty']),
+				form_transient_pair('transient_tm_description',$value['tm_description']),
+				form_transient_pair('transient_tm_price', tool_money_format($value['tm_price']), $value['tm_price'])
+		);
+		
+		
+		
+		}		
+		send_json(make_datatables_list($data)); 
+	}
 		function detail_form($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
 		{		
 			$this->load->library('render');
