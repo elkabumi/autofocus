@@ -8,7 +8,19 @@ class Lookup extends CI_Controller
 		//$this->load->library('dtc');
 	}
 	
-	
+	# lookup data workshop service
+	function workshop_service_table_control()
+	{
+		$this->load->library('dtc');
+		$this->dtc->workshop_service_control();
+	}
+
+	function workshop_service_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->workshop_service_get();
+	}
+
 	# lookup data gedung
 	function building_table_control()
 	{

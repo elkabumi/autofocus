@@ -477,6 +477,17 @@ br { clear: left; }
 	font-size: 11px; 
 	border:1px solid #e8e8e8;
 }
+
+.transient_category { 
+	
+	font-weight: bold; 
+	color: #666; 
+	padding: 10px;
+	font-size: 14px; 
+	border-bottom: 1px solid #eee;
+	
+}
+
 .form_title { 
 	background: #E5EFD5; 
 	font-weight: bold; 

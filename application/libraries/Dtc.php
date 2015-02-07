@@ -120,6 +120,29 @@ class Dtc
 		else send_json_error_feedback();
 	}
 	
+	# lookup data workshop service
+	function workshop_service_control()
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->workshop_service_control(get_datatables_control());
+		send_json($data); 
+	}
+	
+	function workshop_service_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->workshop_service_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['workshop_service_id'], $result['workshop_service_name'], '');
+		}
+		else send_json_error_feedback();
+	}
+
 	# lookup data gedung
 	function building_control()
 	{
