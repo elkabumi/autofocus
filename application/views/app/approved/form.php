@@ -247,11 +247,15 @@ $(function(){
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" value="<?=$pkb_no?>" /></td>
         </tr>
+        <?php
+		if($claim_type == 1){
+?>
           <tr>
           <td width="17%">Own Retention (OR)</td>
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
         </tr>
+        <?php } ?>
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>
