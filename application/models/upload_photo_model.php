@@ -162,15 +162,16 @@ class Upload_photo_model extends CI_Model
 			}
 		$this->insert_id = $id;*/
 		//Insert items
+		$this->db->where('registration_id', $id);
+		$this->db->delete('photos');
 		$index = 0;
 		foreach($items as $row)
 		{			
-			$this->db->trans_start();
-			$this->db->where('photo_id', $row['photo_id']); // data yg mana yang akan di update
-			$this->db->update('photos', $row);
-			
+			$row['registration_id'] = $id;
+			$this->db->insert('photos', $row); 
 			$index++;
 		}
+		
 		
 		
 		
@@ -185,13 +186,14 @@ class Upload_photo_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('b.*,a.status_registration_id', 1);
-		$this->db->from('registrations a');
-		$this->db->join('photos b', 'b.registration_id = a.registration_id');
+		$sql = "SELECT b.*, a.status_registration_id
+					FROM registrations a
+					JOIN photos b ON b.registration_id = a.registration_id
+					WHERE a.registration_id = '1' AND (b.photo_type_id='3' OR b.photo_type_id='4')";
 		
-		$this->db->where('a.registration_id', $id);
-		$query = $this->db->get(); 
-		debug();
+		$query = $this->db->query($sql);
+		//$query = $this->db->get(); 
+		//debug();
 		//query();
 		foreach($query->result_array() as $row)
 		{
