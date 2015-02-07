@@ -18,8 +18,8 @@ $(function(){
 		<tr>
 			
 			<th>nama foto</th>
-            <th>Foto before</th>
-            <th>Foto After</th>
+            <th>Foto File</th>
+            <th>Foto Type</th>
 		</tr> 
 	</thead> 
 	<tbody> 	
@@ -30,8 +30,9 @@ $(function(){
 if($status_registration_id == '3' or $status_registration_id == '4'){
 ?>
 <div class="command_table" style="text-align:left;">
-  
-	<input type="button" id="edit" value="Edit"/>
+      <input type="button" id="add" value="Tambah"/>
+	<input type="button" id="edit" value="Revisi"/>
+    <input type="button" id="delete" value="Hapus"/>
    
 </div>
 <?php } ?>

@@ -178,7 +178,9 @@ $(function(){
          Pribadi
        </label></td>
     </tr>
-
+<?php
+		if($claim_type == 1){
+?>
  <tr>
       <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
         <tr>
@@ -219,7 +221,9 @@ $(function(){
         </tr>
       </table></td>
       
-				
+<?php } 
+		if($claim_type == 0){
+?>
 				
       </tr>
             <tr>
@@ -231,7 +235,7 @@ $(function(){
         </tr>
       </table></td>
 				
-				
+		<?php } ?>		
       </tr>
        <tr>
           <td width="17%">No SPK</td>

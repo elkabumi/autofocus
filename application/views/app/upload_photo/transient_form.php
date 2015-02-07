@@ -53,48 +53,42 @@ function ajaxFileUpload()
      <td width="222" req="req" >nama foto
      </td>
      <td width="633" >
-    <input name="i_photo_name" readonly="readonly" type="text" id="i_photo_name" value="<?=$transient_photo_name ?>" />
+    <input name="i_photo_name" type="text" id="i_photo_name" value="<?=$transient_photo_name ?>" />
    <input type="hidden" name="i_index" value="<?=$index?>" />
     <input type="hidden" name="i_photo_id" value="<?=$transient_photo_id?>" />
      <input type="hidden" name="i_photo_type_id" value="<?=$transient_photo_type_id?>" />
       </td>
     </tr>
+     <tr>
+        <td width="27%">Type_photo</td>
+		<td width="73%"><?php echo  form_dropdown('i_photo_type_id', $photo_type_id,$transient_photo_type_id)  ?>
+          			
+    	</td>
+	</tr>
 	<tr>
-<td width="222" req="req" > foto Before
-     </td>
-<td valign="top">
-      <?php
-	   if($transient_photo == ""){
-	   ?><div id="foto_hidden2" style="width:100px; height:70px; border:1px solid #999; text-align:center; padding-top:40px;"><b>FOTO</b></div>
-	   <?php
-	   }
-	   ?>
-    <div class="img" >
- <img  src="<?=base_url().'storage/img_before/'.$transient_photo?>"  width="100px"  height:"70px";  alt="" />
-
- <input type="hidden" name="i_photo"  value="<?=$transient_photo?>" />
- <div class="desc"></div>
-</div>
-  </tr>
-	<tr>
-<td width="222" req="req" > foto After
+<td width="222" req="req" > Foto File
      </td>
     <td valign="top">
       <?php
-	   if($transient_photo_after == ''){
+	   if($transient_photo_file == ''){
 	   ?><div id="foto_hidden2" style="width:100px; height:70px; border:1px solid #999; text-align:center; padding-top:40px;"><b>FOTO</b></div>
 	   <?php
 	   }
 	   ?>
     <div class="img" >
- <?php if($transient_photo_type_id == '1'){
+ <?php if($transient_photo_id == ''){
  ?>
- <img id="imagex" src="<?=base_url().'tmp/'.$transient_photo_after?>"  width="100px"  height:"70px";  alt="" />
-<?php }if($transient_photo_type_id == '2'){
- ?>
- <img id="imagex" src="<?=base_url().'storage/img_after/'.$transient_photo_after?>"  width="100px"  height:"70px";  alt="" />
- <?php } ?>
- <input type="hidden" name="i_photo_after" id="photo" value="<?=$transient_photo_after?>" />
+ <img id="imagex" src="<?=base_url().'tmp/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
+<?php }else{
+		if($transient_photo_type_id == '3'){
+?>
+<img id="imagex" src="<?=base_url().'storage/img_m_out/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
+ <?php }else if($transient_photo_type_id == '4'){ ?>
+<img id="imagex" src="<?=base_url().'storage/img_m_banding/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
+
+ <?php }
+ }?>
+ <input type="hidden" name="i_photo_file" id="photo" value="<?=$transient_photo_file?>" />
  <div class="desc"></div>
 </div>
 	  <input id="fileToUpload" type="file" size="10" name="fileToUpload" class="input">

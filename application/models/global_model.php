@@ -147,6 +147,20 @@ class Global_model extends CI_Model
 		}
 		return $data;
 	}
+	function get_type_photo()
+	{		
+		$this->db->select('photo_type_id,photo_type_name');
+		$this->db->where('photo_type_id', 3);
+		$this->db->or_where('photo_type_id', 4);
+		$query = $this->db->get('photo_types');		
+		$data = array();
+		foreach($query->result_array() as $row)
+		{
+				$data[$row['photo_type_id']] = $row['photo_type_name'];
+		}
+		return $data;
+	}
+	
 	function get_stand()
 	{		
 		$this->db->select('stand_id,stand_name');
