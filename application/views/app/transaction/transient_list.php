@@ -12,7 +12,7 @@ $(function(){
 	function perhitungan()
 	{
 		var transaction_total = 0;
-		$('input[name="transient_transaction_detail_total[]"]').each(function()
+		$('input[name="transient_workshop_service_job_price[]"]').each(function()
 		{
 			transaction_total += parseFloat($(this).val());
 		});
@@ -21,25 +21,18 @@ $(function(){
 	}
 });
 </script>
+<div class="transient_category">Data Progress Pengerjaan</div>
 <div>
 <form id="tform">
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="transient_contact"> 
 	<thead>
 		<tr>
+			<th>Tanggal</th>
 			<th>Jenis Perbaikan</th>
-            <th>Bongkar Komponen</th>
-			<th>Las/Ketok</th>
-			<th>Dempul</th>
-            <th>Cat</th>
-			<th>Poles</th>
-            <th>Rakit</th>
-			<!--<th>Tanggal plain awal</th>
-			<th>Tanggal plain akhir</th>
-            <th>Tanggal aktual</th>
-            <th>Tanggal target selesai</th>-->
-            <th>Tanggal Action</th>
-            <th>Keterangan</th>
-            <th>Jumlah</th>
+            <th>Harga</th>
+			<th>Harga Borongan</th>
+			<th>Progress (%)</th>
+			
 		</tr> 
 	</thead> 
 	<tbody> 	
@@ -55,7 +48,9 @@ $(function(){
            </td>
           </tr>
         </table>	
-   	<input type="button" id="edit" value="Edit"/>
+   	<input type="button" id="add" value="Tambah"/>
+	<input type="button" id="edit" value="Revisi"/>
+    <input type="button" id="delete" value="Hapus"/>
    
 </div>  
 <div id="editor"></div>

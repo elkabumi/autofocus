@@ -492,6 +492,82 @@ class Dtc_model extends CI_Model
 		
 		return $result;
 	}
+
+	## Data workshop service
+	function workshop_service_control($param)
+	{
+		// map parameter ke variable biasa agar mudah digunakan
+		$limit 		= $param['limit'];
+		$offset	 	= $param['offset'];
+		$category 	= $param['category'];
+		$keyword 	= $param['keyword'];
+		
+		# order define columns start
+		$sort_column_index				= $param['sort_column'];
+		$sort_dir						= $param['sort_dir'];
+		
+		$order_by_column[] = 'workshop_service_id';
+		$order_by_column[] = 'workshop_service_name';
+		$order_by_column[] = 'workshop_service_price';
+		$order_by_column[] = 'workshop_service_job_price';
+		
+		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
+		# order define column end
+		
+		$column['p1']			= 'workshop_service_name';
+		
+		$this->db->start_cache();
+		$this->db->where('workshop_service_id <> ', 0);
+		if(array_key_exists($category, $column) && strlen($keyword) > 0)
+		{
+			$this->db->like($column[$category], $keyword);
+		}// end if
+		$this->db->stop_cache();
+		
+		// hitung total record
+		$this->db->select('COUNT(1) AS total', 1); // pastikan ada AS total nya, 1 bila isinya adalah function (dalam hal ini COUNT)
+		$query	= $this->db->get('workshop_services'); 
+		$row 	= $query->row_array(); // fungsi ci untuk mengambil 1 row saja dari query
+		$total 	= $row['total'];	
+				
+		
+		// proses query sesuai dengan parameter
+		$this->db->select('*', 1); // ambil seluruh data				
+		$this->db->order_by($order_by);
+		$query = $this->db->get('workshop_services', $limit, $offset);
+		
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			
+			$row = format_html($row);
+			
+			$data[] = array(
+				$row['workshop_service_id'], 
+				$row['workshop_service_name'], 
+				$row['workshop_service_price'],
+				$row['workshop_service_job_price']
+			); 
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($param, $data, $total);
+	}
+	
+	function workshop_service_get($id, $mode)
+	{
+		if (empty($id) || !$id || !$mode) return NULL;
+		
+		$result = NULL;
+		
+		if ($mode == 1)
+			$query = $this->db->get_where('workshop_services', array('workshop_service_id' => $id), 1);
+		else
+			$query = $this->db->get_where('workshop_services', array('workshop_service_name' => $id), 1);
+			
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
 	
 	
 	## Data employee

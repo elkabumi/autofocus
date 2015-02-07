@@ -62,7 +62,7 @@ class Transaction_model extends CI_Model
 		};	
 
 		$sql = "
-		select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.transaction_id
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.transaction_id, f.transaction_progress
 		from registrations a
 		
 		left join customers c on a.customer_id = c.customer_id
@@ -95,7 +95,7 @@ class Transaction_model extends CI_Model
 						$progress = "";
 				break;
 				case 3: 
-				$data_progress = $this->get_progress_pengerjaan($row['registration_id']);
+				$data_progress = $row['transaction_progress'];
 				$progress = "<div class='registration_status3' style='width:$data_progress%;'>&nbsp;</div>"; 
 				$status = $data_progress." %";
 				break;
@@ -125,27 +125,15 @@ class Transaction_model extends CI_Model
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*,c.*', 1); // ambil seluruh data
+		$this->db->select('a.*,b.*', 1); // ambil seluruh data
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
-		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id','left');		
 		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
 	}
-	
-	function read_id2($id)
-	{
-		$this->db->select('a.*,b.*,c.*', 1); // ambil seluruh data
-		$this->db->join('transactions b', 'b.registration_id = a.registration_id');
-		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id');		
-		$this->db->where('b.transaction_id', $id);
-		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
-		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
-		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
-		return $result; 
-	}
+
 	
 	function delete($id)
 	{
@@ -160,7 +148,7 @@ class Transaction_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data, $items)
+	function create($data, $items, $items_material)
 	{
 		$this->db->trans_start();
 
@@ -171,15 +159,7 @@ class Transaction_model extends CI_Model
 		$this->db->insert('transactions', $data);
 		$id = $this->db->insert_id();
 		
-		//insert tim kerja
-		
-		/*foreach($items2 as $row)
-		{
-			$row['transaction_id'] = $id;
-			$this->db->insert('employee_group_histories',$row);
-			}
-		$this->insert_id = $id;*/
-		//Insert items
+		// jasa
 		$index = 0;
 		foreach($items as $row)
 		{			
@@ -187,6 +167,17 @@ class Transaction_model extends CI_Model
 			$this->db->insert('transaction_details', $row);
 			$index++;
 		}
+
+		// cat / bahan
+		$index_material = 0;
+		foreach($items_material as $row_material)
+		{			
+			$row_material['transaction_id'] = $id;
+			$this->db->insert('transaction_materials', $row_material);
+			$index_material++;
+		}
+
+
 		
 		$this->insert_id = $data['registration_id'];//create registration
 	//	$this->insert_registration($id, $data);
@@ -197,19 +188,19 @@ class Transaction_model extends CI_Model
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}// end of function 
-	function update($id, $data, $items)
+	function update($id, $data, $items, $items_material)
 	{
 		$this->db->trans_start();
 
-			$data_update['status_registration_id'] = 3;
+		/*$data_update['status_registration_id'] = 3;
 		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
 		$this->db->update('registrations', $data_update);
-
+		*/
 
 		$this->db->where('transaction_id', $id); // data yg mana yang akan di update
 		$this->db->update('transactions', $data);
 		
-		//Insert items
+		//Insert jasa
 		$this->db->where('transaction_id', $id);
 		$this->db->delete('transaction_details');
 		$index = 0;
@@ -220,7 +211,19 @@ class Transaction_model extends CI_Model
 			$index++;
 		}
 		
-		$this->access->log_update($id, 'PO Received');
+		// cat / bahan
+		$this->db->where('transaction_id', $id);
+		$this->db->delete('transaction_materials');
+		$index = 0;
+		$index_material = 0;
+		foreach($items_material as $row_material)
+		{			
+			$row_material['transaction_id'] = $id;
+			$this->db->insert('transaction_materials', $row_material);
+			$index_material++;
+		}
+
+		$this->access->log_update($id, 'Transaksi');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
@@ -230,18 +233,15 @@ class Transaction_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*,a.detail_registration_id AS i_detail_registration_id, c.product_id, c.product_code, c.product_name,e.transaction_id,f.*', 1);
-		$this->db->from('detail_registrations a');
-		$this->db->join('registrations d', 'd.registration_id = a.registration_id');
-		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
-		$this->db->join('products c', 'c.product_id = b.product_id');
-		$this->db->join('transactions e', 'e.registration_id = d.registration_id','left');
-		$this->db->join('transaction_details f', 'f.detail_registration_id = a.detail_registration_id','left');
-		
-		$this->db->where('a.registration_id', $id);
+		$this->db->select('a.*, f.workshop_service_name', 1);
+		$this->db->from('transaction_details a');
+		$this->db->join('transactions e', 'e.transaction_id = a.transaction_id');
+		$this->db->join('workshop_services f', 'f.workshop_service_id = a.workshop_service_id');
+		$this->db->where('e.registration_id', $id);
+		$this->db->order_by('a.transaction_detail_id asc');
 		//$this->db->group_by('e.transaction_id');
 		$query = $this->db->get(); debug();
-		
+		//query();
 		
 		foreach($query->result_array() as $row)
 		{
@@ -249,16 +249,13 @@ class Transaction_model extends CI_Model
 		}
 		return $result;
 	}
-	function detail_list_loader3($id)
+	function detail_list_loader_sparepart($id)
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('b.*', 1);
-		$this->db->from('registrations a');
-		$this->db->join('photos b', 'b.registration_id = a.registration_id');
-		
+		$this->db->select('a.*', 1);
+		$this->db->from('registration_spareparts a');
 		$this->db->where('a.registration_id', $id);
-		$this->db->where('b.photo_type_id ',1);
 		$query = $this->db->get(); 
 		debug();
 		//query();
@@ -268,19 +265,20 @@ class Transaction_model extends CI_Model
 		}
 		return $result;
 	}
-	function detail_list_loader2($id)
+	function detail_list_loader_panel($id)
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*,b.*,c.*,d.*', 1);
-		$this->db->from('registrations a');
-		$this->db->join('transactions b', 'b.registration_id = a.registration_id');
-		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id');
-		$this->db->join('transaction_types d', 'd.transaction_type_id = c.transaction_type_id');		
+		$this->db->select('a.*, c.product_id, c.product_code, c.product_name, d.product_type_name, e.pst_name', 1);
+		$this->db->from('detail_registrations a');
+		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
+		$this->db->join('products c', 'c.product_id = b.product_id');
+		$this->db->join('product_types d', 'd.product_type_id = b.product_type_id');
+		$this->db->join('product_sub_type e', 'e.pst_id = b.pst_id');
 		
-		$this->db->where('b.transaction_id', $id);
+		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get(); debug();
-		
+		//query();
 		foreach($query->result_array() as $row)
 		{
 			$result[] = format_html($row);
@@ -288,6 +286,24 @@ class Transaction_model extends CI_Model
 		return $result;
 	}
 	
+	function detail_list_loader_cat($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('c.*', 1);
+		$this->db->from('registrations a');
+		$this->db->join('transactions b', 'b.registration_id = a.registration_id');
+		$this->db->join('transaction_materials c', 'c.transaction_id = b.transaction_id');
+		$this->db->where('a.registration_id', $id);
+		$query = $this->db->get(); debug();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	
+
 	function employee_group($id)
 	{
 		$this->db->select('a.employee_id', 1); // ambil seluruh data
@@ -311,33 +327,24 @@ class Transaction_model extends CI_Model
 		return $this->db->trans_status();
 	}
 
-
-	function get_progress_pengerjaan($id)
+	function load_workshop_service($id)
 	{
-		$sql = "select 
-				transaction_komponen,
-				transaction_lasketok,
-				transaction_dempul,
-				transaction_cat,
-				transaction_poles,
-				transaction_rakit
-				from transactions
-				where registration_id = '$id'
-				";
+		$sql = "
+			select 
+			a.*
+			from workshop_services a 
+			
+			where workshop_service_id = $id
+		";
 		
-		$query = $this->db->query($sql);
 		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = format_html($row);
-
-		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
-		$result['transaction_cat'] + $result['transaction_poles'] + 
-		$result['transaction_rakit'] + $result['transaction_komponen'];
-
-		$progress = $progress / 6 ;
-
-		return $progress;
+		$query = $this->db->query($sql); 
+		//query();	
+		return $query;
 	}
+
+
+	
 	
 	
 }
