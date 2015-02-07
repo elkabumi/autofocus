@@ -164,6 +164,7 @@ class Upload_photo_model extends CI_Model
 		//Insert items
 		$this->db->where('registration_id', $id);
 		$this->db->delete('photos');
+		
 		$index = 0;
 		foreach($items as $row)
 		{			
@@ -201,6 +202,24 @@ class Upload_photo_model extends CI_Model
 		}
 		return $result;
 	}
+	
+		function detail_list_loader_cat($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('c.*', 1);
+		$this->db->from('registrations a');
+		$this->db->join('transactions b', 'b.registration_id = a.registration_id');
+		$this->db->join('transaction_materials c', 'c.transaction_id = b.transaction_id');
+		$this->db->where('a.registration_id', $id);
+		$query = $this->db->get(); debug();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	
 	function detail_list_loader2($id)
 	{
 		// buat array kosong
