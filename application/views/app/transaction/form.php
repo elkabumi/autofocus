@@ -122,7 +122,7 @@ $(function(){
 <form class="form_class" id="id_form_nya">	
 <div class="form_area">
 <div class="form_area_frame">
-	<table width="100%" cellpadding="4" class="form_layout">
+		<table width="100%" cellpadding="4" class="form_layout">
 	<tr>
 			<td width="17%">Periode
                
@@ -132,9 +132,7 @@ $(function(){
          <input type="hidden" name="i_period_id" class="com_id" value="<?=$period_id?>" />
          <input type="text" class="com_input" size="6" /> 
          <input type="hidden" name="row_id" value="<?=$row_id?>" />
-
-         <div class="iconic_base iconic_search com_popup"></div> 
-         <input type="hidden" name="i_transaction_id" value="<?=$transaction_id?>" />
+         <div class="iconic_base iconic_search com_popup"></div>
        </span></td> 
 		</tr>
    
@@ -190,7 +188,9 @@ $(function(){
          Pribadi
        </label></td>
     </tr>
-
+<?php
+		if($claim_type == 1){
+?>
  <tr>
       <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
         <tr>
@@ -231,7 +231,9 @@ $(function(){
         </tr>
       </table></td>
       
-				
+<?php } 
+		if($claim_type == 0){
+?>
 				
       </tr>
             <tr>
@@ -243,7 +245,7 @@ $(function(){
         </tr>
       </table></td>
 				
-				
+		<?php } ?>		
       </tr>
        <tr>
           <td width="17%">No SPK</td>
@@ -255,11 +257,15 @@ $(function(){
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" value="<?=$pkb_no?>" /></td>
         </tr>
+        <?php
+		if($claim_type == 1){
+?>
           <tr>
           <td width="17%">Own Retention (OR)</td>
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
         </tr>
+        <?php } ?>
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>

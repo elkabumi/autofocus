@@ -99,7 +99,7 @@ class Po_received_report_model extends CI_Model
 			 	break;
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
 				case 5: $status = "<div class='registration_status5'>Pembayaran Belum Lunas</div>"; break;
-				case 6: $status = "<div class='registration_status6'>Mobil Keluar</div>"; break;
+				case 6: $status = "<div class='registration_status6'>Pembayaran Lunas</div>"; break;
 			}
 
 			if($row['status_registration_id']==1 || $row['status_registration_id'] == 2){
@@ -139,7 +139,7 @@ class Po_received_report_model extends CI_Model
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*,min(c.payment_sisa) as sisa,sum(c.payment_jumlah) as dibayar,d.car_nopol,d.car_no_machine, g.car_model_merk, g.car_model_name, e.customer_name,f.insurance_name,f.insurance_addres', 1); // ambil seluruh data
+		$this->db->select('a.*,b.*, c.*, d.car_nopol,d.car_no_machine, g.car_model_merk, g.car_model_name, e.customer_name,f.insurance_name,f.insurance_addres', 1); // ambil seluruh data
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
 		$this->db->join('payments c', 'c.registration_id = a.registration_id','left');
 		$this->db->join('cars d','d.car_id = a.car_id');

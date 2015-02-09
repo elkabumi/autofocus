@@ -82,10 +82,10 @@
 		// definisikan kriteria data
 				
 				$this->form_validation->set_rules('i_employee_group_id','Tim Kerja','trim|required');
-				$this->form_validation->set_rules('i_first_date','Registrasi','trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_last_date','Tim Kerja','trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_actual_date','Registrasi','trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_target_date','Tim Kerja','trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_first_date','Tanggal awal plain','trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_last_date','Tanggal akhir plain','trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_actual_date','Tanggal Aktual','trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_target_date','Tanggal target selesai','trim|required|valid_date|sql_date');
 			
 		// cek data berdasarkan kriteria
 			if ($this->form_validation->run() == FALSE) send_json_validate();
@@ -163,6 +163,7 @@
 				if($list_registration_photo_name){
 				foreach($list_registration_photo_name as $key => $value)
 				{
+					$path = "";
 					if($list_registration_photo_edit[$key] == 1){
 						
 						$storage = "img_mobil/";
