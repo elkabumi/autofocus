@@ -76,6 +76,7 @@ $(function(){
 			dp.style.display = 'none';
 			pph.style.display = 'table';
 			retention.style.display = 'table';
+		
 	
 		}else{
 			asuransi.style.display = 'none';
@@ -83,6 +84,7 @@ $(function(){
 			dp.style.display = 'table';
 			pph.style.display = 'none';
 			retention.style.display = 'none';
+			
 			
 		}
 		
@@ -107,7 +109,7 @@ $(function(){
 			
 		});
 	}
-	
+	dp.style.display = 'none';
 	createDatePicker();
 	//updateAll(); 
 });
@@ -182,9 +184,7 @@ $(function(){
          Pribadi
        </label></td>
     </tr>
-<?php
-		if($claim_type == 1){
-?>
+
  <tr>
       <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
         <tr>
@@ -225,13 +225,10 @@ $(function(){
         </tr>
       </table></td>
       
-<?php } 
-		if($claim_type == 0){
-?>
-				
+			
       </tr>
             <tr>
-     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pribadi" style="width:100%;">
+     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="dp" style="width:100%;">
         <tr>
           <td width="17%">Bayar Dp</td>
           <td width="1%">:</td>
@@ -239,8 +236,7 @@ $(function(){
         </tr>
       </table></td>
 				
-		<?php } ?>		
-      </tr>
+		
        <tr>
           <td width="17%">No SPK</td>
           <td width="1%">:</td>
@@ -251,15 +247,14 @@ $(function(){
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" value="<?=$pkb_no?>" /></td>
         </tr>
-        <?php
-		if($claim_type == 1){
-?>
-          <tr>
+   	 <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="retention" style="width:100%;">
+        <tr>
           <td width="17%">Own Retention (OR)</td>
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
-        </tr>
-        <?php } ?>
+            </tr>
+      </table></td>
+     
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>

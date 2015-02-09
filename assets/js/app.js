@@ -96,6 +96,7 @@ function tableSearchSupport(params, envi, otable)
    		}
 	});	
 }
+
 function session_check(json)
 {
 	if(json.url)
@@ -104,6 +105,7 @@ function session_check(json)
 		//logout_redirect(json.url);
 	}
 }
+
 function logout_redirect(url)
 {
 	if(url)window.location.href = url;
