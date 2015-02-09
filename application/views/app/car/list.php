@@ -40,6 +40,7 @@ $(function(){
 <div id="panel" class="command_table">
 	<input type="button" id="add" value="Add"/>
 	<input type="button" id="edit" value="Edit"/>
+	
 	<input type="button" id="refresh" value="Refresh"/>
 </div>
 <div id="editor"></div>
