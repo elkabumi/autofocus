@@ -133,6 +133,64 @@ $(function(){
 			
 		});
 	}
+
+	function cek_status(){
+		var type = $('input[name="i_claim_type"]').val();
+
+		if(type == 1){
+			var or_sisa 	= $('input[name="i_own_retention_sisa"]').val();
+			var pembayaran_sisa 	= $('input[name="i_pembayaran_sisa"]').val();
+
+			if(or_sisa == 0 && or_sisa != ""){
+				if(pembayaran_sisa == 0 && pembayaran_sisa != ""){
+					$('input[name="i_status"]').val("1");
+					$('input[name="i_status_name"]').val("LUNAS");
+				}else{
+					$('input[name="i_status"]').val("0");
+					$('input[name="i_status_name"]').val("BELUM LUNAS");
+				}
+			}else{
+				$('input[name="i_status"]').val("0");
+				$('input[name="i_status_name"]').val("BELUM LUNAS");
+			}
+		}else{
+			var pembayaran_sisa 	= $('input[name="i_pembayaran_sisa"]').val();
+			if(pembayaran_sisa == 0 && pembayaran_sisa != ""){
+				$('input[name="i_status"]').val("1");
+				$('input[name="i_status_name"]').val("LUNAS");
+			}else{
+				$('input[name="i_status"]').val("0");
+				$('input[name="i_status_name"]').val("BELUM LUNAS");
+			}
+		}
+	}
+
+	if($('input[name="i_claim_type"]').val() == 1){
+		$('input[name="i_own_retention_dibayar"]').change(function(){
+			var or_dibayar 	= $('input[name="i_own_retention_dibayar"]').val();
+			var or = $('input[name="i_own_retention"]').val();
+			
+			sisa = or - or_dibayar;
+
+			$('input[name="i_own_retention_sisa"]').val(sisa);
+
+			cek_status();
+			
+		});
+	}
+
+	$('input[name="i_pembayaran_dibayar"]').change(function(){
+		var pembayaran_dibayar 	= $('input[name="i_pembayaran_dibayar"]').val();
+		var pembayaran = $('input[name="i_pembayaran"]').val();
+		
+		sisa = pembayaran - pembayaran_dibayar;
+
+		$('input[name="i_pembayaran_sisa"]').val(sisa);
+
+		cek_status();
+		
+	});
+
 	createDatePicker();
 	//updateAll(); 
 });
@@ -310,14 +368,14 @@ $(function(){
    
      </table>
 
-<div class="form_category">Pembayaran</div>
-	<table width="100%" cellpadding="4" class="form_layout">
+<div class="form_category">Total Biaya</div>
+	<table width="800" cellpadding="4" class="form_layout">
     <tr>
       <td width="23%">Tanggal Pembayaran</td>
       <td width="1%">:</td>
       <td width="76%"><input type="text" readonly="readonly" name="i_payment_date" class="date_input" size="15" value="<?=$payment_date?>" /></td>
     </tr>
-
+<!--
 	<tr>
    <td>Total Sperpart</td>
          <td>:</td>
@@ -389,9 +447,116 @@ $(function(){
      <td>:</td>
        <td><input name="i_sisa" readonly="readonly" type="text" id="i_sisa" value="<?=$total_pembayaran ?>"/></td>
      </tr>
-     
-     </table>	
+     -->
+     <tr>
+   <td>Total Sparepart</td>
+         <td>:</td>
+       <td><input name="i_approved_sparepart_total_registration" readonly="readonly" type="text" id="i_approved_sparepart_total_registration" value="<?=$approved_sparepart_total_registration?>" /></td>
+     </tr>
 
+      <tr>
+   <td>Total Jasa</td>
+         <td>:</td>
+       <td><input name="i_approved_total_registration" readonly="readonly" type="text" id="i_approved_total_registration" value="<?=$approved_total_registration?>" /></td>
+     </tr>
+    
+	<tr>
+   <td>Total Biaya</td>
+         <td>:</td>
+       <td><input name="i_total_biaya_estimasi" readonly="readonly" type="text" id="i_total_biaya_estimasi" value="<?=$total_biaya_estimasi?>" /></td>
+     </tr>
+
+     <tr>
+   <td>PPH</td>
+         <td>:</td>
+       <td><input name="i_insurance_pph_value" readonly="readonly" type="text" id="i_insurance_pph_value" value="<?=$insurance_pph_value?>" /></td>
+     </tr>
+      <td>Total Biaya setelah PPH</td>
+         <td>:</td>
+       <td><input name="i_total_biaya_estimasi_after_pph" readonly="readonly" type="text" id="i_total_biaya_estimasi_after_pph" value="<?=$total_biaya_estimasi_after_pph?>" />
+ <input type="text" name="i_payment_id" class="com_id" value="<?=$payment_id?>" />
+       </td>
+     </tr>
+   </table>
+
+
+ <? if($claim_type == 1){ ?>
+
+<div class="form_category">Pembayaran OR</div>
+	<table width="800" cellpadding="4" class="form_layout">
+   <tr>
+   <td width="23%">Own Retention</td>
+         <td width="1%">:</td>
+       <td width="76%"><input name="i_own_retention" readonly="readonly" type="text" id="i_own_retention" value="<?=$own_retention?>" /></td>
+     </tr>
+      <tr>
+   <td>Dibayar</td>
+         <td>:</td>
+       <td><input name="i_own_retention_dibayar" type="text" id="i_own_retention_dibayar" value="<?=$own_retention_dibayar?>" /></td>
+     </tr>
+       <tr>
+   <td>Sisa OR</td>
+         <td>:</td>
+       <td><input name="i_own_retention_sisa" readonly="readonly" type="text" id="i_own_retention_sisa" value="<?=$own_retention_sisa?>" /></td>
+     </tr>
+   
+      </table>	
+      <div class="form_category">Pembayaran Asuransi</div>
+	<table width="800" cellpadding="4" class="form_layout">
+   <tr>
+   <td width="23%">Biaya Ditanggung Asuransi</td>
+         <td width="1%">:</td>
+       <td width="76%"><input name="i_pembayaran" readonly="readonly" type="text" id="i_pembayaran" value="<?=$pembayaran?>" /></td>
+     </tr>
+      <tr>
+   <td>Dibayar</td>
+         <td>:</td>
+       <td><input name="i_pembayaran_dibayar"  type="text" id="i_pembayaran_dibayar" value="<?=$pembayaran_dibayar?>" /></td>
+     </tr>
+      <tr>
+   <td>Sisa Ditanggung Asuransi</td>
+         <td>:</td>
+       <td><input name="i_pembayaran_sisa" readonly="readonly" type="text" id="i_pembayaran_sisa" value="<?=$pembayaran_sisa?>" /></td>
+     </tr>
+     <tr>
+   <td>Status</td>
+         <td>:</td>
+       <td><input name="i_status" readonly="readonly" type="text" id="i_status" value="<?= $status ?>" />
+<input name="i_status_name" readonly="readonly" type="text" id="i_status_name" value="<?= $status_name ?>" />
+       </td>
+     </tr>
+      </table>	
+ <?php }else{ ?>
+
+  <div class="form_category">Pembayaran Pribadi</div>
+	<table width="800" cellpadding="4" class="form_layout">
+   <tr>
+   <td width="23%">DP</td>
+         <td width="1%">:</td>
+       <td width="76%"><input name="i_registration_dp" readonly="readonly" type="text" id="i_registration_dp" value="<?=$registration_dp?>" /></td>
+     </tr>
+      <tr>
+   <td>Dibayar</td>
+         <td>:</td>
+       <td><input name="i_pembayaran_dibayar"  type="text" id="i_pembayaran_dibayar" value="<?=$pembayaran_dibayar?>" /></td>
+     </tr>
+      <tr>
+   <td>Sisa</td>
+         <td>:</td>
+       <td><input name="i_pembayaran_sisa" readonly="readonly" type="text" id="i_pembayaran_sisa" value="<?=$pembayaran_sisa?>" /></td>
+     </tr>
+     <tr>
+   <td>Status</td>
+         <td>:</td>
+       <td><input name="i_status" readonly="readonly" type="text" id="i_status" value="<?= $status ?>" />
+		<input name="i_status_name" readonly="readonly" type="text" id="i_status_name" value="<?= $status_name ?>" />
+       </td>
+     </tr>
+      </table>	
+    
+<?php
+}
+?>
      </div>
 	
 	<div class="command_bar">

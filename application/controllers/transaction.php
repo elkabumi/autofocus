@@ -164,19 +164,18 @@
 				foreach($list_registration_photo_name as $key => $value)
 				{
 					if($list_registration_photo_edit[$key] == 1){
-						if($list_registration_photo_type[$key] == 1){
-							$storage = "img_m_in/";
-						}else{
-							$storage = "img_m_pengerjaan/";
-						}
+						
+						$storage = "img_mobil/";
+						$path = $this->access->info['employee_id']."_".date("ymdhms")."_".$list_registration_photo_type[$key]."_";
+					
 					rename($this->config->item('upload_tmp').$list_registration_photo_file[$key],
-					$this->config->item('upload_storage').$storage.$list_registration_photo_file[$key]);	
+					$this->config->item('upload_storage').$storage.$path.$list_registration_photo_file[$key]);	
 					}
 
 					$items_foto[] = array(				
 						'photo_name'  => $list_registration_photo_name[$key],
 						'photo_type_id'  => $list_registration_photo_type[$key],
-						'photo_file'  => $list_registration_photo_file[$key]
+						'photo_file'  => $path.$list_registration_photo_file[$key]
 						
 					);
 					
@@ -375,11 +374,8 @@
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
-			if($value['photo_type_id'] == 1){
-				$storage = "storage/img_m_in/";
-			}else{
-				$storage = "storage/img_m_pengerjaan/";
-			}
+			$storage = "storage/img_mobil/";
+
 			$foto='<img width="50px;" height="50px;" src='.base_url().$storage.form_transient_pair('transient_photo', $value['photo_file'], $value['photo_file']).'';
 				
 

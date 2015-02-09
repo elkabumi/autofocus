@@ -190,7 +190,7 @@ class Upload_photo_model extends CI_Model
 		$sql = "SELECT b.*, a.status_registration_id
 					FROM registrations a
 					JOIN photos b ON b.registration_id = a.registration_id
-					WHERE a.registration_id = '1' AND (b.photo_type_id='3' OR b.photo_type_id='4')";
+					WHERE a.registration_id = '$id' AND (b.photo_type_id='3' OR b.photo_type_id='4')";
 		
 		$query = $this->db->query($sql);
 		//$query = $this->db->get(); 

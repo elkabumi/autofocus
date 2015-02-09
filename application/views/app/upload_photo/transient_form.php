@@ -40,6 +40,8 @@ function ajaxFileUpload()
 					alert('error ~ '+e);
 				}
 		}); 
+
+		$('input[name="i_photo_edit"]').val(1);
 		//alert(1);
 		return false;
  
@@ -50,17 +52,18 @@ function ajaxFileUpload()
 <table cellpadding="2" class="form_layout">
 	<tr>
   
-     <td width="222" req="req" >nama foto
+     <td width="222" req="req" >Nama Foto
      </td>
      <td width="633" >
-    <input name="i_photo_name" type="text" id="i_photo_name" value="<?=$transient_photo_name ?>" />
+    <input name="i_photo_name" type="text" style="width:300px !important" id="i_photo_name" value="<?=$transient_photo_name ?>" />
    <input type="hidden" name="i_index" value="<?=$index?>" />
     <input type="hidden" name="i_photo_id" value="<?=$transient_photo_id?>" />
+    <input type="text" name="i_photo_edit" value="<?=$transient_photo_edit?>" />
      <input type="hidden" name="i_photo_type_id" value="<?=$transient_photo_type_id?>" />
       </td>
     </tr>
      <tr>
-        <td width="27%">Type_photo</td>
+        <td width="27%">Tipe Foto</td>
 		<td width="73%"><?php echo  form_dropdown('i_photo_type_id', $photo_type_id,$transient_photo_type_id)  ?>
           			
     	</td>
@@ -79,14 +82,12 @@ function ajaxFileUpload()
  			<?php if($transient_photo_id == '' or $transient_photo_edit == '1'){
 			?>
  			<img id="imagex" src="<?=base_url().'tmp/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
-			<?php }else{
-				if($transient_photo_type_id == '3'){
-			?>
-				<img id="imagex" src="<?=base_url().'storage/img_m_out/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
-			 <?php }else if($transient_photo_type_id == '4'){ ?>
-					<img id="imagex" src="<?=base_url().'storage/img_m_banding/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
+			<?php }else{ ?>
+				
+				<img id="imagex" src="<?=base_url().'storage/img_mobil/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
+			
 
- <?php }
+ <?php 
  }?>
  <input type="hidden" name="i_photo_file" id="photo" value="<?=$transient_photo_file?>" />
  <div class="desc"></div>
