@@ -720,14 +720,14 @@ class Dtc
 	
 	# lookup data insurance
 	
-	function insurance_control()
+	function insurance_control($id=0)
 	{
 		$ci = & get_instance();
-		$data = $ci->dtc_model->insurance_control(get_datatables_control());
+		$data = $ci->dtc_model->insurance_control(get_datatables_control(), $id);
 		send_json($data); 
 	}
 	
-	function insurance_get()
+	function insurance_get($id=0)
 	{
 		$ci = & get_instance();
 		$mode = $ci->input->post('mode');

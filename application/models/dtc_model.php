@@ -2500,7 +2500,7 @@ class Dtc_model extends CI_Model
 	
 	## Data insurance
 	
-	function insurance_control($param)
+	function insurance_control($param,$id)
 	{
 		// map parameter ke variable biasa agar mudah digunakan
 		$limit 		= $param['limit'];
@@ -2529,7 +2529,11 @@ class Dtc_model extends CI_Model
 		$this->db->stop_cache();
 		
 		// hitung total record
-		$this->db->select('COUNT(1) AS total', 1); // pastikan ada AS total nya, 1 bila isinya adalah function (dalam hal ini COUNT)
+		$this->db->select('COUNT(1) AS total', 1);
+		if($id != '0'){
+			$this->db->where('insurance_id <>', 1);
+		}
+		 // pastikan ada AS total nya, 1 bila isinya adalah function (dalam hal ini COUNT)
 		$query	= $this->db->get('insurances'); 
 		$row 	= $query->row_array(); // fungsi ci untuk mengambil 1 row saja dari query
 		$total 	= $row['total'];	
@@ -2537,6 +2541,9 @@ class Dtc_model extends CI_Model
 		
 		// proses query sesuai dengan parameter
 		$this->db->select('*', 1); // ambil seluruh data
+		if($id != '0'){
+			$this->db->where('insurance_id <>', 1);
+		}
 		$this->db->order_by($order_by);
 		$query = $this->db->get('insurances', $limit, $offset);
 		

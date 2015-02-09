@@ -1,4 +1,4 @@
-<script type="text/javascript">	
+e<script type="text/javascript">	
 $(function(){
 
 	createForm({
@@ -52,8 +52,8 @@ $(function(){
 	createLookUp({
 		table_id		: "#lookup_table_insurance",
 		table_width		: 400,
-		listSource 		: "lookup/insurance_table_control",
-		dataSource		: "lookup/insurance_lookup_id",
+		listSource 		: "lookup/insurance_table_control/1",
+		dataSource		: "lookup/insurance_lookup_id/1",
 		column_id 		: 0,
 		component_id	: "#lookup_insurance",
 		filter_by		: [{id : "p1", label : "Nama"}],
