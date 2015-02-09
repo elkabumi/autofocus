@@ -76,15 +76,15 @@ function ajaxFileUpload()
 	   }
 	   ?>
     <div class="img" >
- <?php if($transient_photo_id == ''){
- ?>
- <img id="imagex" src="<?=base_url().'tmp/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
-<?php }else{
-		if($transient_photo_type_id == '3'){
-?>
-<img id="imagex" src="<?=base_url().'storage/img_m_out/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
- <?php }else if($transient_photo_type_id == '4'){ ?>
-<img id="imagex" src="<?=base_url().'storage/img_m_banding/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
+ 			<?php if($transient_photo_id == '' or $transient_photo_edit == '1'){
+			?>
+ 			<img id="imagex" src="<?=base_url().'tmp/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
+			<?php }else{
+				if($transient_photo_type_id == '3'){
+			?>
+				<img id="imagex" src="<?=base_url().'storage/img_m_out/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
+			 <?php }else if($transient_photo_type_id == '4'){ ?>
+					<img id="imagex" src="<?=base_url().'storage/img_m_banding/'.$transient_photo_file?>"  width="100px"  height:"70px";  alt="" />
 
  <?php }
  }?>

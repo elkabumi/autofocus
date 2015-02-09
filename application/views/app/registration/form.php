@@ -73,14 +73,16 @@ $(function(){
 		if($(this).val() == 1){
 			asuransi.style.display = 'table';
 			no_klaim.style.display = 'table';
-			pribadi.style.display = 'none';
+			dp.style.display = 'none';
 			pph.style.display = 'table';
+			retention.style.display = 'table';
 	
 		}else{
 			asuransi.style.display = 'none';
 			no_klaim.style.display = 'none';
-			pribadi.style.display = 'table';
+			dp.style.display = 'table';
 			pph.style.display = 'none';
+			retention.style.display = 'none';
 			
 		}
 		
@@ -224,7 +226,8 @@ $(function(){
 				
       </tr>
             <tr>
-     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pribadi" style="width:100%;">
+     <td colspan="3">
+     <table width="100%" border="0" cellspacing="0" cellpadding="0" id="dp" style="width:100%;">
         <tr>
           <td width="17%">Bayar Dp</td>
           <td width="1%">:</td>
@@ -240,15 +243,21 @@ $(function(){
           <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no" /></td>
         </tr>
         <tr>
+        
           <td width="17%">No PKB</td>
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" /></td>
         </tr>
           <tr>
+           <td colspan="3">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" id="retention" style="width:100%;">
+          <tr>
           <td width="17%">Own Retention (OR)</td>
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" /></td>
         </tr>
+          </table></td>
+           </tr>
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>
