@@ -75,8 +75,7 @@ class Approved extends CI_Controller{
 				$data['check_in'] = format_new_date($data['check_in']);
 
 				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
-		
-			
+	
 			}
 		
 		
@@ -209,9 +208,7 @@ class Approved extends CI_Controller{
 			$this->form_validation->set_rules('i_product_code', 'Produk', 'trim|required');
 			$index = $this->input->post('i_index');		
 			// cek data berdasarkan kriteria
-			if ($this->form_validation->run() == FALSE) send_json_validate(); 
-		
-		
+			if ($this->form_validation->run() == FALSE) send_json_validate();
 		
 			$no 							= $this->input->post('i_index');
 			$transient_product_code 		= $this->input->post('i_product_code');
