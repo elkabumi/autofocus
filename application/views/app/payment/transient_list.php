@@ -2,9 +2,9 @@
 $(function(){
 	createTableFormTransient({
 		id 				: "#transient_contact",
-		listSource 		: "po_received_report/detail_list_loader/<?=$row_id?>",
-		formSource 		: "po_received_report/detail_form/<?=$row_id?>",
-		controlTarget	: "po_received_report/detail_form_action",
+		listSource 		: "payment/detail_list_loader/<?=$row_id?>",
+		formSource 		: "payment/detail_form/<?=$row_id?>",
+		controlTarget	: "payment/detail_form_action",
 		onAdd		: function (){perhitungan();},	
 		onTargetLoad: function (){perhitungan();} 
 	});

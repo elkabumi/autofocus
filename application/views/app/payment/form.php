@@ -307,10 +307,99 @@ $(function(){
     <td width="745" valign="top"><textarea name="i_registration_description" readonly="readonly" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
     </tr>
    
+   
+     </table>
+
+<div class="form_category">Pembayaran</div>
+	<table width="100%" cellpadding="4" class="form_layout">
+    <tr>
+      <td width="23%">Tanggal Pembayaran</td>
+      <td width="1%">:</td>
+      <td width="76%"><input type="text" readonly="readonly" name="i_payment_date" class="date_input" size="15" value="<?=$payment_date?>" /></td>
+    </tr>
+
+	<tr>
+   <td>Total Sperpart</td>
+         <td>:</td>
+       <td><input name="i_total_sperpart" readonly="readonly" type="text" id="i_total_sperpart" value="<?=$approved_sparepart_total_registration?>" /></td>
+     </tr>
+     <tr>
+     <td>Total Jasa</td>
+     <td>:</td>
+       <td><input name="i_total_jasa" readonly="readonly" type="text" id="i_total_jasa" value="<?=$transaction_total ?>" /></td>
+     </tr>
+     <tr>
+     <td>Total Cat</td>
+     <td>:</td>
+       <td><input name="i_total_cat" readonly="readonly" type="text" id="i_total_cat" value="<?=$transaction_material_total ?>"/></td>
+     </tr>
+     <? if($claim_type == 1){
+		  	 $grand_total = $own_retention;
+			 $ansuransi = $approved_sparepart_total_registration + $transaction_total + $transaction_material_total - $own_retention;
+			 ?>
+		<tr>
+          <td>Dibayar Ansuransi</td>
+          <td>:</td>
+          <td><input type="text" readonly="readonly" id="i_own_retention" name="i_own_retention" value="<?=$ansuransi?>"  /></td>
+        </tr>
+			 <?
+		 }else{?>
+			 <tr>
+          <td>Bayar Dp</td>
+          <td>:</td>
+          <td><input type="text" readonly="readonly" id="i_registration_dp" name="i_registration_dp" value="<?=$registration_dp?>" /></td>
+        </tr>
+		<?
+			 $grand_total = $approved_sparepart_total_registration + $transaction_total + $transaction_material_total - $registration_dp;
+			 }
+    
+	 ?>
+     <tr>
+     <td>Grand Total</td>
+     <td>:</td>
+       <td><input name="i_grand_total" readonly="readonly" type="text" id="i_grand_total" value="<?=$grand_total ?>"/></td>
+     </tr>
+     <? 
+	 if($sisa <> 0){
+     	 $total_pembayaran = $sisa;
+		 ?>
+		 <tr>
+     <td>Sudah di bayar</td>
+     <td>:</td>
+       <td><input name="i_sudah_bayar" readonly="readonly" type="text" id="i_sudah_bayar" value="<?=$dibayar ?>"/></td>
+     </tr>
+     
+	 <?
+	 }else{
+		 $total_pembayaran = $grand_total;
+		 }
+	 ?>
+     <tr>
+     <td>Belum di bayar</td>
+     <td>:</td>
+       <td><input name="i_belum_bayar" readonly="readonly" type="text" id="i_belum_bayar" value="<?=$total_pembayaran ?>"/></td>
+     </tr>
+     <tr>
+     <td>Dibayar</td>
+     <td>:</td>
+       <td><input name="i_bayar" type="text" id="i_bayar" value="0"/><input name="i_status" type="hidden" id="i_status" value=""/></td>
+     </tr>
+     <tr>
+     <td>Sisa Pembayaran</td>
+     <td>:</td>
+       <td><input name="i_sisa" readonly="readonly" type="text" id="i_sisa" value="<?=$total_pembayaran ?>"/></td>
+     </tr>
+     
      </table>	
 
      </div>
 	
+	<div class="command_bar">
+		<input type="button" id="submit" value="Simpan"/>
+		<input type="button" id="enable" value="Edit"/>
+	
+		<input type="button" id="cancel" value="Batal"/>
+	</div>
 </div>
 <!-- table contact -->
 

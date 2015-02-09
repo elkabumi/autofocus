@@ -1,5 +1,5 @@
 <?php
-class Po_received_report_model extends CI_Model 
+class Payment_model extends CI_Model 
 {
 	var $trans_type = 5;
 	var $insert_id = NULL;
@@ -10,8 +10,8 @@ class Po_received_report_model extends CI_Model
 		//$this->sek_id = $this->access->sek_id;
 	}
 	function list_controller()
-	{	
-	$where = '';
+	{		
+		$where = '';
 		$params 	= get_datatables_control();
 		$limit 		= $params['limit'];
 		$offset 	= $params['offset'];
@@ -22,6 +22,7 @@ class Po_received_report_model extends CI_Model
 		// daftar kolom yang valid
 		
 		$columns['code'] 			= 'registration_code';
+		$columns['date'] 			= 'registration_date';
 		$columns['nopol'] 			= 'car_nopol';
 		$columns['customer_name']	= 'customer_name';
 		$columns['insurance_name'] 	= 'insurance_name';
@@ -38,17 +39,21 @@ class Po_received_report_model extends CI_Model
 		$order_by_column[] = 'customer_name';
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
-		$order_by_column[] = 'registration_total';
-		$order_by_column[] = 'total_transaction';
-		$order_by_column[] = 'total_transaction';
-		$order_by_column[] = 'status_registration_id';
-		
+		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_id';
+	
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
 			
-				$where = " where ".$columns[$category]." like '%$keyword%'";
+				if($columns[$category] == "registration_date"){
+					$date = explode("/", $keyword);
+					$new_keyword = $date[2]."-".$date[1]."-".$date[0];
+					$where = " and ".$columns[$category]." = '$new_keyword'";
+				}else{
+					$where = " and ".$columns[$category]." like '%$keyword%'";
+				}
 			
 			
 		}
@@ -57,13 +62,14 @@ class Po_received_report_model extends CI_Model
 		};	
 
 		$sql = "
-		select a.* , c.customer_name, d.car_nopol, e.insurance_name, f.transaction_total, f.transaction_progress,
-		f.transaction_material_total
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.transaction_id, f.transaction_progress
 		from registrations a
+		
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
 		left join transactions f on f.registration_id = a.registration_id
+		WHERE a.status_registration_id ='4' or a.status_registration_id = '5'
 		$where  $order_by
 			
 			";
@@ -84,39 +90,13 @@ class Po_received_report_model extends CI_Model
 			
 			$registration_date = format_new_date($row['registration_date']);
 			
-			$status = 0;
-			
 			switch($row['status_registration_id']){
-				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
-				case 2: $status = "<div class='registration_status2'>Sudah disetujui</div>"; break;
-				case 3: 
-				$data_progress = $row['transaction_progress'];
-				
-				$status = "<div class='registration_status3'>Proses Pengerjaan : $data_progress %</div>";
-
-
-
-			 	break;
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
-				case 5: $status = "<div class='registration_status5'>Pembayaran Belum Lunas</div>"; break;
-				case 6: $status = "<div class='registration_status6'>Mobil Keluar</div>"; break;
-			}
-
-			if($row['status_registration_id']==1 || $row['status_registration_id'] == 2){
-				$total_biaya_estimasi = $row['approved_sparepart_total_registration'] + $row['approved_total_registration'];
-				$total_biaya_pengerjaan = 0;
-				$laba = 0;
-			}else{
-				$total_biaya_estimasi = $row['approved_sparepart_total_registration'] + $row['approved_total_registration'];
-				$total_biaya_pengerjaan = $row['approved_sparepart_total_registration'] + $row['transaction_total'] + $row['transaction_material_total'];
-				$laba = $total_biaya_estimasi - $total_biaya_pengerjaan;
+				case 5: $status = "<div class='registration_status5'>Pembayaran Belum lunas</div>"; break;
 			}
 			
-
-			$link_detail = "<a href=".site_url('po_received_report/form/'.$row['registration_id'])." class='link_input'> Detail </a>";
-			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input'> Download</a>";		
-
-			
+			$link = "<a href=".site_url('payment/form/'.$row['registration_id'])." class='link_input'> Proses </a>";
+		
 			$data[] = array(
 				$row['registration_id'], 
 				$row['registration_code'],
@@ -125,27 +105,20 @@ class Po_received_report_model extends CI_Model
 				$row['customer_name'],
 				$row['insurance_name'],
 				$row['claim_no'],
-				tool_money_format($total_biaya_estimasi),
-				tool_money_format($total_biaya_pengerjaan),
-				tool_money_format($laba),
 				$status,
-				$link_report
+				$link
 			); 
 		}
 		
 		// kembalikan nilai dalam format datatables_control
-		return make_datatables_control($params, $data, $total);	
-		}
+		return make_datatables_control($params, $data, $total);
+	}
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*,min(c.payment_sisa) as sisa,sum(c.payment_jumlah) as dibayar,d.car_nopol,d.car_no_machine, g.car_model_merk, g.car_model_name, e.customer_name,f.insurance_name,f.insurance_addres', 1); // ambil seluruh data
+		$this->db->select('a.*,b.*,min(c.payment_sisa) as sisa,sum(c.payment_jumlah) as dibayar', 1); // ambil seluruh data
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
 		$this->db->join('payments c', 'c.registration_id = a.registration_id','left');
-		$this->db->join('cars d','d.car_id = a.car_id');
-		$this->db->join('customers e','e.customer_id = a.customer_id');
-		$this->db->join('insurances f','f.insurance_id = a.insurance_id','left');
-		$this->db->join('car_models g', 'g.car_model_id = d.car_model_id');
 		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
 		//query($query);
@@ -347,115 +320,8 @@ class Po_received_report_model extends CI_Model
 	}
 
 
-	function read_id_report($id)
-	{
-		$this->db->select('a.*,b.*,c.*,d.period_name,e.stand_name,f.customer_name,g.car_nopol,h.insurance_name,i.employee_group_name', 1); // ambil seluruh data
-		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
-		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id','left');		
-		$this->db->join('periods d', 'a.period_id = d.period_id','left');
-		$this->db->join('stands e', 'a.stand_id = e.stand_id','left');				
-		$this->db->join('customers f', 'a.customer_id = f.customer_id','left');		
-		$this->db->join('cars g', 'a.car_id = g.car_id','left');
-		$this->db->join('insurances h', 'a.insurance_id = h.insurance_id','left');		
-		$this->db->join('employee_groups i', 'b.employee_group_id  = i.employee_group_id ','left');		
-		
-		$this->db->where('a.registration_id', $id);
-		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
-		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
-		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
-		return $result; 
-	}
 	
-	function get_data_detail($id) {
-		
-		$query = "SELECT a . * , b.product_name
-					FROM detail_registrations a
-					JOIN product_prices d ON d.product_price_id = a.product_price_id
-					JOIN products b ON b.product_id = d.product_id
-					
-					WHERE registration_id = '$id'
-					"
-					;
-		
-        $query = $this->db->query($query);
-       // query();
-        if ($query->num_rows() == 0)
-            return array();
-
-        $data = $query->result_array();
-
-        foreach ($data as $index => $row) {
-         	
-        }
-        return $data;
-    }
 	
-	function get_data_sperpart($id) {
-		
-		$query = "SELECT *
-					FROM registration_spareparts
-					WHERE registration_id = '$id'
-					"
-					;
-		
-        $query = $this->db->query($query);
-       // query();
-        if ($query->num_rows() == 0)
-            return array();
-
-        $data = $query->result_array();
-
-        foreach ($data as $index => $row) {
-         	
-        }
-        return $data;
-    }
 	
-	function get_data_cat($id) {
-		
-		$query = "SELECT c.*
-					FROM registrations a
-					JOIN transactions b on b.registration_id = a.registration_id
-					JOIN transaction_materials c on c.transaction_id = b.transaction_id
-					WHERE a.registration_id = '$id'
-					"
-					;
-		
-        $query = $this->db->query($query);
-       // query();
-        if ($query->num_rows() == 0)
-            return array();
-
-        $data = $query->result_array();
-
-        foreach ($data as $index => $row) {
-         	
-        }
-        return $data;
-    }
-	
-	function get_data_jasa($id) {
-		
-		$query = "SELECT a.*, f.workshop_service_name
-					FROM transaction_details a
-					JOIN transactions e on e.transaction_id = a.transaction_id
-					JOIN workshop_services f on f.workshop_service_id = a.workshop_service_id
-					WHERE registration_id = '$id'
-					ORDER BY a.transaction_detail_id asc
-					"
-					;
-		
-        $query = $this->db->query($query);
-       // query();
-        if ($query->num_rows() == 0)
-            return array();
-
-        $data = $query->result_array();
-
-        foreach ($data as $index => $row) {
-         	
-        }
-        return $data;
-    }
 }
 #

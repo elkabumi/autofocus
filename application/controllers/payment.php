@@ -1,28 +1,28 @@
 <?php
 	if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-			class Po_received_report extends CI_Controller{
+			class Payment extends CI_Controller{
 			function __construct(){
 			parent::__construct();
 			$this->load->library('render');
-			$this->load->model('po_received_report_model');
+			$this->load->model('payment_model');
 			$this->load->library('access');
 			$this->access->set_module('transaction.payment');
 			$this->access->user_page();
 			}
 			function index(){
-			$this->render->add_view('app/po_received_report/list');
-			$this->render->build('Detail Per Mobil');
-			$this->render->show('Detail Per Mobil');
+			$this->render->add_view('app/payment/list');
+			$this->render->build('Pembayaran');
+			$this->render->show('Pembayaran');
 		}
 		function table_controller(){
-			$data = $this->po_received_report_model->list_controller();
+			$data = $this->payment_model->list_controller();
 			send_json($data);
 		}
 		function form($registration_id = 0)
 		{
 			$data = array();
 		
-			$result = $this->po_received_report_model->read_id($registration_id);
+			$result = $this->payment_model->read_id($registration_id);
 			if($result){
 				$data = $result;
 				$data['row_id'] = $registration_id;
@@ -35,22 +35,22 @@
 			$data['payment_date'] = date('d/m/Y');
 				
 			$this->load->helper('form');
-			$this->render->add_form('app/po_received_report/form', $data);
+			$this->render->add_form('app/payment/form', $data);
 			$this->render->build('Registrasi');
 			
-			$this->render->add_view('app/po_received_report/transient_list_sparepart', $data);
+			$this->render->add_view('app/payment/transient_list_sparepart', $data);
 			$this->render->build('Data Sparepart');
 			
-			$this->render->add_view('app/po_received_report/transient_list_panel', $data);
+			$this->render->add_view('app/payment/transient_list_panel', $data);
 			$this->render->build('Data Panel Asuransi');
 
-			$this->render->add_view('app/po_received_report/transient_list', $data);
+			$this->render->add_view('app/payment/transient_list', $data);
 			$this->render->build('Data Jasa');
 
-			$this->render->add_view('app/po_received_report/transient_list_cat', $data);
+			$this->render->add_view('app/payment/transient_list_cat', $data);
 			$this->render->build('Data Cat');
 			
-			$this->render->show('Detail Per Mobil');
+			$this->render->show('Pembayaran');
 		}
 		
 		
@@ -62,9 +62,9 @@
 			// bila operasinya DELETE -----------------------------------------------------------------------------------------
 			if($is_delete)
 			{
-				$this->load->model('po_received_report_model');
+				$this->load->model('payment_model');
 				$id = $this->input->post('i_transaction_id');
-				$is_process_error = $this->po_received_report_model->delete($id);
+				$is_process_error = $this->payment_model->delete($id);
 				send_json_action($is_process_error, "Data telah dihapus", "Data gagal dihapus");
 			}
 		// bila bukan delete, berarti create atau update ------------------------------------------------------------------
@@ -87,7 +87,7 @@
 				
 				$status = $this->input->post('i_status');
 
-				$error = $this->po_received_report_model->create($data,$status);
+				$error = $this->payment_model->create($data,$status);
 				send_json_action($error, "Data telah ditambah", "Data gagal ditambah");
 			}
 			
@@ -95,7 +95,7 @@
 			{
 				if($registration_id == 0)send_json(make_datatables_list(null));
 
-				$data = $this->po_received_report_model->detail_list_loader($registration_id);
+				$data = $this->payment_model->detail_list_loader($registration_id);
 				$sort_id = 0;
 
 				foreach($data as $key => $value)
@@ -141,7 +141,7 @@
 					$data['transaction_detail_progress'] = array_shift($this->input->post('transient_transaction_detail_progress'));
 				}
 					$this->load->helper('form');
-					$this->render->add_form('app/po_received_report/transient_form', $data);
+					$this->render->add_form('app/payment/transient_form', $data);
 					$this->render->show_buffer();
 			}
 			
@@ -183,7 +183,7 @@
 	{
 		if($registration_id == 0)send_json(make_datatables_list(null)); 
 				
-		$data = $this->po_received_report_model->detail_list_loader_sparepart($registration_id);
+		$data = $this->payment_model->detail_list_loader_sparepart($registration_id);
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
@@ -209,7 +209,7 @@
 				
 				send_json(make_datatables_list(null)); 
 						
-				$data = $this->po_received_report_model->detail_list_loader_panel($row_id);
+				$data = $this->payment_model->detail_list_loader_panel($row_id);
 				$sort_id = 0;
 				foreach($data as $key => $value) 
 				{
@@ -235,7 +235,7 @@
 	{
 		if($registration_id == 0)send_json(make_datatables_list(null)); 
 				
-		$data = $this->po_received_report_model->detail_list_loader_cat($registration_id);
+		$data = $this->payment_model->detail_list_loader_cat($registration_id);
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
@@ -277,7 +277,7 @@
 			$data['tm_price'] 	= array_shift($this->input->post('transient_tm_price'));
 		
 		}		
-		$this->render->add_form('app/po_received_report/transient_form_cat', $data);
+		$this->render->add_form('app/payment/transient_form_cat', $data);
 		$this->render->show_buffer();
 	}
 	
@@ -319,7 +319,7 @@
 	{
 		$id 	= $this->input->post('workshop_service_id');
 		
-		$query = $this->po_received_report_model->load_workshop_service($id);
+		$query = $this->payment_model->load_workshop_service($id);
 		$data = array();
 		
 		foreach($query->result_array() as $row)
@@ -357,33 +357,6 @@
 				$output = array('error' => '', 'value' => $data['file_name']);
 				send_json($output);
 				//$this->load->view('upload_success', $data);
-			}
-		}
-		
-		function report($id = 0){
-	
-	if($id){
-	   $this->load->model('global_model');
-	   
-	   $result = $this->po_received_report_model->read_id($id);
-			
-			if ($result) // cek dulu apakah data ditemukan 
-			{
-				$data = $result;
-				$data['row_id'] = $id;		
-				$data['car_nopol'] = $result['car_nopol'];
-				$data['insurance_pph'] = $result['insurance_pph'];	
-				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
-				
-			}
-		//$data='';
-			
-		$data_detail = $this->po_received_report_model->get_data_detail($id);
-		$data_sperpart = $this->po_received_report_model->get_data_sperpart($id);
-		$data_jasa = $this->po_received_report_model->get_data_jasa($id);
-		$data_cat = $this->po_received_report_model->get_data_cat($id);
-	   
-	   $this->global_model->create_report_detail_mobil('Laporan Detail Per Mobil', 'report/po_received_report.php', $data, $data_detail,$data_sperpart,$data_jasa,$data_cat,'header.php');
 			}
 		}
 	}

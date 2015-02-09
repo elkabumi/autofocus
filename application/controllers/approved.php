@@ -343,7 +343,7 @@ class Approved extends CI_Controller{
 		$this->form_validation->set_rules('i_customer_id','Customer','trim|required|integer');
 		$this->form_validation->set_rules('i_car_id','Mobil','trim|required|integer');
 		$this->form_validation->set_rules('i_claim_type','Tipe Klaim','trim|required');
-		$this->form_validation->set_rules('i_own_retention','OR','trim|required|is_numeric');
+		$this->form_validation->set_rules('i_own_retention','OR','trim');
 		$this->form_validation->set_rules('i_check_in','Tanggal Masuk','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_registration_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required');
