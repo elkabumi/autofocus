@@ -31,6 +31,9 @@ $(function(){
             <th>Nama Customer</th>
             <th>Asuransi</th>
       		<th>No Klaim</th>
+      		<th>Total Biaya Estimasi</th>
+            <th>Total Biaya Pengerjaan</th>
+            <th>Laba</th>
             <th>Status</th>
             <th>Config</th>
 		</tr> 
@@ -40,6 +43,7 @@ $(function(){
 </table>
 <div id="panel" class="command_table">
   <input type="button" id="refresh" value="Refresh"/>
+  <input type="button" id="edit" value="Lihat Detail"/>
 </div>
 <div id="editor"></div>
 </div>

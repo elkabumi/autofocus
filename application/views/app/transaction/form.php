@@ -133,7 +133,8 @@ $(function(){
          <input type="text" class="com_input" size="6" /> 
          <input type="hidden" name="row_id" value="<?=$row_id?>" />
 
-         <div class="iconic_base iconic_search com_popup"></div> <input type="text" name="i_transaction_id" value="<?=$transaction_id?>" />
+         <div class="iconic_base iconic_search com_popup"></div> 
+         <input type="hidden" name="i_transaction_id" value="<?=$transaction_id?>" />
        </span></td> 
 		</tr>
    

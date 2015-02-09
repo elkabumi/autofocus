@@ -10,8 +10,8 @@ class Po_received_report_model extends CI_Model
 		//$this->sek_id = $this->access->sek_id;
 	}
 	function list_controller()
-	{		
-		$where = '';
+	{	
+	$where = '';
 		$params 	= get_datatables_control();
 		$limit 		= $params['limit'];
 		$offset 	= $params['offset'];
@@ -38,8 +38,11 @@ class Po_received_report_model extends CI_Model
 		$order_by_column[] = 'customer_name';
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
+		$order_by_column[] = 'registration_total';
+		$order_by_column[] = 'total_transaction';
+		$order_by_column[] = 'total_transaction';
 		$order_by_column[] = 'status_registration_id';
-		$order_by_column[] = 'status_registration_id';
+		
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
@@ -54,11 +57,13 @@ class Po_received_report_model extends CI_Model
 		};	
 
 		$sql = "
-		select a.* , c.customer_name, d.car_nopol, e.insurance_name
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name, f.transaction_total, f.transaction_progress,
+		f.transaction_material_total
 		from registrations a
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
+		left join transactions f on f.registration_id = a.registration_id
 		$where  $order_by
 			
 			";
@@ -80,22 +85,36 @@ class Po_received_report_model extends CI_Model
 			$registration_date = format_new_date($row['registration_date']);
 			
 			$status = 0;
-
+			
 			switch($row['status_registration_id']){
 				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
 				case 2: $status = "<div class='registration_status2'>Sudah disetujui</div>"; break;
 				case 3: 
-				$data_progress = $this->get_progress_pengerjaan($row['registration_id']);
+				$data_progress = $row['transaction_progress'];
 				
 				$status = "<div class='registration_status3'>Proses Pengerjaan : $data_progress %</div>";
+
+
 
 			 	break;
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
 				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
 			}
+
+			if($row['status_registration_id']==1 || $row['status_registration_id'] == 2){
+				$total_biaya_estimasi = $row['approved_sparepart_total_registration'] + $row['approved_total_registration'];
+				$total_biaya_pengerjaan = 0;
+				$laba = 0;
+			}else{
+				$total_biaya_estimasi = $row['approved_sparepart_total_registration'] + $row['approved_total_registration'];
+				$total_biaya_pengerjaan = $row['approved_sparepart_total_registration'] + $row['transaction_total'] + $row['transaction_material_total'];
+				$laba = $total_biaya_estimasi - $total_biaya_pengerjaan;
+			}
+			
+
 			$link_detail = "<a href=".site_url('po_received_report/form/'.$row['registration_id'])." class='link_input'> Detail </a>";
-			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input'> Download PDF</a>";		
-		
+			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input'> Download</a>";		
+
 			
 			$data[] = array(
 				$row['registration_id'], 
@@ -105,15 +124,17 @@ class Po_received_report_model extends CI_Model
 				$row['customer_name'],
 				$row['insurance_name'],
 				$row['claim_no'],
+				tool_money_format($total_biaya_estimasi),
+				tool_money_format($total_biaya_pengerjaan),
+				tool_money_format($laba),
 				$status,
-				$link_detail.'&nbsp;&nbsp;&nbsp;'.$link_report,
-				
+				$link_report
 			); 
 		}
 		
 		// kembalikan nilai dalam format datatables_control
-		return make_datatables_control($params, $data, $total);
-	}
+		return make_datatables_control($params, $data, $total);	
+		}
 	
 	function read_id($id)
 	{

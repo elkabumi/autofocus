@@ -46,7 +46,9 @@ class Summary_report_model extends CI_Model
 			$where = '';
 		}
 		$sql = "
-		select a.* , c.customer_name, d.car_nopol, e.insurance_name, f.transaction_total
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name, f.transaction_total,
+		f.transaction_progress,
+		f.transaction_material_total
 		from registrations a
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
@@ -67,32 +69,6 @@ class Summary_report_model extends CI_Model
 	
 	
 	
-	function get_progress_pengerjaan($id)
-	{
-		$sql = "select 
-				transaction_komponen,
-				transaction_lasketok,
-				transaction_dempul,
-				transaction_cat,
-				transaction_poles,
-				transaction_rakit
-				from transactions
-				where registration_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = format_html($row);
-
-		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
-		$result['transaction_cat'] + $result['transaction_poles'] + 
-		$result['transaction_rakit'] + $result['transaction_komponen'];
-
-		$progress = $progress / 6 ;
-
-		return $progress;
-	}
 function report($where)
 	{		
 		

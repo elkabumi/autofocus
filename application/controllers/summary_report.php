@@ -58,20 +58,25 @@ class Summary_report extends CI_Controller
 				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
 				case 2: $status = "<div class='registration_status2'>Sudah disetujui</div>"; break;
 				case 3: 
-				$data_progress = $this->summary_report_model->get_progress_pengerjaan($value['registration_id']);
+				$data_progress = $value['transaction_progress'];
 				
 				$status = "<div class='registration_status3'>Proses Pengerjaan : $data_progress %</div>";
+
+
 
 			 	break;
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
 				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
 			}
 
-			if($value['transaction_total']){
-				$laba = $value['total_registration'] - $value['transaction_total'];
-			}else{
-				$value['transaction_total'] = 0;
+			if($value['status_registration_id']==1 || $value['status_registration_id'] == 2){
+				$total_biaya_estimasi = $value['approved_sparepart_total_registration'] + $value['approved_total_registration'];
+				$total_biaya_pengerjaan = 0;
 				$laba = 0;
+			}else{
+				$total_biaya_estimasi = $value['approved_sparepart_total_registration'] + $value['approved_total_registration'];
+				$total_biaya_pengerjaan = $value['approved_sparepart_total_registration'] + $value['transaction_total'] + $value['transaction_material_total'];
+				$laba = $total_biaya_estimasi - $total_biaya_pengerjaan;
 			}
 
 			$registration_date = format_new_date($value['registration_date']);
@@ -83,8 +88,8 @@ class Summary_report extends CI_Controller
 					form_transient_pair('transient_customer_name', $value['customer_name']),
 					form_transient_pair('transient_insurance_name', $value['insurance_name']),
 					form_transient_pair('transient_claim_no', $value['claim_no']),
-					form_transient_pair('transient_total_registration', tool_money_format($value['total_registration']), $value['total_registration']),
-					form_transient_pair('transient_transaction_total', tool_money_format($value['transaction_total']), $value['transaction_total']),
+					form_transient_pair('transient_total_registration', tool_money_format($total_biaya_estimasi), $total_biaya_estimasi),
+					form_transient_pair('transient_transaction_total', tool_money_format($total_biaya_pengerjaan), $total_biaya_pengerjaan),
 					form_transient_pair('transient_laba', tool_money_format($laba), $laba),
 					form_transient_pair('transient_status', $status)
 					
@@ -105,7 +110,11 @@ class Summary_report extends CI_Controller
 		$where = "WHERE a.registration_date between '".$i_date_1."'  AND '".$i_date_2."'";
 
 
+		$date1 = explode("-", $i_date_1);
+		$date2 = explode("-", $i_date_2);
+
 			$data['detail'] = $this->summary_report_model->report($where);
+			$data['title'] = "Laporan Summary tanggal ".$date1[2]."/".$date1[1]."/".$date1[0]." sampai ".$date2[2]."/".$date2[1]."/".$date2[0]; 
 	
 		$this->load->model('global_model');
 	  	$this->global_model->create_report('summary_report', 'report/summary_report.php', $data);

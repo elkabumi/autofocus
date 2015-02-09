@@ -5,8 +5,12 @@
 <body>
 <table>
   <tr>
-  <th colspan="8">&nbsp;</th>
+  <th colspan="11"><?= $title ?></th>
   </tr>
+  <tr>
+  <th colspan="11"></th>
+  </tr>
+  
   </table>
 	 <table border="1" cellpadding="4" cellspacing="0" class="table table-bordered table-striped" id="example1">
                                   
@@ -29,12 +33,17 @@
   
 		<?php $no=1;
            foreach($detail as $item):
-		   if($item['transaction_total']){
-				$laba = $item['total_registration'] - $item['transaction_total'];
-			}else{
-				$value['transaction_total'] = 0;
-				$laba = 0;
-			}
+		  
+      if($item['status_registration_id']==1 || $item['status_registration_id'] == 2){
+        $total_biaya_estimasi = $item['approved_sparepart_total_registration'] + $item['approved_total_registration'];
+        $total_biaya_pengerjaan = 0;
+        $laba = 0;
+      }else{
+        $total_biaya_estimasi = $item['approved_sparepart_total_registration'] + $item['approved_total_registration'];
+        $total_biaya_pengerjaan = $item['approved_sparepart_total_registration'] + $item['transaction_total'] + $item['transaction_material_total'];
+        $laba = $total_biaya_estimasi - $total_biaya_pengerjaan;
+      }
+
 		   $registration_date = format_new_date($item['registration_date']);
 		 
 		 
@@ -49,8 +58,8 @@
                                                <th><?=$item['insurance_name']?></th>
                                                <th><?=$item['claim_no']?></th>
                                               
-                                               <th><?=tool_money_format($item['total_registration'])?></th>
-                                               <th><?=tool_money_format($item['transaction_total'])?></th>
+                                               <th><?=tool_money_format($total_biaya_estimasi)?></th>
+                                               <th><?=tool_money_format($total_biaya_pengerjaan)?></th>
                                                <th><?=tool_money_format($laba)?></th>
                                            
          <?php

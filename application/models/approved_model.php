@@ -66,7 +66,7 @@ class Approved_model extends CI_Model
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
-		WHERE status_registration_id = '1'
+		WHERE status_registration_id = '1' or status_registration_id = '2'
 		 $where   $order_by
 			
 			";

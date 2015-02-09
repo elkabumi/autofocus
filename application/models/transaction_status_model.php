@@ -57,7 +57,8 @@ class Transaction_status_model extends CI_Model
 		};	
 
 		$sql = "
-		select a.* , c.customer_name, d.car_nopol, e.insurance_name, f.transaction_total
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name, f.transaction_total, f.transaction_progress,
+		f.transaction_material_total
 		from registrations a
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
@@ -89,21 +90,27 @@ class Transaction_status_model extends CI_Model
 				case 1: $status = "<div class='registration_status1'>Menunggu Persetujuan</div>"; break;
 				case 2: $status = "<div class='registration_status2'>Sudah disetujui</div>"; break;
 				case 3: 
-				$data_progress = $this->get_progress_pengerjaan($row['registration_id']);
+				$data_progress = $row['transaction_progress'];
 				
 				$status = "<div class='registration_status3'>Proses Pengerjaan : $data_progress %</div>";
+
+
 
 			 	break;
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
 				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
 			}
 
-			if($row['transaction_total']){
-				$laba = $row['total_registration'] - $row['transaction_total'];
-			}else{
-				$row['transaction_total'] = 0;
+			if($row['status_registration_id']==1 || $row['status_registration_id'] == 2){
+				$total_biaya_estimasi = $row['approved_sparepart_total_registration'] + $row['approved_total_registration'];
+				$total_biaya_pengerjaan = 0;
 				$laba = 0;
+			}else{
+				$total_biaya_estimasi = $row['approved_sparepart_total_registration'] + $row['approved_total_registration'];
+				$total_biaya_pengerjaan = $row['approved_sparepart_total_registration'] + $row['transaction_total'] + $row['transaction_material_total'];
+				$laba = $total_biaya_estimasi - $total_biaya_pengerjaan;
 			}
+			
 
 			if($row['status_registration_id'] == 1){ 
 				$link = "<a href=".site_url('transaction_status/form_transaction_status/'.$row['registration_id'])." class='link_input'> APPROVE </a>";		
@@ -119,8 +126,8 @@ class Transaction_status_model extends CI_Model
 				$row['customer_name'],
 				$row['insurance_name'],
 				$row['claim_no'],
-				tool_money_format($row['total_registration']),
-				tool_money_format($row['transaction_total']),
+				tool_money_format($total_biaya_estimasi),
+				tool_money_format($total_biaya_pengerjaan),
 				tool_money_format($laba),
 				$status
 			); 
@@ -381,32 +388,7 @@ class Transaction_status_model extends CI_Model
 		return $this->db->trans_status();
 	}
 
-	function get_progress_pengerjaan($id)
-	{
-		$sql = "select 
-				transaction_komponen,
-				transaction_lasketok,
-				transaction_dempul,
-				transaction_cat,
-				transaction_poles,
-				transaction_rakit
-				from transactions
-				where registration_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = format_html($row);
-
-		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
-		$result['transaction_cat'] + $result['transaction_poles'] + 
-		$result['transaction_rakit'] + $result['transaction_komponen'];
-
-		$progress = $progress / 6 ;
-
-		return $progress;
-	}
+	
 	
 }
 #

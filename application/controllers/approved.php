@@ -85,8 +85,8 @@ class Approved extends CI_Controller{
 		$this->render->add_form('app/approved/form_report', $data);
 		$this->render->build('Registrasi');
 		
-		$this->render->add_view('app/approved/transient_list_report', $data);
-		$this->render->build('Data Panel');
+		//$this->render->add_view('app/approved/transient_list_report', $data);
+		//$this->render->build('Data Panel');
 		
 		$this->render->show('Cetak Laporan');
 	}
@@ -436,7 +436,7 @@ class Approved extends CI_Controller{
 			
 			$item2[] = array(				
 				//'product_id'  => $list_product_id[$key],
-				'rs_id' => $list_rs_id[$key],
+				//'rs_id' => $list_rs_id[$key],
 				'rs_part_number ' => $list_rs_part_number[$key],
 				'rs_name' => $list_rs_name[$key],
 				'rs_qty' => $list_rs_qty[$key],

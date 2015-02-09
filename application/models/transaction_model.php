@@ -148,7 +148,7 @@ class Transaction_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data, $items, $items_material)
+	function create($data, $items, $items_material, $items_foto)
 	{
 		$this->db->trans_start();
 
@@ -177,7 +177,15 @@ class Transaction_model extends CI_Model
 			$index_material++;
 		}
 
-
+		// foto
+		$index_foto = 0;
+		foreach($items_foto as $row_foto)
+		{			
+			$row_foto['registration_id'] = $data['registration_id'];
+			
+			$this->db->insert('photos', $row_foto);
+			$index_foto++;
+		}
 		
 		$this->insert_id = $data['registration_id'];//create registration
 	//	$this->insert_registration($id, $data);
@@ -188,7 +196,7 @@ class Transaction_model extends CI_Model
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}// end of function 
-	function update($id, $data, $items, $items_material)
+	function update($id, $data, $items, $items_material, $items_foto)
 	{
 		$this->db->trans_start();
 
@@ -214,13 +222,25 @@ class Transaction_model extends CI_Model
 		// cat / bahan
 		$this->db->where('transaction_id', $id);
 		$this->db->delete('transaction_materials');
-		$index = 0;
 		$index_material = 0;
 		foreach($items_material as $row_material)
 		{			
 			$row_material['transaction_id'] = $id;
 			$this->db->insert('transaction_materials', $row_material);
 			$index_material++;
+		}
+
+
+		// foto
+		$index_foto = 0;
+		$this->db->where('registration_id', $data['registration_id']);
+		$this->db->delete('photos');
+		foreach($items_foto as $row_foto)
+		{			
+			$row_foto['registration_id'] = $data['registration_id'];
+			
+			$this->db->insert('photos', $row_foto);
+			$index_foto++;
 		}
 
 		$this->access->log_update($id, 'Transaksi');
@@ -303,6 +323,24 @@ class Transaction_model extends CI_Model
 		return $result;
 	}
 	
+	function detail_list_loader_foto($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('b.*, c.photo_type_name', 1);
+		$this->db->from('registrations a');
+		$this->db->join('photos b', 'b.registration_id = a.registration_id');
+		$this->db->join('photo_types c', 'c.photo_type_id = b.photo_type_id');
+		$this->db->where('a.registration_id', $id);
+		$this->db->order_by('b.photo_id asc');
+		$query = $this->db->get(); debug();
+		//query();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
 
 	function employee_group($id)
 	{
