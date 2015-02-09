@@ -62,14 +62,20 @@ $(function(){
 	$('input[name="i_claim_type"]').change(function(){
 		var asuransi = document.getElementById("asuransi");
 		var no_klaim = document.getElementById("no_klaim");
+		var pribadi = document.getElementById("pribadi");
+		var pph = document.getElementById("pph");
 		
 		if($(this).val() == 1){
 			asuransi.style.display = 'table';
 			no_klaim.style.display = 'table';
+			pribadi.style.display = 'none';
+			pph.style.display = 'table';
 	
 		}else{
 			asuransi.style.display = 'none';
 			no_klaim.style.display = 'none';
+			pribadi.style.display = 'table';
+			pph.style.display = 'none';
 			
 		}
 		
@@ -84,6 +90,11 @@ $('#print_spk').click(function(){
 	$('#print_pkb').click(function(){
 		
 				location.href = site_url + 'pkb/report/' + $('input[name="row_id"]').val();
+			
+	});
+	$('#print_estimasi').click(function(){
+		
+				location.href = site_url + 'registration/report/' + $('input[name="row_id"]').val();
 			
 	});
 	
@@ -214,6 +225,7 @@ $('#print_spk').click(function(){
 		<input type="button" id="cancel" value="Batal"/>
        <input type="button" id="print_spk" value="Cetak SPK"  />
        <input type="button" id="print_pkb" value="Cetak PKB"  />
+           <input type="button" id="print_estimasi" value="Cetak Estimasi"  />
 	</div>
 </div>
 <!-- table contact -->

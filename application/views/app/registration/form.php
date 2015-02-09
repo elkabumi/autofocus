@@ -107,6 +107,7 @@ $(function(){
 			
 		});
 	}
+	
 	createDatePicker();
 	//updateAll(); 
 });
@@ -115,7 +116,7 @@ $(function(){
 <form class="form_class" id="id_form_nya">	
 <div class="form_area">
 <div class="form_area_frame">
-	<table width="100%" cellpadding="4" class="form_layout">
+		<table width="100%" cellpadding="4" class="form_layout">
 	<tr>
 			<td width="17%">Periode
                
@@ -181,7 +182,9 @@ $(function(){
          Pribadi
        </label></td>
     </tr>
-
+<?php
+		if($claim_type == 1){
+?>
  <tr>
       <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
         <tr>
@@ -197,7 +200,7 @@ $(function(){
         <tr>
           <td width="17%">PIC Asuransi</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_pic_asuransi" name="i_pic_asuransi" /></td>
+          <td width="82%"><input type="text" id="i_pic_asuransi" name="i_pic_asuransi" value="<?=$pic_asuransi?>" /></td>
         </tr>
       </table></td>
      </tr>   
@@ -206,7 +209,7 @@ $(function(){
         <tr>
           <td width="17%">No Klaim</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" /></td>
+          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" value="<?=$claim_no?>"/></td>
         </tr>
       </table></td>
       
@@ -222,42 +225,41 @@ $(function(){
         </tr>
       </table></td>
       
-				
+<?php } 
+		if($claim_type == 0){
+?>
 				
       </tr>
             <tr>
-     <td colspan="3">
-     <table width="100%" border="0" cellspacing="0" cellpadding="0" id="dp" style="width:100%;">
+     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pribadi" style="width:100%;">
         <tr>
           <td width="17%">Bayar Dp</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp" /></td>
+          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp" value="<?=$registration_dp?>" /></td>
         </tr>
       </table></td>
 				
-				
+		<?php } ?>		
       </tr>
        <tr>
           <td width="17%">No SPK</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no" /></td>
+          <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no"  value="<?=$spk_no?>" /></td>
         </tr>
         <tr>
-        
           <td width="17%">No PKB</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" /></td>
+          <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" value="<?=$pkb_no?>" /></td>
         </tr>
-          <tr>
-           <td colspan="3">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0" id="retention" style="width:100%;">
+        <?php
+		if($claim_type == 1){
+?>
           <tr>
           <td width="17%">Own Retention (OR)</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" /></td>
+          <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
         </tr>
-          </table></td>
-           </tr>
+        <?php } ?>
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>
@@ -271,7 +273,7 @@ $(function(){
      <tr>
       <td>Tanggal SPK  </td>
       <td>:</td>
-      <td><input type="text" name="i_spk_date" class="date_input" size="15" value="" /></td>
+      <td><input type="text" name="i_spk_date" class="date_input" size="15" value="<?=$spk_date?>" /></td>
     </tr>
        <tr>
     <td width="158" valign="top">Keterangan</td>
@@ -288,6 +290,8 @@ $(function(){
 		<input type="button" id="enable" value="Edit"/>
 	
 		<input type="button" id="cancel" value="Batal"/>
+        
+      
 	</div>
 </div>
 <!-- table contact -->
