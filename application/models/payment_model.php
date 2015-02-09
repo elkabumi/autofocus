@@ -91,16 +91,8 @@ class Payment_model extends CI_Model
 			$registration_date = format_new_date($row['registration_date']);
 			
 			switch($row['status_registration_id']){
-				case 4: $status = "0 %"; 
-						$progress = "";
-				break;
-				case 5: 
-				$data_progress = $row['transaction_progress'];
-				$progress = "<div class='registration_status3' style='width:$data_progress%;'>&nbsp;</div>"; 
-				$status = $data_progress." %";
-				break;
-				
-				
+				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
+				case 5: $status = "<div class='registration_status5'>Pembayaran Belum lunas</div>"; break;
 			}
 			
 			$link = "<a href=".site_url('payment/form/'.$row['registration_id'])." class='link_input'> Proses </a>";
@@ -113,7 +105,6 @@ class Payment_model extends CI_Model
 				$row['customer_name'],
 				$row['insurance_name'],
 				$row['claim_no'],
-				$progress,
 				$status,
 				$link
 			); 
@@ -125,10 +116,12 @@ class Payment_model extends CI_Model
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*', 1); // ambil seluruh data
+		$this->db->select('a.*,b.*,min(c.payment_sisa) as sisa,sum(c.payment_jumlah) as dibayar', 1); // ambil seluruh data
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
+		$this->db->join('payments c', 'c.registration_id = a.registration_id','left');
 		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
+		//query($query);
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
@@ -149,11 +142,15 @@ class Payment_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data)
+	function create($data,$status)
 	{
 		$this->db->trans_start();
-
-		$data_update['status_registration_id'] = 5;
+		
+		if($status == 0){
+			$data_update['status_registration_id'] = 6;
+		}else{
+			$data_update['status_registration_id'] = 5;
+		}
 		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
 		$this->db->update('registrations', $data_update);
 

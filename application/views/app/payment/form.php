@@ -97,11 +97,18 @@ $(function(){
 	});
 	
 	$('input[name="i_bayar"]').change(function(){
-		var total = $('input[name="i_grand_total"]').val();
+		var total = $('input[name="i_belum_bayar"]').val();
 		var bayar = $(this).val();
 		var sisa = total - bayar;
 		
-		$('input[name="i_sisa"]').val(sisa);
+			$('input[name="i_sisa"]').val(sisa);
+		
+		if(sisa == 0){
+			$('input[name="i_status"]').val(0);
+			}else{
+				$('input[name="i_status"]').val(1);
+				}
+			
 			
 	});
 		
@@ -142,10 +149,10 @@ $(function(){
 			<td width="1%" >:</td>
 			<td  width="82%" > <span class="lookup" id="lookup_period">
          <input type="hidden" name="i_period_id" class="com_id" value="<?=$period_id?>" />
-         <input type="text" class="com_input" size="6" /> 
+         <input type="text" readonly="readonly" class="com_input" size="6" /> 
          <input type="hidden" name="row_id" value="<?=$row_id?>" />
 
-         <div class="iconic_base iconic_search com_popup"></div> <input type="text" name="i_transaction_id" value="<?=$transaction_id?>" />
+         <div class="iconic_base iconic_search com_popup"></div> <input type="hidden" name="i_transaction_id" value="<?=$transaction_id?>" />
        </span></td> 
 		</tr>
    
@@ -156,7 +163,7 @@ $(function(){
       <td>  <span class="lookup" id="lookup_stand">
 				<input type="hidden" name="i_stand_id" class="com_id" value="<?=$stand_id?>" />
                
-				<input type="text" class="com_input" />
+				<input type="text" readonly="readonly" class="com_input" />
 				<input type="hidden" name="i_registration_date2" class="date_input" size="15" value="<?=$registration_date?>" />
 				 <div class="iconic_base iconic_search com_popup"></div>
 				</span></td>
@@ -164,7 +171,7 @@ $(function(){
       <tr>
           <td width="17%">Kode Transaksi</td>
           <td width="1%">:</td>
-          <td width="82%"><input name="i_code" type="text" id="i_code" value="<?=$registration_code ?>" /></td>
+          <td width="82%"><input name="i_code" readonly="readonly" type="text" id="i_code" value="<?=$registration_code ?>" /></td>
         </tr>
     <tr>
       <td>Data Pelanggan
@@ -173,7 +180,7 @@ $(function(){
       <td> <span class="lookup" id="lookup_customer">
         <input type="hidden" name="i_customer_id" class="com_id" value="<?=$customer_id?>" />
         
-        <input type="text" class="com_input" />
+        <input type="text" readonly="readonly" class="com_input" />
         <div class="iconic_base iconic_search com_popup"></div>
           <span class="com_desc"></span>
         </span></td>
@@ -184,7 +191,7 @@ $(function(){
       <td> <span class="lookup" id="lookup_car">
 				<input type="hidden" name="i_car_id" class="com_id" value="<?=$car_id?>" />
               
-				<input type="text" class="com_input" />
+				<input type="text" readonly="readonly" class="com_input" />
 				  <div class="iconic_base iconic_search com_popup"></div>
                     <span class="com_desc"></span>
 				</span></td>
@@ -193,15 +200,17 @@ $(function(){
       <td>Klaim</td>
       <td>:</td>
       <td><label>
-         <input type="radio" name="i_claim_type" value="1" id="i_claim_type" <?php if($claim_type == 1){ ?> checked="checked"<?php } ?> />
+         <input type="radio" name="i_claim_type"  readonly="readonly" value="1" id="i_claim_type" <?php if($claim_type == 1){ ?> checked="checked"<?php } ?> />
          Menggunakan Asuransi</label>
      <br />
        <label>
-         <input name="i_claim_type" type="radio" id="i_claim_type" value="0" <?php if($claim_type == 0){ ?> checked="checked"<?php } ?>/>
+         <input name="i_claim_type" readonly="readonly" type="radio" id="i_claim_type" value="0" <?php if($claim_type == 0){ ?> checked="checked"<?php } ?>/>
          Pribadi
        </label></td>
     </tr>
-
+<?php
+		if($claim_type == 1){
+?>
  <tr>
       <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
         <tr>
@@ -210,14 +219,14 @@ $(function(){
           <td width="82%"><span class="lookup" id="lookup_insurance">
 				<input type="hidden" name="i_insurance_id" class="com_id" value="<?=$insurance_id?>" />
               
-				<input type="text" class="com_input" />
+				<input type="text"  readonly="readonly" class="com_input" />
 				  <div class="iconic_base iconic_search com_popup"></div>
 				</span></td>
         </tr>
         <tr>
           <td width="17%">PIC Asuransi</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_pic_asuransi" name="i_pic_asuransi" value="<?=$pic_asuransi?>" /></td>
+          <td width="82%"><input type="text" readonly="readonly" id="i_pic_asuransi" name="i_pic_asuransi" value="<?=$pic_asuransi?>" /></td>
         </tr>
       </table></td>
      </tr>   
@@ -226,7 +235,7 @@ $(function(){
         <tr>
           <td width="17%">No Klaim</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" value="<?=$claim_no?>"/></td>
+          <td width="82%"><input type="text" readonly="readonly" id="i_claim_no" name="i_claim_no" value="<?=$claim_no?>"/></td>
         </tr>
       </table></td>
       
@@ -238,11 +247,13 @@ $(function(){
         <tr>
           <td width="17%">PPh %</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_insurance_pph" name="i_insurance_pph" value="<?=$insurance_pph?>" readonly="readonly" /></td>
+          <td width="82%"><input type="text" readonly="readonly" id="i_insurance_pph" name="i_insurance_pph" value="<?=$insurance_pph?>" readonly="readonly" /></td>
         </tr>
       </table></td>
       
-				
+<?php } 
+		if($claim_type == 0){
+?>
 				
       </tr>
             <tr>
@@ -250,46 +261,50 @@ $(function(){
         <tr>
           <td width="17%">Bayar Dp</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp" value="<?=$registration_dp?>" /></td>
+          <td width="82%"><input type="text" id="i_registration_dp" readonly="readonly" name="i_registration_dp" value="<?=$registration_dp?>" /></td>
         </tr>
       </table></td>
 				
-				
+		<?php } ?>		
       </tr>
        <tr>
           <td width="17%">No SPK</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no"  value="<?=$spk_no?>" /></td>
+          <td width="82%"><input type="text" id="i_spk_no" readonly="readonly" name="i_spk_no"  value="<?=$spk_no?>" /></td>
         </tr>
         <tr>
           <td width="17%">No PKB</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" value="<?=$pkb_no?>" /></td>
+          <td width="82%"><input type="text" id="i_pkb_no"  readonly="readonly" name="i_pkb_no" value="<?=$pkb_no?>" /></td>
         </tr>
+        <?php
+		if($claim_type == 1){
+?>
           <tr>
           <td width="17%">Own Retention (OR)</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
+          <td width="82%"><input type="text" readonly="readonly" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
         </tr>
+        <?php } ?>
         <tr>
       <td>Tanggal Masuk</td>
       <td>:</td>
-      <td><input type="text" name="i_check_in" class="date_input" size="15" value="<?=$check_in?>" /></td>
+      <td><input type="text" readonly="readonly" name="i_check_in" class="date_input" size="15" value="<?=$check_in?>" /></td>
     </tr>
      <tr>
       <td>Tanggal Estimasi Keluar   	  </td>
       <td>:</td>
-      <td><input type="text" name="i_registration_estimation_date" class="date_input" size="15" value="<?=$registration_estimation_date?>" /></td>
+      <td><input type="text" readonly="readonly" name="i_registration_estimation_date" class="date_input" size="15" value="<?=$registration_estimation_date?>" /></td>
     </tr>
      <tr>
       <td>Tanggal SPK  </td>
       <td>:</td>
-      <td><input type="text" name="i_spk_date" class="date_input" size="15" value="<?=$spk_date?>" /></td>
+      <td><input type="text" name="i_spk_date" readonly="readonly" class="date_input" size="15" value="<?=$spk_date?>" /></td>
     </tr>
        <tr>
     <td width="158" valign="top">Keterangan</td>
     <td width="10" valign="top">:</td>
-    <td width="745" valign="top"><textarea name="i_registration_description" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
+    <td width="745" valign="top"><textarea name="i_registration_description" readonly="readonly" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
     </tr>
    
    
@@ -300,41 +315,79 @@ $(function(){
     <tr>
       <td width="23%">Tanggal Pembayaran</td>
       <td width="1%">:</td>
-      <td width="76%"><input type="text" name="i_payment_date" class="date_input" size="15" value="<?=$payment_date?>" /></td>
+      <td width="76%"><input type="text" readonly="readonly" name="i_payment_date" class="date_input" size="15" value="<?=$payment_date?>" /></td>
     </tr>
 
 	<tr>
    <td>Total Sperpart</td>
          <td>:</td>
-       <td><input name="i_total_sperpart" type="text" id="i_total_sperpart" value="<?=$approved_sparepart_total_registration?>" /></td>
+       <td><input name="i_total_sperpart" readonly="readonly" type="text" id="i_total_sperpart" value="<?=$approved_sparepart_total_registration?>" /></td>
      </tr>
      <tr>
      <td>Total Jasa</td>
      <td>:</td>
-       <td><input name="i_total_jasa"   type="text" id="i_total_jasa" value="<?=$transaction_total ?>" /></td>
+       <td><input name="i_total_jasa" readonly="readonly" type="text" id="i_total_jasa" value="<?=$transaction_total ?>" /></td>
      </tr>
      <tr>
      <td>Total Cat</td>
      <td>:</td>
-       <td><input name="i_total_cat" type="text" id="i_total_cat" value="<?=$transaction_material_total ?>"/></td>
+       <td><input name="i_total_cat" readonly="readonly" type="text" id="i_total_cat" value="<?=$transaction_material_total ?>"/></td>
      </tr>
-     <?
-     $grand_total = $approved_sparepart_total_registration + $transaction_total +$transaction_material_total;
+     <? if($claim_type == 1){
+		  	 $grand_total = $own_retention;
+			 $ansuransi = $approved_sparepart_total_registration + $transaction_total + $transaction_material_total - $own_retention;
+			 ?>
+		<tr>
+          <td>Dibayar Ansuransi</td>
+          <td>:</td>
+          <td><input type="text" readonly="readonly" id="i_own_retention" name="i_own_retention" value="<?=$ansuransi?>"  /></td>
+        </tr>
+			 <?
+		 }else{?>
+			 <tr>
+          <td>Bayar Dp</td>
+          <td>:</td>
+          <td><input type="text" readonly="readonly" id="i_registration_dp" name="i_registration_dp" value="<?=$registration_dp?>" /></td>
+        </tr>
+		<?
+			 $grand_total = $approved_sparepart_total_registration + $transaction_total + $transaction_material_total - $registration_dp;
+			 }
+    
 	 ?>
      <tr>
      <td>Grand Total</td>
      <td>:</td>
-       <td><input name="i_grand_total" type="text" id="i_grand_total" value="<?=$grand_total ?>"/></td>
+       <td><input name="i_grand_total" readonly="readonly" type="text" id="i_grand_total" value="<?=$grand_total ?>"/></td>
+     </tr>
+     <? 
+	 if($sisa <> 0){
+     	 $total_pembayaran = $sisa;
+		 ?>
+		 <tr>
+     <td>Sudah di bayar</td>
+     <td>:</td>
+       <td><input name="i_sudah_bayar" readonly="readonly" type="text" id="i_sudah_bayar" value="<?=$dibayar ?>"/></td>
+     </tr>
+     
+	 <?
+	 }else{
+		 $total_pembayaran = $grand_total;
+		 }
+	 ?>
+     <tr>
+     <td>Belum di bayar</td>
+     <td>:</td>
+       <td><input name="i_belum_bayar" readonly="readonly" type="text" id="i_belum_bayar" value="<?=$total_pembayaran ?>"/></td>
      </tr>
      <tr>
      <td>Dibayar</td>
      <td>:</td>
-       <td><input name="i_bayar" type="text" id="i_bayar" value="0"/></td>
+       <td><input name="i_bayar" type="text" id="i_bayar" value="0"/><input name="i_status" type="hidden" id="i_status" value=""/></td>
      </tr>
      <tr>
      <td>Sisa Pembayaran</td>
      <td>:</td>
-       <td><input name="i_sisa" type="text" id="i_sisa" value="<?=$grand_total ?>"/></td>
+       <td><input name="i_sisa" readonly="readonly" type="text" id="i_sisa" value="<?=$total_pembayaran ?>"/></td>
      </tr>
      
      </table>	

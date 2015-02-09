@@ -91,7 +91,8 @@ class Po_received_report_model extends CI_Model
 
 			 	break;
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
-				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
+				case 5: $status = "<div class='registration_status5'>Pembayaran Belum Lunas</div>"; break;
+				case 6: $status = "<div class='registration_status6'>Mobil Keluar</div>"; break;
 			}
 			$link_detail = "<a href=".site_url('po_received_report/form/'.$row['registration_id'])." class='link_input'> Detail </a>";
 			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input'> Download PDF</a>";		
@@ -117,15 +118,214 @@ class Po_received_report_model extends CI_Model
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*,c.*', 1); // ambil seluruh data
+		$this->db->select('a.*,b.*,min(c.payment_sisa) as sisa,sum(c.payment_jumlah) as dibayar,d.car_nopol,d.car_no_machine, g.car_model_merk, g.car_model_name, e.customer_name,f.insurance_name,f.insurance_addres', 1); // ambil seluruh data
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
-		$this->db->join('transaction_details c', 'c.transaction_id = b.transaction_id','left');		
+		$this->db->join('payments c', 'c.registration_id = a.registration_id','left');
+		$this->db->join('cars d','d.car_id = a.car_id');
+		$this->db->join('customers e','e.customer_id = a.customer_id');
+		$this->db->join('insurances f','f.insurance_id = a.insurance_id','left');
+		$this->db->join('car_models g', 'g.car_model_id = d.car_model_id');
 		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
+		//query($query);
 		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
 	}
+
+	
+	function delete($id)
+	{
+
+		$this->db->trans_start();
+		$data['approved_active_status'] = '0';
+		$data['inactive_by_id'] =  $this->access->info['employee_id'];
+		$this->db->where('approved_id', $id); // data yg mana yang akan di update
+		$this->db->update('approveds', $data);
+	
+		$this->access->log_delete($id, 'PO Received');
+		$this->db->trans_complete();
+
+		return $this->db->trans_status();
+	}
+	function create($data,$status)
+	{
+		$this->db->trans_start();
+		
+		if($status == 0){
+			$data_update['status_registration_id'] = 6;
+		}else{
+			$data_update['status_registration_id'] = 5;
+		}
+		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
+		$this->db->update('registrations', $data_update);
+
+		$this->db->insert('payments', $data);
+		$id = $this->db->insert_id();
+		
+		$this->insert_id = $data['registration_id'];//create registration
+	//	$this->insert_registration($id, $data);
+		
+		$this->access->log_insert($id, 'Transaksi');
+		$this->db->trans_complete();
+		return $this->db->trans_status();
+	}// end of function 
+	function update($id, $data, $items, $items_material)
+	{
+		$this->db->trans_start();
+
+		/*$data_update['status_registration_id'] = 3;
+		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
+		$this->db->update('registrations', $data_update);
+		*/
+
+		$this->db->where('transaction_id', $id); // data yg mana yang akan di update
+		$this->db->update('transactions', $data);
+		
+		//Insert jasa
+		$this->db->where('transaction_id', $id);
+		$this->db->delete('transaction_details');
+		$index = 0;
+		foreach($items as $row)
+		{			
+			$row['transaction_id'] = $id;
+			$this->db->insert('transaction_details', $row); 
+			$index++;
+		}
+		
+		// cat / bahan
+		$this->db->where('transaction_id', $id);
+		$this->db->delete('transaction_materials');
+		$index = 0;
+		$index_material = 0;
+		foreach($items_material as $row_material)
+		{			
+			$row_material['transaction_id'] = $id;
+			$this->db->insert('transaction_materials', $row_material);
+			$index_material++;
+		}
+
+		$this->access->log_update($id, 'Transaksi');
+		$this->db->trans_complete();
+		return $this->db->trans_status();
+	}
+	
+	
+	function detail_list_loader($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('a.*, f.workshop_service_name', 1);
+		$this->db->from('transaction_details a');
+		$this->db->join('transactions e', 'e.transaction_id = a.transaction_id');
+		$this->db->join('workshop_services f', 'f.workshop_service_id = a.workshop_service_id');
+		$this->db->where('e.registration_id', $id);
+		$this->db->order_by('a.transaction_detail_id asc');
+		//$this->db->group_by('e.transaction_id');
+		$query = $this->db->get(); debug();
+		//query();
+		
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	function detail_list_loader_sparepart($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('a.*', 1);
+		$this->db->from('registration_spareparts a');
+		$this->db->where('a.registration_id', $id);
+		$query = $this->db->get(); 
+		debug();
+		//query();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	function detail_list_loader_panel($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('a.*, c.product_id, c.product_code, c.product_name, d.product_type_name, e.pst_name', 1);
+		$this->db->from('detail_registrations a');
+		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
+		$this->db->join('products c', 'c.product_id = b.product_id');
+		$this->db->join('product_types d', 'd.product_type_id = b.product_type_id');
+		$this->db->join('product_sub_type e', 'e.pst_id = b.pst_id');
+		
+		$this->db->where('a.registration_id', $id);
+		$query = $this->db->get(); debug();
+		//query();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	
+	function detail_list_loader_cat($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('c.*', 1);
+		$this->db->from('registrations a');
+		$this->db->join('transactions b', 'b.registration_id = a.registration_id');
+		$this->db->join('transaction_materials c', 'c.transaction_id = b.transaction_id');
+		$this->db->where('a.registration_id', $id);
+		$query = $this->db->get(); debug();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
+	
+
+	function employee_group($id)
+	{
+		$this->db->select('a.employee_id', 1); // ambil seluruh data
+		$this->db->where('employee_group_id', $id);
+		$query = $this->db->get('employee_group_items a', 1); // parameter limit harus 1
+		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
+		return $result; 
+	}
+	
+	function approved($id)
+	{
+		$this->db->trans_start();
+		$data['status_registration_id'] = 2;
+		$this->db->where('registration_id', $id); // data yg mana yang akan di update
+		$this->db->update('registrations', $data);
+	
+		
+		//$this->access->log_update($id, 'Kategori produk');
+		$this->db->trans_complete();
+		return $this->db->trans_status();
+	}
+
+	function load_workshop_service($id)
+	{
+		$sql = "
+			select 
+			a.*
+			from workshop_services a 
+			
+			where workshop_service_id = $id
+		";
+		
+		
+		$query = $this->db->query($sql); 
+		//query();	
+		return $query;
+	}
+
+
 	function read_id_report($id)
 	{
 		$this->db->select('a.*,b.*,c.*,d.period_name,e.stand_name,f.customer_name,g.car_nopol,h.insurance_name,i.employee_group_name', 1); // ambil seluruh data
@@ -144,276 +344,97 @@ class Po_received_report_model extends CI_Model
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
 	}
-	function delete($id)
-	{
-		$this->db->trans_start();
-		$data['transaction_status_active_status'] = '0';
-		$data['inactive_by_id'] =  $this->access->info['employee_id'];
-		$this->db->where('transaction_status_id', $id); // data yg mana yang akan di update
-		$this->db->update('transaction_statuss', $data);
 	
-		$this->access->log_delete($id, 'PO Received');
-		$this->db->trans_complete();
+	function get_data_detail($id) {
+		
+		$query = "SELECT a . * , b.product_name
+					FROM detail_registrations a
+					JOIN product_prices d ON d.product_price_id = a.product_price_id
+					JOIN products b ON b.product_id = d.product_id
+					
+					WHERE registration_id = '$id'
+					"
+					;
+		
+        $query = $this->db->query($query);
+       // query();
+        if ($query->num_rows() == 0)
+            return array();
 
-		return $this->db->trans_status();
-	}
-	function create($data, $items,$item2)
-	{
-		$this->db->trans_start();
-		$this->db->insert('transaction_statuss', $data);
-		$id = $this->db->insert_id();
-		
-		//Insert items
-		$index = 0;
-		foreach($items as $row)
-		{			
-			$row['transaction_status_id'] = $id;
-			$this->db->insert('product_types', $row);
-			$index++;
-		}
-		
-		$index2 = 0;
-		foreach($item2 as $row2)
-		{			
-			$row2['transaction_status_id'] = $id;
-			$this->db->insert('product_sub_type', $row2);
-			$index2++;
-		}
-		
-		$this->insert_id = $id;//create registration
-	//	$this->insert_registration($id, $data);
-		
-		$this->access->log_insert($id, 'PO Received');
-		$this->db->trans_complete();
-		return $this->db->trans_status();
-	}// end of function 
-	function update($id, $data, $items,$item2)
-	{
-		$this->db->trans_start();
-		$this->db->where('transaction_status_id', $id); // data yg mana yang akan di update
-		$this->db->update('transaction_statuss', $data);
-		
-		//Insert items
-		$this->db->where('transaction_status_id', $id);
-		$this->db->delete('product_types');
-		$index = 0;
-		foreach($items as $row)
-		{			
-			$row['transaction_status_id'] = $id;
-			$this->db->insert('product_types', $row); 
-			$index++;
-		}
-		
-		$this->db->where('transaction_status_id', $id);
-		$this->db->delete('product_sub_type');
-		$index = 0;
-		$index2 = 0;
-		foreach($item2 as $row2)
-		{			
-			$row2['transaction_status_id'] = $id;
-			$this->db->insert('product_sub_type', $row2);
-			$index2++;
-		}
-		$this->access->log_update($id, 'PO Received');
-		$this->db->trans_complete();
-		return $this->db->trans_status();
-	}
-	
-	function insert_registration($data_id, $datatrans, $update_mode = 0) {
-	$id = 0;
+        $data = $query->result_array();
 
-	if ($update_mode) {
-	    $query = $this->db->get_where('registrations_sl', array('registration_data_id' => $data_id, 'registration_type_id' => $this->trans_type), 1);
-	    if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$id = $row['registration_id'];
-		//update registration
-		$data['registration_date'] = $datatrans['registration_date'];
-		$data['registration_description'] = $datatrans['registration_description'];
-		$this->db->update('registrations_sl', $data, array('registration_id' => $id));
-		$this->db->where('registration_id', $id);
-		$this->db->delete('journals_sl');
-	    }
-	    else
-		$update_mode = 0;
-	}
-	if (!$update_mode) {
-	    $data['registration_date'] = $datatrans['registration_date'];
-	    $data['registration_description'] = $datatrans['registration_description'];
-	    $data['registration_type_id'] = $this->trans_type;
-	    $data['registration_code'] = $datatrans['registration_code'];
-	    $data['registration_data_id'] = $data_id;
-	    $data['period_id'] = 1;
-	    $this->db->insert('registrations_sl', $data);
-	    $id = $this->db->insert_id();
-		//$this->db->update('registrations_sl', array('registration_data_id' => $id), array('registration_id' => $id));
-	}
-	if ($id == 0)
-	    return;
-	$index = 0;
-
-	$i = 0;
-	$journal_items['registration_id'] = $id;
-	$journal_items['market_id'] =  $datatrans['stand_id'];
-	
-	//pembayaran cash
-	if($datatrans['registration_payment_method_id'] == 1){
-	
-	$debit = 3; $kredit = 30;
-	
-	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['registration_description'];
-	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'];
-	$journal_items['journal_credit'] = 0;
-	$journal_items['coa_id'] = $debit;
-	$this->db->insert('journals_sl', $journal_items);
-	
-	if($datatrans['registration_sent_price'] > 0){
-		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['registration_description'];
-		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
-		$journal_items['coa_id'] = 32;
-		$this->db->insert('journals_sl', $journal_items);
-	}
-
-	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['registration_description'];
-	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
-	$journal_items['coa_id'] = $kredit;
-	$this->db->insert('journals_sl', $journal_items);
-	
-	//pembayaran kredit
-	}else if($datatrans['registration_payment_method_id'] == 2){
-		$debit = 8; $kredit = 30;
-	
-	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['registration_description'];
-	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'] - $datatrans['registration_down_payment'];
-	$journal_items['journal_credit'] = 0;
-	$journal_items['coa_id'] = $debit;
-	$this->db->insert('journals_sl', $journal_items);
-	
-	if($datatrans['registration_down_payment'] > 0){
-		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['registration_description'];
-		$journal_items['journal_debit'] = $datatrans['registration_down_payment'];
-		$journal_items['journal_credit'] = 0;
-		$journal_items['coa_id'] = 3;
-		$this->db->insert('journals_sl', $journal_items);
-	}
-	
-	if($datatrans['registration_sent_price'] > 0){
-		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['registration_description'];
-		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
-		$journal_items['coa_id'] = 32;
-		$this->db->insert('journals_sl', $journal_items);
-	}
-
-	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['registration_description'];
-	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
-	$journal_items['coa_id'] = $kredit;
-	$this->db->insert('journals_sl', $journal_items);
-	
-	}else{
-	
-	$debit = 5; $kredit = 30;
-	
-	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['registration_description'];
-	$journal_items['journal_debit'] = $datatrans['registration_final_total_price'];
-	$journal_items['journal_credit'] = 0;
-	$journal_items['coa_id'] = $debit;
-	$this->db->insert('journals_sl', $journal_items);
-	
-	if($datatrans['registration_sent_price'] > 0){
-		$journal_items['journal_index'] = $i++;
-		$journal_items['journal_description'] = $datatrans['registration_description'];
-		$journal_items['journal_debit'] = 0;
-		$journal_items['journal_credit'] = $datatrans['registration_sent_price'];
-		$journal_items['coa_id'] = 32;
-		$this->db->insert('journals_sl', $journal_items);
-	}
-
-	$journal_items['journal_index'] = $i++;
-	$journal_items['journal_description'] = $datatrans['registration_description'];
-	$journal_items['journal_debit'] = 0;
-	$journal_items['journal_credit'] = $datatrans['registration_total_price'];
-	$journal_items['coa_id'] = $kredit;
-	$this->db->insert('journals_sl', $journal_items);
-		
-	}
-	
-		return $id;
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
     }
 	
+	function get_data_sperpart($id) {
+		
+		$query = "SELECT *
+					FROM registration_spareparts
+					WHERE registration_id = '$id'
+					"
+					;
+		
+        $query = $this->db->query($query);
+       // query();
+        if ($query->num_rows() == 0)
+            return array();
 
+        $data = $query->result_array();
+
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
+    }
 	
-	function transaction_status($id)
-	{
-		$this->db->trans_start();
-		$data['status_registration_id'] = 2;
-		$this->db->where('registration_id', $id); // data yg mana yang akan di update
-		$this->db->update('registrations', $data);
+	function get_data_cat($id) {
+		
+		$query = "SELECT c.*
+					FROM registrations a
+					JOIN transactions b on b.registration_id = a.registration_id
+					JOIN transaction_materials c on c.transaction_id = b.transaction_id
+					WHERE a.registration_id = '$id'
+					"
+					;
+		
+        $query = $this->db->query($query);
+       // query();
+        if ($query->num_rows() == 0)
+            return array();
+
+        $data = $query->result_array();
+
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
+    }
 	
+	function get_data_jasa($id) {
 		
-		//$this->access->log_update($id, 'Kategori produk');
-		$this->db->trans_complete();
-		return $this->db->trans_status();
-	}
-	
-	function detail_list_loader($id)
-	{
-		// buat array kosong
-		$result = array(); 		
-		$this->db->select('a.*, c.product_id, c.product_code, c.product_name,e.transaction_id,f.transaction_detail_id,f.transaction_detail_plain_first_date,f.transaction_detail_plain_last_date,f.transaction_detail_actual_date,f.transaction_detail_target_date,f.transaction_detail_description,f.transaction_id,f.transaction_detail_bongkar_komponen,f.transaction_detail_lasketok,f.transaction_detail_dempul,f.transaction_detail_cat,f.transaction_detail_poles,f.transaction_detail_rakit,f.transaction_detail_total,f.transaction_detail_date', 1);
-		$this->db->from('detail_registrations a');
-		$this->db->join('registrations d', 'd.registration_id = a.registration_id');
-		$this->db->join('product_prices b', 'b.product_price_id = a.product_price_id');
-		$this->db->join('products c', 'c.product_id = b.product_id');
-		$this->db->join('transactions e', 'e.registration_id = d.registration_id','left');
-		$this->db->join('transaction_details f', 'f.detail_registration_id = a.detail_registration_id','left');
+		$query = "SELECT a.*, f.workshop_service_name
+					FROM transaction_details a
+					JOIN transactions e on e.transaction_id = a.transaction_id
+					JOIN workshop_services f on f.workshop_service_id = a.workshop_service_id
+					WHERE registration_id = '$id'
+					ORDER BY a.transaction_detail_id asc
+					"
+					;
 		
-		$this->db->where('a.registration_id', $id);
-		//$this->db->group_by('e.transaction_id');
-		$query = $this->db->get(); debug();
-		
-		foreach($query->result_array() as $row)
-		{
-			$result[] = format_html($row);
-		}
-		return $result;
-	}
-	function get_progress_pengerjaan($id)
-	{
-		$sql = "select 
-				transaction_komponen,
-				transaction_lasketok,
-				transaction_dempul,
-				transaction_cat,
-				transaction_poles,
-				transaction_rakit
-				from transactions
-				where registration_id = '$id'
-				";
-		
-		$query = $this->db->query($sql);
-		
-		$result = null;
-		foreach ($query->result_array() as $row) $result = format_html($row);
+        $query = $this->db->query($query);
+       // query();
+        if ($query->num_rows() == 0)
+            return array();
 
-		$progress = $result['transaction_lasketok'] + $result['transaction_dempul'] + 
-		$result['transaction_cat'] + $result['transaction_poles'] + 
-		$result['transaction_rakit'] + $result['transaction_komponen'];
+        $data = $query->result_array();
 
-		$progress = $progress / 6 ;
-
-		return $progress;
-	}
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
+    }
 }
 #

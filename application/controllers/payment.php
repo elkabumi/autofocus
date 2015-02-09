@@ -29,10 +29,8 @@
 				$data['check_in'] = format_new_date($data['check_in']);
 				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
 				$data['spk_date'] = format_new_date($data['spk_date']);
-				$data['transaction_plain_first_date'] = format_new_date($result['transaction_plain_first_date']);
-				$data['transaction_plain_last_date'] = $result['transaction_plain_last_date'];
-				$data['transaction_actual_date'] = $result['transaction_actual_date'];
-				$data['transaction_target_date'] = $result['transaction_target_date'];
+				$data['sisa'] = $result['sisa'];
+				$data['dibayar'] = $result['dibayar'];
 			}
 			$data['payment_date'] = date('d/m/Y');
 				
@@ -74,6 +72,7 @@
 				
 				$this->form_validation->set_rules('i_bayar','Tim Kerja','trim|required');
 				$this->form_validation->set_rules('i_sisa','Registrasi','trim|required');
+				$this->form_validation->set_rules('i_status','status','trim');
 				$this->form_validation->set_rules('i_payment_date','Tim Kerja','trim|required|valid_date|sql_date');
 			
 		// cek data berdasarkan kriteria
@@ -85,10 +84,13 @@
 				$data['payment_date'] = $this->input->post('i_payment_date');
 				$data['payment_jumlah'] = $this->input->post('i_bayar');
 				$data['payment_sisa'] = $this->input->post('i_sisa');
+				
+				$status = $this->input->post('i_status');
 
-				$error = $this->payment_model->create($data);
+				$error = $this->payment_model->create($data,$status);
 				send_json_action($error, "Data telah ditambah", "Data gagal ditambah");
 			}
+			
 			function detail_list_loader($registration_id=0)
 			{
 				if($registration_id == 0)send_json(make_datatables_list(null));

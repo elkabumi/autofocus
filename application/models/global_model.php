@@ -370,6 +370,31 @@ class Global_model extends CI_Model
 			readfile('report_new/'.$title.'.pdf');
 	    }
 	}
+	
+	function create_report_detail_mobil($title, $content, $data = '', $data_detail = '',$data_sperpart ='',$data_jasa ='',$data_cat ='', $header){
+		
+	    $this->load->library('html2pdf');
+	    $this->html2pdf->folder('report_new/');
+	    
+	    //Set the filename to save/download as
+	    $this->html2pdf->filename($title.'.pdf');
+	    
+	    //Set the paper defaults
+	    $this->html2pdf->paper( 'A4', 'Portrait');
+	    
+	   	
+
+	    $mydata = $this->load->view($header,$data,TRUE) ;
+	    $mydata .= $this->load->view($content, array('data' => $data, 'data_detail' => $data_detail,'data_sperpart' => $data_sperpart,'data_jasa' =>$data_jasa,'data_cat' => $data_cat) ,TRUE) ;
+	    $mydata .= $this->load->view('footer.php',$data,TRUE) ;
+	    //Load html view
+	    $this->html2pdf->html($mydata);
+	    
+	    if($this->html2pdf->create('save')) {
+	    	header('Content-type: application/pdf');
+			readfile('report_new/'.$title.'.pdf');
+	    }
+	}
 }
 
 # -- end file -- #
