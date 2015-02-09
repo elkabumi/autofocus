@@ -116,7 +116,7 @@ class Payment_model extends CI_Model
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*,min(c.payment_sisa) as sisa,sum(c.payment_jumlah) as dibayar', 1); // ambil seluruh data
+		$this->db->select('a.*,b.*, c.*', 1); // ambil seluruh data
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
 		$this->db->join('payments c', 'c.registration_id = a.registration_id','left');
 		$this->db->where('a.registration_id', $id);
@@ -142,11 +142,11 @@ class Payment_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data,$status)
+	function create($data, $status)
 	{
 		$this->db->trans_start();
 		
-		if($status == 0){
+		if($status == 1){
 			$data_update['status_registration_id'] = 6;
 		}else{
 			$data_update['status_registration_id'] = 5;
@@ -164,42 +164,25 @@ class Payment_model extends CI_Model
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}// end of function 
-	function update($id, $data, $items, $items_material)
+	function update($id, $data, $status)
 	{
 		$this->db->trans_start();
 
-		/*$data_update['status_registration_id'] = 3;
+		if($status == 1){
+			$data_update['status_registration_id'] = 6;
+		}else{
+			$data_update['status_registration_id'] = 5;
+		}
 		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
 		$this->db->update('registrations', $data_update);
-		*/
 
-		$this->db->where('transaction_id', $id); // data yg mana yang akan di update
-		$this->db->update('transactions', $data);
+		$this->db->where('payment_id', $id); // data yg mana yang akan di update
+		$this->db->update('payments', $data);
 		
-		//Insert jasa
-		$this->db->where('transaction_id', $id);
-		$this->db->delete('transaction_details');
-		$index = 0;
-		foreach($items as $row)
-		{			
-			$row['transaction_id'] = $id;
-			$this->db->insert('transaction_details', $row); 
-			$index++;
-		}
+		$this->insert_id = $data['registration_id'];//create registration
+	//	$this->insert_registration($id, $data);
 		
-		// cat / bahan
-		$this->db->where('transaction_id', $id);
-		$this->db->delete('transaction_materials');
-		$index = 0;
-		$index_material = 0;
-		foreach($items_material as $row_material)
-		{			
-			$row_material['transaction_id'] = $id;
-			$this->db->insert('transaction_materials', $row_material);
-			$index_material++;
-		}
-
-		$this->access->log_update($id, 'Transaksi');
+		$this->access->log_insert($id, 'Transaksi');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}

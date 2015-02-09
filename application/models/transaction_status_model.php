@@ -98,7 +98,8 @@ class Transaction_status_model extends CI_Model
 
 			 	break;
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
-				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
+				case 5: $status = "<div class='registration_status5'>Pembayaran belum lunas</div>"; break;
+				case 6: $status = "<div class='registration_status5'>Pembayaran Lunas</div>"; break;
 			}
 
 			if($row['status_registration_id']==1 || $row['status_registration_id'] == 2){
@@ -164,7 +165,7 @@ class Transaction_status_model extends CI_Model
 	function create($data, $items,$item2)
 	{
 		$this->db->trans_start();
-		$this->db->insert('transaction_statuss', $data);
+		$this->db->insert('transaction_status', $data);
 		$id = $this->db->insert_id();
 		
 		//Insert items

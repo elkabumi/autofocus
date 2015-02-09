@@ -29,8 +29,27 @@
 				$data['check_in'] = format_new_date($data['check_in']);
 				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
 				$data['spk_date'] = format_new_date($data['spk_date']);
-				$data['sisa'] = $result['sisa'];
-				$data['dibayar'] = $result['dibayar'];
+				$data['total_biaya_estimasi'] = $data['approved_sparepart_total_registration'] + $data['approved_total_registration'];
+				$data['total_biaya_pengerjaan'] = $data['approved_sparepart_total_registration'] + $data['transaction_total'] + $data['transaction_material_total'];
+				$data['insurance_pph_value'] = $data['insurance_pph'] / 100 * $data['total_biaya_estimasi'];
+				$data['total_biaya_estimasi_after_pph'] = $data['total_biaya_estimasi'] + $data['insurance_pph_value'];
+				if($data['claim_type'] == 1){
+					$data['pembayaran'] = $data['total_biaya_estimasi_after_pph'] - $data['own_retention'];
+
+				}else{
+					$data['pembayaran'] = $data['total_biaya_estimasi_after_pph'] - $data['registration_dp'];
+				}
+
+				if($data['status_registration_id'] == 6){
+						$data['status'] = 1;
+						$data['status_name'] = "LUNAS";
+				}else{
+						$data['status'] = 0;
+						$data['status_name'] = "BELUM LUNAS";
+				}
+
+
+
 			}
 			$data['payment_date'] = date('d/m/Y');
 				
@@ -70,9 +89,8 @@
 		// bila bukan delete, berarti create atau update ------------------------------------------------------------------
 		// definisikan kriteria data
 				
-				$this->form_validation->set_rules('i_bayar','Tim Kerja','trim|required');
-				$this->form_validation->set_rules('i_sisa','Registrasi','trim|required');
-				$this->form_validation->set_rules('i_status','status','trim');
+				
+			//	$this->form_validation->set_rules('i_status','status','trim');
 				$this->form_validation->set_rules('i_payment_date','Tim Kerja','trim|required|valid_date|sql_date');
 			
 		// cek data berdasarkan kriteria
@@ -82,13 +100,31 @@
 
 				$data['registration_id'] = $this->input->post('row_id');
 				$data['payment_date'] = $this->input->post('i_payment_date');
-				$data['payment_jumlah'] = $this->input->post('i_bayar');
-				$data['payment_sisa'] = $this->input->post('i_sisa');
-				
+
+				if($this->input->post('i_claim_type') == 1){
+					$data['own_retention_dibayar'] = $this->input->post('i_own_retention_dibayar');
+					$data['own_retention_sisa'] = $this->input->post('i_own_retention_sisa');
+
+					$data['pembayaran_dibayar'] = $this->input->post('i_pembayaran_dibayar');
+					$data['pembayaran_sisa'] = $this->input->post('i_pembayaran_sisa');
+				}else{
+					$data['own_retention_dibayar'] = 0;
+					$data['own_retention_sisa'] = 0;
+
+					$data['pembayaran_dibayar'] = $this->input->post('i_pembayaran_dibayar');
+					$data['pembayaran_sisa'] = $this->input->post('i_pembayaran_sisa');
+				}
+
+				$payment_id = $this->input->post('i_payment_id');
 				$status = $this->input->post('i_status');
 
-				$error = $this->payment_model->create($data,$status);
-				send_json_action($error, "Data telah ditambah", "Data gagal ditambah");
+				if(empty($payment_id)){		
+					$error = $this->payment_model->create($data, $status);
+					send_json_action($error, "Data telah di simpan", "Data gagal ditambah");
+				}else{
+					$error = $this->payment_model->update($payment_id, $data, $status);
+					send_json_action($error, "Data telah di simpan", "Data gagal ditambah");
+				}
 			}
 			
 			function detail_list_loader($registration_id=0)

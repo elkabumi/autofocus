@@ -84,11 +84,9 @@ function ajaxFileUpload()
     <?php if($registration_id == ""){?>
  <img id="imagex" src="<?=base_url().'tmp/'.$photo_file?>"  width="100px"  height:"70px";  alt="" />
  <?php   }else{ 
- 		if($photo_type == 1){
- 			$storage_foto = "img_m_in/";
- 		}else{
- 			$storage_foto = "img_m_pengerjaan/";
- 		}
+ 		
+ 			$storage_foto = "img_mobil/";
+ 		
  	?>
  <img id="imagex" src="<?=base_url().'storage/'.$storage_foto.$photo_file?>"  width="100px"  height:"70px";  alt="" />
  <?php } ?>

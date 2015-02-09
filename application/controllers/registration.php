@@ -43,6 +43,7 @@ class Registration extends CI_Controller
 		$data['spk_date']					= '';
 		$data['spk_no']						= '';
 		$data['pkb_no']						= '';
+		$data['claim_no']						= '';
 	
 		
 		$this->load->helper('form');

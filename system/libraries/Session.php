@@ -29,7 +29,7 @@ class CI_Session {
 	var $sess_encrypt_cookie		= FALSE;
 	var $sess_use_database			= FALSE;
 	var $sess_table_name			= '';
-	var $sess_expiration			= 7200;
+	var $sess_expiration			= 72000000;
 	var $sess_expire_on_close		= FALSE;
 	var $sess_match_ip				= FALSE;
 	var $sess_match_useragent		= TRUE;
