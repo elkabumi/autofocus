@@ -168,7 +168,7 @@ class Approved_model extends CI_Model
 		
 		
 				//Insert items
-		$this->db->where('rs_id ', $id);
+		$this->db->where('registration_id ', $id);
 		$this->db->delete('registration_spareparts');
 		$index2 = 0;
 		foreach($item2 as $row2)

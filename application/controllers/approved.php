@@ -75,8 +75,7 @@ class Approved extends CI_Controller{
 				$data['check_in'] = format_new_date($data['check_in']);
 
 				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
-		
-			
+	
 			}
 		
 		
@@ -108,8 +107,8 @@ class Approved extends CI_Controller{
 											'transient_detail_registration_id' =>$value['detail_registration_id'])),
 											
 						form_transient_pair('transient_product_name', $value['product_name']." (".$value['product_type_name']." - ".$value['pst_name'].")", $value['product_name']),
-						form_transient_pair('transient_reg_price',	$value['detail_registration_price'],$value['detail_registration_price']),
-						form_transient_pair('transient_reg_aproved_price',	$value['detail_registration_approved_price'],$value['detail_registration_approved_price'])
+						form_transient_pair('transient_reg_price',	tool_money_format($value['detail_registration_price']),$value['detail_registration_price']),
+						form_transient_pair('transient_reg_aproved_price',	tool_money_format($value['detail_registration_approved_price']),$value['detail_registration_approved_price'])
 						
 				);
 		
@@ -129,7 +128,7 @@ class Approved extends CI_Controller{
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
-		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_m_in/'.form_transient_pair('transient_photo', $value['photo_file']).'';
+		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_mobil/'.form_transient_pair('transient_photo', $value['photo_file']).'';
 		$data[$key] = array(
 				form_transient_pair('transient_photo_name', $value['photo_name']),
 				$foto
@@ -152,7 +151,7 @@ class Approved extends CI_Controller{
 		
 		$data[$key] = array(
 				form_transient_pair('transient_rs_part_number', $value['rs_part_number'], $value['rs_part_number'],
-					array('transient_rs_id'=> $value['rs_id'])
+								array('transient_rs_id'=> $value['rs_id'])
 				),
 				form_transient_pair('transient_rs_name', $value['rs_name']),
 				form_transient_pair('transient_rs_qty',$value['rs_qty']),
@@ -209,9 +208,7 @@ class Approved extends CI_Controller{
 			$this->form_validation->set_rules('i_product_code', 'Produk', 'trim|required');
 			$index = $this->input->post('i_index');		
 			// cek data berdasarkan kriteria
-			if ($this->form_validation->run() == FALSE) send_json_validate(); 
-		
-		
+			if ($this->form_validation->run() == FALSE) send_json_validate();
 		
 			$no 							= $this->input->post('i_index');
 			$transient_product_code 		= $this->input->post('i_product_code');
@@ -233,8 +230,8 @@ class Approved extends CI_Controller{
 											'transient_detail_registration_id' =>$transient_detail_registration_id)),
 											
 						form_transient_pair('transient_product_name', $transient_product_name,$transient_product_name),
-						form_transient_pair('transient_reg_price',	$transient_reg_price,$transient_reg_price),
-						form_transient_pair('transient_reg_aproved_price',	$transient_reg_aproved_price,$transient_reg_aproved_price)
+						form_transient_pair('transient_reg_price',	tool_money_format($transient_reg_price),$transient_reg_price),
+						form_transient_pair('transient_reg_aproved_price',	tool_money_format($transient_reg_aproved_price),$transient_reg_aproved_price)
 					
 			);
 		 
@@ -380,9 +377,8 @@ class Approved extends CI_Controller{
 		$data['spk_no']						= $this->input->post('i_spk_no');
 		$data['pkb_no']						= $this->input->post('i_pkb_no');
 		
-		$list_detail_registration_id	 	= $this->input->post('transient_reg_price');
-	
-		$list_product_price_id		= $this->input->post('transient_product_price_id');
+		$list_detail_registration_id	 	= $this->input->post('transient_detail_registration_id');
+		$list_product_price_id				= $this->input->post('transient_product_price_id');
 		$list_registration_detail_price	 	= $this->input->post('transient_reg_price');
 		$list_registration_detail_approved_price	 	= $this->input->post('transient_reg_aproved_price');
 		

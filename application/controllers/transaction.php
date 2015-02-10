@@ -82,10 +82,10 @@
 		// definisikan kriteria data
 				
 				$this->form_validation->set_rules('i_employee_group_id','Tim Kerja','trim|required');
-				$this->form_validation->set_rules('i_first_date','Registrasi','trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_last_date','Tim Kerja','trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_actual_date','Registrasi','trim|required|valid_date|sql_date');
-				$this->form_validation->set_rules('i_target_date','Tim Kerja','trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_first_date','Tanggal awal plain','trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_last_date','Tanggal akhir plain','trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_actual_date','Tanggal Aktual','trim|required|valid_date|sql_date');
+				$this->form_validation->set_rules('i_target_date','Tanggal target selesai','trim|required|valid_date|sql_date');
 			
 		// cek data berdasarkan kriteria
 			if ($this->form_validation->run() == FALSE) send_json_validate();
@@ -163,20 +163,20 @@
 				if($list_registration_photo_name){
 				foreach($list_registration_photo_name as $key => $value)
 				{
+					$path = "";
 					if($list_registration_photo_edit[$key] == 1){
-						if($list_registration_photo_type[$key] == 1){
-							$storage = "img_m_in/";
-						}else{
-							$storage = "img_m_pengerjaan/";
-						}
+						
+						$storage = "img_mobil/";
+						$path = $this->access->info['employee_id']."_".date("ymdhms")."_".$list_registration_photo_type[$key]."_";
+					
 					rename($this->config->item('upload_tmp').$list_registration_photo_file[$key],
-					$this->config->item('upload_storage').$storage.$list_registration_photo_file[$key]);	
+					$this->config->item('upload_storage').$storage.$path.$list_registration_photo_file[$key]);	
 					}
 
 					$items_foto[] = array(				
 						'photo_name'  => $list_registration_photo_name[$key],
 						'photo_type_id'  => $list_registration_photo_type[$key],
-						'photo_file'  => $list_registration_photo_file[$key]
+						'photo_file'  => $path.$list_registration_photo_file[$key]
 						
 					);
 					
@@ -375,11 +375,8 @@
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
-			if($value['photo_type_id'] == 1){
-				$storage = "storage/img_m_in/";
-			}else{
-				$storage = "storage/img_m_pengerjaan/";
-			}
+			$storage = "storage/img_mobil/";
+
 			$foto='<img width="50px;" height="50px;" src='.base_url().$storage.form_transient_pair('transient_photo', $value['photo_file'], $value['photo_file']).'';
 				
 

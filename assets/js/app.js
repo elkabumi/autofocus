@@ -96,14 +96,16 @@ function tableSearchSupport(params, envi, otable)
    		}
 	});	
 }
+
 function session_check(json)
 {
 	if(json.url)
 	{
-		alert("Session sudah habis.\nKami akan membawa Anda ke halaman Login.");
-		logout_redirect(json.url);
+		//alert("Session sudah habis.\nKami akan membawa Anda ke halaman Login.");
+		//logout_redirect(json.url);
 	}
 }
+
 function logout_redirect(url)
 {
 	if(url)window.location.href = url;

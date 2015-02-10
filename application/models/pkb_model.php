@@ -382,13 +382,34 @@ class Pkb_model extends CI_Model
 	
 	function get_data_detail($id) {
 		
-		$query = "SELECT a . * , b.product_name,e.pst_name
+		$query = "SELECT a . * , b.product_name
 					FROM detail_registrations a
 					JOIN product_prices d ON d.product_price_id = a.product_price_id
 					JOIN products b ON b.product_id = d.product_id
-					JOIN product_sub_type e ON e.pst_id = d.pst_id
+					
 					WHERE registration_id = '$id'
 					
+					"
+					;
+		
+        $query = $this->db->query($query);
+       // query();
+        if ($query->num_rows() == 0)
+            return array();
+
+        $data = $query->result_array();
+
+        foreach ($data as $index => $row) {
+         	
+        }
+        return $data;
+    }
+	
+	function get_data_sperpart($id) {
+		
+		$query = "SELECT *
+					FROM registration_spareparts
+					WHERE registration_id = '$id'
 					"
 					;
 		

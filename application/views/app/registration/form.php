@@ -1,4 +1,4 @@
-<script type="text/javascript">	
+e<script type="text/javascript">	
 $(function(){
 
 	createForm({
@@ -52,8 +52,8 @@ $(function(){
 	createLookUp({
 		table_id		: "#lookup_table_insurance",
 		table_width		: 400,
-		listSource 		: "lookup/insurance_table_control",
-		dataSource		: "lookup/insurance_lookup_id",
+		listSource 		: "lookup/insurance_table_control/1",
+		dataSource		: "lookup/insurance_lookup_id/1",
 		column_id 		: 0,
 		component_id	: "#lookup_insurance",
 		filter_by		: [{id : "p1", label : "Nama"}],
@@ -73,14 +73,18 @@ $(function(){
 		if($(this).val() == 1){
 			asuransi.style.display = 'table';
 			no_klaim.style.display = 'table';
-			pribadi.style.display = 'none';
+			dp.style.display = 'none';
 			pph.style.display = 'table';
+			retention.style.display = 'table';
+		
 	
 		}else{
 			asuransi.style.display = 'none';
 			no_klaim.style.display = 'none';
-			pribadi.style.display = 'table';
+			dp.style.display = 'table';
 			pph.style.display = 'none';
+			retention.style.display = 'none';
+			
 			
 		}
 		
@@ -105,6 +109,7 @@ $(function(){
 			
 		});
 	}
+	dp.style.display = 'none';
 	createDatePicker();
 	//updateAll(); 
 });
@@ -113,7 +118,7 @@ $(function(){
 <form class="form_class" id="id_form_nya">	
 <div class="form_area">
 <div class="form_area_frame">
-	<table width="100%" cellpadding="4" class="form_layout">
+		<table width="100%" cellpadding="4" class="form_layout">
 	<tr>
 			<td width="17%">Periode
                
@@ -195,7 +200,7 @@ $(function(){
         <tr>
           <td width="17%">PIC Asuransi</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_pic_asuransi" name="i_pic_asuransi" /></td>
+          <td width="82%"><input type="text" id="i_pic_asuransi" name="i_pic_asuransi" value="<?=$pic_asuransi?>" /></td>
         </tr>
       </table></td>
      </tr>   
@@ -204,7 +209,7 @@ $(function(){
         <tr>
           <td width="17%">No Klaim</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" /></td>
+          <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" value="<?=$claim_no?>"/></td>
         </tr>
       </table></td>
       
@@ -220,35 +225,36 @@ $(function(){
         </tr>
       </table></td>
       
-				
-				
+			
       </tr>
             <tr>
-     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pribadi" style="width:100%;">
+     <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="dp" style="width:100%;">
         <tr>
           <td width="17%">Bayar Dp</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp" /></td>
+          <td width="82%"><input type="text" id="i_registration_dp" name="i_registration_dp" value="<?=$registration_dp?>" /></td>
         </tr>
       </table></td>
 				
-				
-      </tr>
+		
        <tr>
           <td width="17%">No SPK</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no" /></td>
+          <td width="82%"><input type="text" id="i_spk_no" name="i_spk_no"  value="<?=$spk_no?>" /></td>
         </tr>
         <tr>
           <td width="17%">No PKB</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" /></td>
+          <td width="82%"><input type="text" id="i_pkb_no" name="i_pkb_no" value="<?=$pkb_no?>" /></td>
         </tr>
-          <tr>
+   	 <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="retention" style="width:100%;">
+        <tr>
           <td width="17%">Own Retention (OR)</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" /></td>
-        </tr>
+          <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
+            </tr>
+      </table></td>
+     
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>
@@ -262,7 +268,7 @@ $(function(){
      <tr>
       <td>Tanggal SPK  </td>
       <td>:</td>
-      <td><input type="text" name="i_spk_date" class="date_input" size="15" value="" /></td>
+      <td><input type="text" name="i_spk_date" class="date_input" size="15" value="<?=$spk_date?>" /></td>
     </tr>
        <tr>
     <td width="158" valign="top">Keterangan</td>
@@ -279,6 +285,8 @@ $(function(){
 		<input type="button" id="enable" value="Edit"/>
 	
 		<input type="button" id="cancel" value="Batal"/>
+        
+      
 	</div>
 </div>
 <!-- table contact -->

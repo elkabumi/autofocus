@@ -21,14 +21,15 @@ class Registration extends CI_Controller
 		$this->load->model('global_model');
 		$period_id = $this->global_model->get_active_period();
 			
-		$data['row_id'] = '';
-		$data['period_id'] = $period_id[0];
+		$data['row_id'] 	= '';
+		$data['period_id']	 = $period_id[0];
 		$data['stand_id'] = '';
 		$data['registration_date'] = date('d/m/Y');
 		$data['registration_code'] =  format_code('registrations','registration_code','R',7);
 		$data['customer_id'] = '';
 		$data['car_id'] = '';
 		$data['claim_type'] = '1';
+		$data['claim_no'] = '';
 		$data['insurance_id'] = '';
 		$data['check_in'] = date('d/m/Y');
 		$data['registration_estimation_date'] = '';
@@ -42,6 +43,7 @@ class Registration extends CI_Controller
 		$data['spk_date']					= '';
 		$data['spk_no']						= '';
 		$data['pkb_no']						= '';
+		$data['claim_no']						= '';
 	
 		
 		$this->load->helper('form');
@@ -97,8 +99,11 @@ class Registration extends CI_Controller
 		$this->form_validation->set_rules('i_stand_id','Cabang','trim|required|integer');
 		$this->form_validation->set_rules('i_customer_id','Customer','trim|required|integer');
 		$this->form_validation->set_rules('i_car_id','Mobil','trim|required|integer');
+		
 		$this->form_validation->set_rules('i_claim_type','Tipe Klaim','trim|required');
-		$this->form_validation->set_rules('i_own_retention','OR','trim|required|is_numeric');
+		if($this->input->post('i_claim_type') == '1'){
+			$this->form_validation->set_rules('i_own_retention','OR','trim|required|is_numeric');
+		}
 		$this->form_validation->set_rules('i_check_in','Tanggal Masuk','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_registration_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required');
@@ -117,12 +122,27 @@ class Registration extends CI_Controller
 		$data['car_id'] 					= $this->input->post('i_car_id');
 		$data['employee_id']				= $this->access->info['employee_id'];
 		$data['incident_date'] 				= "";
-		$data['claim_type']					= $this->input->post('i_claim_type');
-		$data['insurance_id'] 				= $this->input->post('i_insurance_id');
 		
-		$data['registration_dp']			= $this->input->post('i_registration_dp');
-		$data['insurance_pph'] 				= $this->input->post('i_insurance_pph');
-		$data['claim_no'] 					= $this->input->post('i_claim_no');
+		$data['claim_type']					= $this->input->post('i_claim_type');
+		if($this->input->post('i_claim_type') == '1'){
+			$data['insurance_id'] 				= $this->input->post('i_insurance_id');	
+			$data['pic_asuransi']				= $this->input->post('i_pic_asuransi');
+			$data['insurance_pph'] 				= $this->input->post('i_insurance_pph');
+			$data['claim_no'] 					= $this->input->post('i_claim_no');
+			$data['registration_dp']			= '';	
+		
+	
+		}else{
+			
+			$data['registration_dp']			= $this->input->post('i_registration_dp');	
+			$data['insurance_id'] 				= '';
+			$data['pic_asuransi']				= '';
+			$data['insurance_pph'] 				= '';
+			$data['claim_no'] 					= '';
+		}
+	
+		
+		
 		$data['check_in'] 					= $this->input->post('i_check_in');
 		$data['registration_estimation_date'] 					= $this->input->post('i_registration_estimation_date');
 		$data['check_out'] 					= "";
@@ -130,7 +150,7 @@ class Registration extends CI_Controller
 		$data['status_registration_id'] 		= 1;
 		$data['registration_description']	= $this->input->post('i_registration_description');
 		$data['own_retention']				= $this->input->post('i_own_retention');
-		$data['pic_asuransi']				= $this->input->post('i_pic_asuransi');
+		
 		$data['spk_date']					= $this->input->post('i_spk_date');
 		$data['spk_no']						= $this->input->post('i_spk_no');
 		$data['pkb_no']						= $this->input->post('i_pkb_no');
@@ -195,6 +215,7 @@ class Registration extends CI_Controller
 		$data['total_registration'] = $total_price;
 		$data['approved_total_registration'] = $total_price;
 		
+		$date=date('ymdhis');
 		
 		$item2 = array();
 		if($list_registration_photo_name){
@@ -202,11 +223,11 @@ class Registration extends CI_Controller
 		{
 			if($list_registration_photo[$key])
 			rename($this->config->item('upload_tmp').$list_registration_photo[$key],
-			$this->config->item('upload_storage')."img_m_in/".$list_registration_photo[$key]);	
+			$this->config->item('upload_storage')."img_mobil/".$date.'_'.$this->access->info['employee_id'].'_1_'.$list_registration_photo[$key]);	
 			
 			$item2[] = array(				
 				'photo_name'  => $list_registration_photo_name[$key],
-				'photo_file'  => $list_registration_photo[$key]
+				'photo_file'  => $date.'_'.$this->access->info['employee_id'].'_1_'.$list_registration_photo[$key]
 				
 			);
 			

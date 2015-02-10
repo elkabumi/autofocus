@@ -359,16 +359,16 @@ class Lookup extends CI_Controller
 		$this->dtc->site_get($id);
 	}
 	# lookup data insurance
-	function insurance_table_control()
+	function insurance_table_control($type=0)
 	{
 		$this->load->library('dtc');
-		$this->dtc->insurance_control();
+		$this->dtc->insurance_control($type);
 	}
 	
-	function insurance_lookup_id()
+	function insurance_lookup_id($type=0)
 	{
 		$this->load->library('dtc');
-		$this->dtc->insurance_get();
+		$this->dtc->insurance_get($type);
 	}
 	
 	 #lookup data product type aktif

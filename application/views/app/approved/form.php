@@ -104,6 +104,11 @@ $(function(){
 			
 		});
 	}
+		$('#print_estimasi').click(function(){
+		
+				location.href = site_url + 'registration/report/' + $('input[name="row_id"]').val();
+			
+	});
 	createDatePicker();
 	//updateAll(); 
 });
@@ -286,6 +291,8 @@ $(function(){
 		<input type="button" id="enable" value="Setujui"/>
 	
 		<input type="button" id="cancel" value="Batal"/>
+        
+           <input type="button" id="print_estimasi" value="Cetak Estimasi"  />
 	</div>
 </div>
 <!-- table contact -->

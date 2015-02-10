@@ -22,32 +22,15 @@
 		function form($registration_id = 0)
 		{
 			$data = array();
-			if($registration_id == 0){
-				$data['row_id'] = '';
-				$data['check_in'] = format_new_date($data['check_in']);
-				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
-				$data['transaction_id'] = '';
-				$data['employee_group_id'] = '';
-				$data['transaction_type_id'] = '';
-				$data['transaction_plain_first_date'] = date('d/m/Y');
-				$data['transaction_plain_last_date'] = date('d/m/Y');
-				$data['transaction_actual_date'] = date('d/m/Y');
-				$data['transaction_target_date'] = date('d/m/Y');
-				$data['transaction_detail_description'] = '';
-			}else{
+			
 				$result = $this->upload_photo_model->read_id($registration_id);
 			if($result){
 				$data = $result;
 				$data['row_id'] = $registration_id;
-				$data['transaction_id'] = $result['transaction_id'];
-				$data['employee_group_id'] = $result['employee_group_id'];
-				$data['transaction_plain_first_date'] = $result['transaction_plain_first_date'];
-				$data['transaction_plain_last_date'] = $result['transaction_plain_last_date'];
-				$data['transaction_actual_date'] = $result['transaction_actual_date'];
-				$data['transaction_target_date'] = $result['transaction_target_date'];
-				$data['status_registration_id'] = $result['status_registration_id'];
+				$data['check_in'] = format_new_date($data['check_in']);
+				$data['registration_estimation_date'] = format_new_date($data['registration_estimation_date']);
+				$data['spk_date'] = format_new_date($data['spk_date']);
 				
-			}
 				}
 			$this->load->helper('form');
 			$this->render->add_form('app/upload_photo/form', $data);
@@ -56,12 +39,8 @@
 			$this->render->add_view('app/upload_photo/transient_list', $data);	
 			$this->render->build('Foto');
 			
-			$this->render->add_view('app/upload_photo/transient_list_cat', $data);
-			$this->render->build('Cat dan Bahan');
-			
-			$this->render->build('Upload Photo');
 			$this->render->add_js('ajaxfileupload');
-			$this->render->show('Transaksi');
+			$this->render->show('Upload Foto');
 		}
 		
 		
@@ -84,44 +63,39 @@
 				$list_photo_name	= $this->input->post('transient_photo_name');
 				$list_photo_file	= $this->input->post('transient_photo_file');
 				$list_photo_type_id	= $this->input->post('transient_photo_type_id');
+				$list_photo_edit	= $this->input->post('transient_photo_edit');
+				$date = date('ymdhis');
 				
 				$items = array();
 				if($list_photo_file){
 				foreach($list_photo_file as $key => $value)
 				{
 				
-					if($list_photo_file[$key]){
+					$path = "";
+					if($list_photo_edit[$key] == 1){
+						
+							$storage = "img_mobil/";
+							$path = $this->access->info['employee_id']."_".date("ymdhms")."_".$list_photo_type_id[$key]."_";
 					
-							if($list_photo_type_id[$key] == '3'){
-									if(file_exists($this->config->item('upload_tmp').$list_photo_file[$key])){
-										rename($this->config->item('upload_tmp').$list_photo_file[$key],
-										$this->config->item('upload_storage')."img_m_out/".$list_photo_file[$key]);	
-									}
-							}else if($list_photo_type_id[$key] == '4'){
-									if(file_exists($this->config->item('upload_tmp').$list_photo_file[$key])){
-										rename($this->config->item('upload_tmp').$list_photo_file[$key],
-										$this->config->item('upload_storage')."img_m_banding/".$list_photo_file[$key]);	
-									}
-							}
+						
+					rename($this->config->item('upload_tmp').$list_photo_file[$key],
+					$this->config->item('upload_storage').$storage.$path.$list_photo_file[$key]);	
+					}
 
 						
 						
 							
-					}else{
-						$list_photo_type_id[$key] = '1';
-					}
+					
 					$items[] = array(
-									
-						
 						'photo_name'  => $list_photo_name[$key],
-						'photo_file'  	=> $list_photo_file[$key],
-						'photo_type_id' =>$list_photo_type_id[$key]
+						'photo_file'  	=> $path.$list_photo_file[$key],
+						'photo_type_id' =>	$list_photo_type_id[$key]
 					);
 					
 					
-					
 				}
 				}
+				
 				
 				$error = $this->upload_photo_model->create($id,$data, $items);
 				send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
@@ -143,14 +117,14 @@
 						if($value['photo_type_id'] == '3'){
 							$photo_type_name = 'foto mobil keluar';
 							if($value['photo_file'] != ''){
-								$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_m_out/'.$value['photo_file'].'';
+								$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_mobil/'.$value['photo_file'].'';
 							}else{
 								$foto ='';
 							}
 						}else if($value['photo_type_id'] == '4'){
 							$photo_type_name = 'foto mobil Perbandingan';
 							if($value['photo_file'] != ''){
-								$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_m_banding/'.$value['photo_file'].'';
+								$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_mobil/'.$value['photo_file'].'';
 							}else{
 								$foto ='';
 							}
@@ -164,7 +138,8 @@
 											'transient_photo_id' => $value['photo_id'])),
 						form_transient_pair('transient_photo_v',$foto, $foto, 
 										array(
-											'transient_photo_file' => $value['photo_file'])),
+											'transient_photo_file' => $value['photo_file'],
+											'transient_photo_edit' => 0)),
 						form_transient_pair('transient_photo_type_id',$photo_type_name,$value['photo_type_id']),		
 					
 				);
@@ -211,6 +186,7 @@
 					$data['transient_photo_id'] 			= '';
 					$data['transient_photo_name']			= '';	
 					$data['transient_photo_file'] 			=  '';
+					$data['transient_photo_edit'] 			=  '1';
 					
 					
 			} else {
@@ -221,6 +197,7 @@
 					$data['transient_photo_id'] 			= array_shift($this->input->post('transient_photo_id'));
 					$data['transient_photo_name'] 			= array_shift($this->input->post('transient_photo_name'));
 					$data['transient_photo_file']			= array_shift($this->input->post('transient_photo_file'));
+					$data['transient_photo_edit']			= array_shift($this->input->post('transient_photo_edit'));
 			}		
 			$data['photo_type_id'] 		= $this->global_model->get_type_photo();
 			$this->load->helper('form');
@@ -249,6 +226,7 @@
 			
 			$i_photo_type_id	= $this->input->post('i_photo_type_id');
 			$i_photo_file	= $this->input->post('i_photo_file');
+			$i_photo_edit	= $this->input->post('i_photo_edit');
 			
 			if($i_photo_type_id == '3'){$photo_type_name = 'foto mobil keluar';}else if($i_photo_type_id == '4') {$photo_type_name = 'foto mobil Perbandingan';}
 		
@@ -260,7 +238,8 @@
 											'transient_photo_id' => $i_photo_id)),
 						form_transient_pair('transient_photo_v',$foto, $foto, 
 										array(
-											'transient_photo_file' => $i_photo_file)),
+											'transient_photo_file' => $i_photo_file,
+											'transient_photo_edit' => $i_photo_edit)),
 						form_transient_pair('transient_photo_type_id',$photo_type_name,$i_photo_type_id),		
 			);
 			 

@@ -66,7 +66,8 @@ class Summary_report extends CI_Controller
 
 			 	break;
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
-				case 5: $status = "<div class='registration_status5'>Mobil Keluar</div>"; break;
+				case 5: $status = "<div class='registration_status5'>Pembayaran belum lunas</div>"; break;
+				case 6: $status = "<div class='registration_status5'>Pembayaran Lunas</div>"; break;
 			}
 
 			if($value['status_registration_id']==1 || $value['status_registration_id'] == 2){

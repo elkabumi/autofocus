@@ -151,7 +151,7 @@ $total_after_discount = $total_transaction - $discount;
   </tr>
   <tr>
     <td width="15%"></td>
-    <td width="52%" align="right"><strong>-5.00/5.00% Labaur Discount (Rp)</strong></td>
+    <td width="52%" align="right"><strong>-<?=$insurance_pph?>/<?=$insurance_pph?> Labaur Discount (Rp)</strong></td>
     <td style="border-bottom:1px solid #999" width="33%" align="right"><?=number_format($discount)?></td>
   </tr>
   <tr>
