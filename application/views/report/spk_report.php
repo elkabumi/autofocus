@@ -87,15 +87,17 @@
 </table>
 </div>
 <p><b>Detail Kerugian</b></p>
+<div style="padding-top:50px" class="">
+<div class=""><b>Sperpart</b></div>
 <div class="">
-<h3>Jasa:</h3>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-weight:bold;">
-  <tr>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr style="border-bottom-style:solid">
    
-    <td width="5%">No</b></td>
-    <td width="15%">Deskripsi</td>
-    <td width="16%" align="right">Kategori</td>
-
+    <td width="5%">No</td>
+    <td width="15%">Qty</td>
+    <td width="30%">Part No</td>
+    <td width="45%">Nama Part</td>
+	<td width="60%" align="right">Jumlah</td>
   </tr>
   </table>
   </div>
@@ -103,57 +105,53 @@
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <?php 
   $no = 1;
-  foreach($data_detail as $item): 
-  switch($item['product_category_id']) {
-	  	case '2':
-  ?>
+   $total_sperpart= 0;
+  foreach($data_sperpart as $item): ?>
   <tr>
    
     <td width="5%"><?=$no?></td>
-    <td width="15%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
-    <td width="16%" align="right"><?=$item['pst_name']?></td>
-  
+    <td width="15%"><?=$item['rs_qty']?></td>
+    <td width="30%"><?=$item['rs_part_number']?></td>
+    <td width="45%"><?=$item['rs_name']?></td>
+    <td width="60%" align="right"><?=number_format($item['rs_repair'], 0)?></td>
   </tr>
   <?php 
+  $total_sperpart = $total_sperpart + $item['rs_repair'];
     $no++;
-	break;
-  }
   endforeach; 
 
   ?>
-  </div>
   </table>
-  <h3>Sperpart:</h3>
- <div class="">
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-weight:bold;">
+  </div>
+<div style="padding-top:10px">
+<div class=""><b>Jasa</b></div>
+<div class="">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
    
-    <td width="5%">No</b></td>
-    <td width="15%">Deskripsi</td>
-    <td width="16%" align="right">Kategori</td>
-
+    <td width="5%">No</td>
+    <td width="15%">Nama jasa</td>
+    <td width="40%" align="right">Jumlah</td>
   </tr>
   </table>
-</div>
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <?php
-  $no_sperpart = 1;
-  foreach($data_detail as $item):
-  switch($item['product_category_id']) {
-  case '1':
-  ?>
+  </div>
+  <div class="">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <?php 
+  $no = 1;
+   $total_transaction= 0;
+  foreach($data_detail as $item): ?>
   <tr>
-    <td width="5%"><?=$no_sperpart?></td>
-    <td width="15%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
-    <td width="16%" align="right"><?=$item['pst_name']?></td>
-  
+   
+    <td width="5%"><?=$no?></td>
+    <td width="15%"><?=$item['product_name']?></td>
+    <td width="40%" align="right"><?=number_format($item['detail_registration_price'], 0)?></td>
   </tr>
-  <?php
-    $no_sperpart++;
-	break;
-  }
+  <?php 
+  $total_transaction = $total_transaction + $item['detail_registration_price'];
+    $no++;
   endforeach; 
-  
+
   ?>
   </table>
 </div>

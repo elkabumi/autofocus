@@ -38,8 +38,9 @@ class Pkb extends CI_Controller
 			}
 			
 		$data_detail = $this->pkb_model->get_data_detail($id);
+		$data_sperpart = $this->pkb_model->get_data_sperpart($id);
 	   
-	   $this->global_model->create_report_registration('Surat Perintah Kerja', 'report/pkb_report.php', $data, $data_detail, 'header.php');
+	   $this->global_model->create_report_pkb('Surat Perintah Kerja', 'report/pkb_report.php', $data, $data_detail, $data_sperpart,'header.php');
 	}
 	}
 	

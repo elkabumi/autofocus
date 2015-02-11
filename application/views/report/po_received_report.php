@@ -61,7 +61,9 @@
   </tr>
 </table>
 </div>
-<div class="table_content"><b>Sperpart</b></div>
+<div class="title_report1"><b>Biaya Estimiasi</b></div>
+
+<div class="table_content"><b>Sparepart</b></div>
 <div class="table_title">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -86,10 +88,10 @@
     <td width="15%"><?=$item['rs_qty']?></td>
     <td width="30%"><?=$item['rs_part_number']?></td>
     <td width="45%"><?=$item['rs_name']?></td>
-    <td width="60%" align="right"><?=number_format($item['rs_repair'], 0)?></td>
+    <td width="60%" align="right"><?=number_format($item['rs_approved_repair'], 0)?></td>
   </tr>
   <?php 
-  $total_sperpart = $total_sperpart + $item['rs_repair'];
+  $total_sperpart = $total_sperpart + $item['rs_approved_repair'];
     $no++;
   endforeach; 
 
@@ -127,10 +129,10 @@
    
     <td width="5%"><?=$no?></td>
     <td width="15%"><?=$item['product_name']?></td>
-    <td width="40%" align="right"><?=number_format($item['detail_registration_price'], 0)?></td>
+    <td width="40%" align="right"><?=number_format($item['detail_registration_approved_price'], 0)?></td>
   </tr>
   <?php 
-  $total_transaction = $total_transaction + $item['detail_registration_price'];
+  $total_transaction = $total_transaction + $item['detail_registration_approved_price'];
     $no++;
   endforeach; 
 
@@ -146,6 +148,58 @@
   </tr>
   </table>
   </div>
+
+
+
+<div class="title_report1" style="margin-top:17px;"><b>Biaya Pengerjaan</b></div>
+
+<div class="table_content"><b>Sparepart</b></div>
+<div class="table_title">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   
+    <td width="5%">No</td>
+    <td width="15%">Qty</td>
+    <td width="30%">Part No</td>
+    <td width="45%">Nama Part</td>
+	<td width="60%" align="right">Jumlah</td>
+  </tr>
+  </table>
+  </div>
+  <div class="table_content">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <?php 
+  $no = 1;
+   $total_sperpart= 0;
+  foreach($data_sperpart as $item): ?>
+  <tr>
+   
+    <td width="5%"><?=$no?></td>
+    <td width="15%"><?=$item['rs_qty']?></td>
+    <td width="30%"><?=$item['rs_part_number']?></td>
+    <td width="45%"><?=$item['rs_name']?></td>
+    <td width="60%" align="right"><?=number_format($item['rs_approved_repair'], 0)?></td>
+  </tr>
+  <?php 
+  $total_sperpart = $total_sperpart + $item['rs_approved_repair'];
+    $no++;
+  endforeach; 
+
+  ?>
+  </table>
+  </div>
+  <div class="table_footer">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td width="15%"></td>
+    <td width="52%" align="right"><strong>Total Parts (Rp)</strong></td>
+    <td width="33%" align="right"><?=number_format($total_sperpart, 0)?></td>
+  </tr>
+  </table>
+</div>
+
+  
+  
 <div class="table_content"><b>Data Progres Pengerjaan</b></div>
 <div class="table_title">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -153,10 +207,10 @@
    
     <td width="5%">No</td>
     <td width="15%">Tanggal</td>
-    <td width="15%">Jenis Perbaikan</td>
-    <td width="15%">Harga</td>
-    <td width="15%">Progress(%)</td>
-    <td width="40%" align="right">Harga Borongan</td>
+    <td width="40%">Jenis Perbaikan</td>
+    <td width="10%">Harga</td>
+    <td width="10%">Progress(%)</td>
+    <td width="20%" align="right">Harga Borongan</td>
   </tr>
   </table>
   </div>
@@ -170,10 +224,10 @@
    
     <td width="5%"><?=$no?></td>
     <td width="15%"><?=$item['transaction_detail_date']?></td>
-    <td width="15%"><?=$item['workshop_service_name']?></td>
-    <td width="15%"><?=$item['workshop_service_price']?></td>
-    <td width="15%"><?=$item['transaction_detail_progress']?></td>
-    <td width="40%" align="right"><?=number_format($item['workshop_service_job_price'], 0)?></td>
+    <td width="40%"><?=$item['workshop_service_name']?></td>
+    <td width="10%"><?=$item['workshop_service_price']?></td>
+    <td width="10%"><?=$item['transaction_detail_progress']?></td>
+    <td width="20%" align="right"><?=number_format($item['workshop_service_job_price'], 0)?></td>
   </tr>
   <?php 
   $total_jasa = $total_jasa + $item['workshop_service_job_price'];
@@ -192,13 +246,13 @@
   </tr>
   </table>
   </div>
-  <div class="table_content"><b>Data Cat</b></div>
+  <div class="table_content"><b>Data Cat/Bahan</b></div>
 <div class="table_title">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
    
     <td width="5%">No</td>
-    <td width="15%">Nama Bahan/Cat</td>
+    <td width="15%">Nama</td>
     <td width="30%">Qty</td>
     <td width="45%">Keterangan</td>
 	<td width="60%" align="right">Harga</td>
@@ -230,25 +284,58 @@
  
 <div class="table_footer">
 <?
-$grand_total = $total_cat + $total_jasa + $total_transaction + $total_sperpart;
+//$grand_total = $total_cat + $total_jasa + $total_transaction + $total_sperpart;
 
 ?>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
    <tr>
     <td width="15%"></td>
-    <td width="52%" align="right"><strong>Total Parts (Rp)</strong></td>
+    <td width="52%" align="right"><strong>Total Cat/Bahan (Rp)</strong></td>
     <td width="33%" align="right"><?=number_format($total_cat, 0)?></td>
   </tr>
-   <tr>
-    <td width="15%"></td>
-    <td width="52%" align="right"><strong>Grand Total(Rp)</strong></td>
-    <td style="border-top:1px solid #999" width="33%" align="right"><?=number_format($grand_total, 0)?></td>
-  </tr>
+ 
   </table>
+  <br />
+  <br />
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="54%">&nbsp;</td>
+    <td width="46%" align="right"><div style="border:1px solid #999; width:100%; font-size:16px; text-align:right; float:right;">
+      <table width="100%" border="0" cellspacing="0" cellpadding="4">
+        <tr>
+          <td width="70%">Total Biaya Estimasi</td>
+          <td width="30%" align="right"><?php
+		  
+		  $total_estimasi = $total_sperpart + $total_transaction;
+          echo number_format($total_estimasi);
+		  ?></td>
+        </tr>
+        <tr>
+          <td>Total Biaya Pengerjaan</td>
+          <td align="right"><?php
+          $total_pengerjaan = $total_sperpart + $total_jasa + $total_cat;
+		  echo number_format($total_pengerjaan);
+		  ?></td>
+        </tr>
+        <tr>
+          <td bgcolor="#CCCCCC"><strong>LABA</strong></td>
+          <td align="right" bgcolor="#CCCCCC"><strong>
+            <?php
+          $laba = $total_estimasi - $total_pengerjaan;
+		  echo number_format($laba);
+		  ?>
+          </strong></td>
+        </tr>
+      </table>
+    </div></td>
+  </tr>
+</table>
+
+  
 </div>
   <table>
   <tr>
-  <td width="100%" align="left"><?= "(".Terbilang($grand_total).".Rupiah)" ?></td>
+  <td width="100%" align="left"><?php // "(".Terbilang($grand_total).".Rupiah)" ?></td>
   </tr>
   <div class="tanda_tangan">
   <table width="100%">

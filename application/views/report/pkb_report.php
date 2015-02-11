@@ -64,84 +64,75 @@
 </table>
 </div>
 </div>
+<div style="padding-top:50px" class="">
+<div class=""><b>Sperpart</b></div>
 <div class="">
-<h3>Jasa:</h3>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-weight:bold;">
-  <tr>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr style="border-bottom-style:solid">
    
-    <td width="30%">No</b></td>
-    <td width="60%">Deskripsi</td>
-    <td width="25%">No</td>
-    <td width="40%">Deskripsi</td>
-    
-
+    <td width="5%">No</td>
+    <td width="15%">Qty</td>
+    <td width="30%">Part No</td>
+    <td width="45%">Nama Part</td>
+	<td width="60%" align="right">Jumlah</td>
   </tr>
   </table>
-</div>
+  </div>
+  <div class="">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <?php 
-  $no_jasa = 1;
-  foreach($data_detail as $item):
-  switch($no_jasa % 2 . $item['product_category_id']) {
-	  	case '12':
-  ?>
-  <tr>
-    <td width="30%"><?=$no_jasa?></td>
-    <td width="60%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
-    <? 
-		$no_jasa++;
-		break;
-		case '02':
-	?>
-    <td width="25%"><?=$no_jasa?></td>
-    <td width="40%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
-  </tr>
-  <?php 
-  $no_jasa++;
-		break;
-  }
-  endforeach;
-  ?>
-  </table>
- <div class="">
- <h3>Sperpart:</h3>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-weight:bold;">
+  $no = 1;
+   $total_sperpart= 0;
+  foreach($data_sperpart as $item): ?>
   <tr>
    
-    <td width="30%">No</b></td>
-    <td width="60%">Deskripsi</td>
-    <td width="25%">No</td>
-    <td width="40%">Deskripsi</td>
-
-  </tr>
-  </table>
-</div>
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <?php
-  $no_sperpart = 1;
-  foreach($data_detail as $item):
-  switch($no_sperpart % 2 . $item['product_category_id']) {
-  		case '11':
-  ?>
-  <tr>
-    <td width="30%"><?=$no_sperpart?></td>
-    <td width="60%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
-    <? 
-		$no_sperpart++;
-		break;
-		case '01':
-	?>
-    <td width="25%"><?=$no_sperpart?></td>
-    <td width="40%"><?=$item['product_name']." (".$item['product_category_name'].")"?></td>
+    <td width="5%"><?=$no?></td>
+    <td width="15%"><?=$item['rs_qty']?></td>
+    <td width="30%"><?=$item['rs_part_number']?></td>
+    <td width="45%"><?=$item['rs_name']?></td>
+    <td width="60%" align="right"><?=number_format($item['rs_repair'], 0)?></td>
   </tr>
   <?php 
-  $no_sperpart++;
-		break;
-  }
-  endforeach;
+  $total_sperpart = $total_sperpart + $item['rs_repair'];
+    $no++;
+  endforeach; 
+
   ?>
   </table>
-</div>
+  </div>
+<div style="padding-top:10px">
+<div class=""><b>Jasa</b></div>
+<div class="">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   
+    <td width="5%">No</td>
+    <td width="15%">Nama jasa</td>
+    <td width="40%" align="right">Jumlah</td>
+  </tr>
+  </table>
+  </div>
+  <div class="">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <?php 
+  $no = 1;
+   $total_transaction= 0;
+  foreach($data_detail as $item): ?>
+  <tr>
+   
+    <td width="5%"><?=$no?></td>
+    <td width="15%"><?=$item['product_name']?></td>
+    <td width="40%" align="right"><?=number_format($item['detail_registration_price'], 0)?></td>
+  </tr>
+  <?php 
+  $total_transaction = $total_transaction + $item['detail_registration_price'];
+    $no++;
+  endforeach; 
+
+  ?>
+  </table>
+  </div>
+  </div>
 
 <div class="proses">
 <hr style="margin-top:0px">

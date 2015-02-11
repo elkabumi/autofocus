@@ -135,8 +135,8 @@ $(function(){
 	}
 
 	function cek_status(){
-		var type = $('input[name="i_claim_type"]').val();
-
+		var type = '<?= $claim_type ?>';//$('input[name="i_claim_type"]').val();
+		
 		if(type == 1){
 			var or_sisa 	= $('input[name="i_own_retention_sisa"]').val();
 			var pembayaran_sisa 	= $('input[name="i_pembayaran_sisa"]').val();
@@ -162,6 +162,7 @@ $(function(){
 				$('input[name="i_status"]').val("0");
 				$('input[name="i_status_name"]').val("BELUM LUNAS");
 			}
+			
 		}
 	}
 
@@ -474,7 +475,7 @@ $(function(){
       <td>Total Biaya setelah PPH</td>
          <td>:</td>
        <td><input name="i_total_biaya_estimasi_after_pph" readonly="readonly" type="text" id="i_total_biaya_estimasi_after_pph" value="<?=$total_biaya_estimasi_after_pph?>" />
- <input type="text" name="i_payment_id" class="com_id" value="<?=$payment_id?>" />
+ <input type="hidden" name="i_payment_id" class="com_id" value="<?=$payment_id?>" />
        </td>
      </tr>
    </table>
@@ -521,7 +522,7 @@ $(function(){
      <tr>
    <td>Status</td>
          <td>:</td>
-       <td><input name="i_status" readonly="readonly" type="text" id="i_status" value="<?= $status ?>" />
+       <td><input name="i_status" readonly="readonly" type="hidden" id="i_status" value="<?= $status ?>" />
 <input name="i_status_name" readonly="readonly" type="text" id="i_status_name" value="<?= $status_name ?>" />
        </td>
      </tr>
@@ -538,7 +539,9 @@ $(function(){
       <tr>
    <td>Dibayar</td>
          <td>:</td>
-       <td><input name="i_pembayaran_dibayar"  type="text" id="i_pembayaran_dibayar" value="<?=$pembayaran_dibayar?>" /></td>
+       <td>
+<input name="i_pembayaran"  type="hidden" id="i_pembayaran" value="<?=$pembayaran?>" />
+       	<input name="i_pembayaran_dibayar"  type="text" id="i_pembayaran_dibayar" value="<?=$pembayaran_dibayar?>" /></td>
      </tr>
       <tr>
    <td>Sisa</td>
@@ -548,7 +551,7 @@ $(function(){
      <tr>
    <td>Status</td>
          <td>:</td>
-       <td><input name="i_status" readonly="readonly" type="text" id="i_status" value="<?= $status ?>" />
+       <td><input name="i_status" readonly="readonly" type="hidden" id="i_status" value="<?= $status ?>" />
 		<input name="i_status_name" readonly="readonly" type="text" id="i_status_name" value="<?= $status_name ?>" />
        </td>
      </tr>

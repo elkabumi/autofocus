@@ -58,7 +58,7 @@ function ajaxFileUpload()
     <input name="i_photo_name" type="text" style="width:300px !important" id="i_photo_name" value="<?=$transient_photo_name ?>" />
    <input type="hidden" name="i_index" value="<?=$index?>" />
     <input type="hidden" name="i_photo_id" value="<?=$transient_photo_id?>" />
-    <input type="text" name="i_photo_edit" value="<?=$transient_photo_edit?>" />
+    <input type="hidden" name="i_photo_edit" value="<?=$transient_photo_edit?>" />
      <input type="hidden" name="i_photo_type_id" value="<?=$transient_photo_type_id?>" />
       </td>
     </tr>

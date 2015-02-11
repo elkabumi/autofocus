@@ -71,7 +71,7 @@
 				foreach($list_photo_file as $key => $value)
 				{
 				
-				
+					$path = "";
 					if($list_photo_edit[$key] == 1){
 						
 							$storage = "img_mobil/";
