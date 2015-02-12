@@ -72,7 +72,9 @@
     <td width="15%">Qty</td>
     <td width="30%">Part No</td>
     <td width="45%">Nama Part</td>
-	<td width="60%" align="right">Jumlah</td>
+     
+	<td width="30%" align="right">Harga</td>
+  <td width="30%" align="right">Harga disetujui</td>
   </tr>
   </table>
   </div>
@@ -88,7 +90,8 @@
     <td width="15%"><?=$item['rs_qty']?></td>
     <td width="30%"><?=$item['rs_part_number']?></td>
     <td width="45%"><?=$item['rs_name']?></td>
-    <td width="60%" align="right"><?=number_format($item['rs_approved_repair'], 0)?></td>
+     <td width="30%" align="right"><?=$item['rs_repair']?></td>
+    <td width="30%" align="right"><?=number_format($item['rs_approved_repair'], 0)?></td>
   </tr>
   <?php 
   $total_sperpart = $total_sperpart + $item['rs_approved_repair'];
@@ -113,9 +116,10 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
    
-    <td width="5%">No</td>
-    <td width="15%">Jenis Perbaikan</td>
-    <td width="40%" align="right">Jumlah</td>
+    <td width="10%">No</td>
+    <td width="50%">Jenis Perbaikan</td>
+    <td width="20%" align="right">Harga</td>
+    <td width="20%" align="right">Harga Disetujui</td>
   </tr>
   </table>
   </div>
@@ -127,9 +131,10 @@
   foreach($data_detail as $item): ?>
   <tr>
    
-    <td width="5%"><?=$no?></td>
-    <td width="15%"><?=$item['product_name']?></td>
-    <td width="40%" align="right"><?=number_format($item['detail_registration_approved_price'], 0)?></td>
+    <td width="10%"><?=$no?></td>
+    <td width="50%"><?=$item['product_name']?></td>
+    <td width="20%" align="right"><?=number_format($item['detail_registration_price'], 0)?></td>
+    <td width="20%" align="right"><?=number_format($item['detail_registration_approved_price'], 0)?></td>
   </tr>
   <?php 
   $total_transaction = $total_transaction + $item['detail_registration_approved_price'];
@@ -143,7 +148,7 @@
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
    <tr>
     <td width="15%"></td>
-    <td width="52%" align="right"><strong>Total Panel(Rp)</strong></td>
+    <td width="52%" align="right"><strong>Total Panel (Rp)</strong></td>
     <td width="33%" align="right"><?=number_format($total_transaction, 0)?></td>
   </tr>
   </table>
@@ -162,7 +167,8 @@
     <td width="15%">Qty</td>
     <td width="30%">Part No</td>
     <td width="45%">Nama Part</td>
-	<td width="60%" align="right">Jumlah</td>
+	<td width="60%" align="right">Harga</td>
+ 
   </tr>
   </table>
   </div>
@@ -178,6 +184,7 @@
     <td width="15%"><?=$item['rs_qty']?></td>
     <td width="30%"><?=$item['rs_part_number']?></td>
     <td width="45%"><?=$item['rs_name']?></td>
+
     <td width="60%" align="right"><?=number_format($item['rs_approved_repair'], 0)?></td>
   </tr>
   <?php 
@@ -318,7 +325,7 @@
 		  ?></td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC"><strong>LABA</strong></td>
+          <td bgcolor="#CCCCCC"><strong>LABA / RUGI</strong></td>
           <td align="right" bgcolor="#CCCCCC"><strong>
             <?php
           $laba = $total_estimasi - $total_pengerjaan;

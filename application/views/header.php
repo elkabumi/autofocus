@@ -55,10 +55,11 @@ body{
 
 }
 .title_report1{
-	margin-top:4px;
-	margin-bottom:-4px;
+	margin-top:10px;
+	margin-bottom:10px;
 	text-align:center;
 	font-size:13px;
+	text-transform: uppercase;
 
 }
 </style>

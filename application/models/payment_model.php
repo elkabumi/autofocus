@@ -151,6 +151,11 @@ class Payment_model extends CI_Model
 		}else{
 			$data_update['status_registration_id'] = 5;
 		}
+
+		if($data_update['status_registration_id'] == 6){
+			$data_update['check_out'] = date("Y-m-d");
+		}
+
 		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
 		$this->db->update('registrations', $data_update);
 
@@ -173,6 +178,11 @@ class Payment_model extends CI_Model
 		}else{
 			$data_update['status_registration_id'] = 5;
 		}
+
+		if($data_update['status_registration_id'] == 6){
+			$data_update['check_out'] = date("Y-m-d");
+		}
+
 		$this->db->where('registration_id', $data['registration_id']); // data yg mana yang akan di update
 		$this->db->update('registrations', $data_update);
 

@@ -374,7 +374,8 @@
 				$data['car_nopol'] = $result['car_nopol'];
 				$data['insurance_pph'] = $result['insurance_pph'];	
 				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
-				
+				$data['check_in'] = format_new_date($data['check_in']);
+				$data['check_out'] = format_new_date($data['check_out']);
 			}
 		//$data='';
 			
