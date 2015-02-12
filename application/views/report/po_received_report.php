@@ -61,6 +61,8 @@
   </tr>
 </table>
 </div>
+<div class="title_report1"><b>Biaya Estimiasi</b></div>
+
 <div class="table_content"><b>Sparepart</b></div>
 <div class="table_title">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -146,6 +148,58 @@
   </tr>
   </table>
   </div>
+
+
+
+<div class="title_report1" style="margin-top:17px;"><b>Biaya Pengerjaan</b></div>
+
+<div class="table_content"><b>Sparepart</b></div>
+<div class="table_title">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   
+    <td width="5%">No</td>
+    <td width="15%">Qty</td>
+    <td width="30%">Part No</td>
+    <td width="45%">Nama Part</td>
+	<td width="60%" align="right">Jumlah</td>
+  </tr>
+  </table>
+  </div>
+  <div class="table_content">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <?php 
+  $no = 1;
+   $total_sperpart= 0;
+  foreach($data_sperpart as $item): ?>
+  <tr>
+   
+    <td width="5%"><?=$no?></td>
+    <td width="15%"><?=$item['rs_qty']?></td>
+    <td width="30%"><?=$item['rs_part_number']?></td>
+    <td width="45%"><?=$item['rs_name']?></td>
+    <td width="60%" align="right"><?=number_format($item['rs_approved_repair'], 0)?></td>
+  </tr>
+  <?php 
+  $total_sperpart = $total_sperpart + $item['rs_approved_repair'];
+    $no++;
+  endforeach; 
+
+  ?>
+  </table>
+  </div>
+  <div class="table_footer">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td width="15%"></td>
+    <td width="52%" align="right"><strong>Total Parts (Rp)</strong></td>
+    <td width="33%" align="right"><?=number_format($total_sperpart, 0)?></td>
+  </tr>
+  </table>
+</div>
+
+  
+  
 <div class="table_content"><b>Data Progres Pengerjaan</b></div>
 <div class="table_title">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">

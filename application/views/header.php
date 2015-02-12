@@ -54,6 +54,13 @@ body{
 	margin:auto;
 
 }
+.title_report1{
+	margin-top:4px;
+	margin-bottom:-4px;
+	text-align:center;
+	font-size:13px;
+
+}
 </style>
 
 <div class="header">
