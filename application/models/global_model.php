@@ -410,7 +410,7 @@ class Global_model extends CI_Model
 	   	
 
 	    $mydata = $this->load->view($header,$data,TRUE) ;
-	    $mydata .= $this->load->view($content, array('data' => $data, 'data_detail' => $data_detail,'data_sperpart' => $data_sperpart,'data_jasa' =>$data_jasa,'data_cat' => $data_cat) ,TRUE) ;
+	    $mydata .= $this->load->view($content, array('data' => $data, 'data_detail' => $data_detail,'data_sperpart' => $data_sperpart,'data_jasa' =>$data_jasa,'data_cat' => $data_cat, 'title' => $title) ,TRUE) ;
 	    $mydata .= $this->load->view('footer.php',$data,TRUE) ;
 	    //Load html view
 	    $this->html2pdf->html($mydata);
