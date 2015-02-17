@@ -31,6 +31,7 @@ class Salary_report extends CI_Controller{
 	   $day 	= substr($date1, 0,2); 
 	   $month 	= substr($date1, 2,2);
 	   $year 	= substr($date1, 4,4);
+	  
 	   $day2 	= substr($date2, 0,2); 
 	   $month2 	= substr($date2, 2,2);
 	   $year2 	= substr($date2, 4,4);
@@ -41,7 +42,7 @@ class Salary_report extends CI_Controller{
 	   $data = $this->salary_report_model->read_date($date_1,$date_2);
 	   $total = $this->salary_report_model->get_total($date_1,$date_2);
 	  
-	  	$this->global_model->create_salary_report('Laporan Transaksi','report/salary_report.php', $data,$total,'header.php');
+	  		$this->global_model->create_salary_report('Laporan Transaksi','report/salary_report.php', $data,$total,'header.php');
 	}
 	
 }
