@@ -89,8 +89,8 @@ class Workshop_service_model extends CI_Model{
 			$data[] = array(
 				$row['workshop_service_id'], 
 				$row['workshop_service_name'],
-				$row['workshop_service_price'],
-				$row['workshop_service_job_price'],
+				tool_money_format($row['workshop_service_price']),
+				tool_money_format($row['workshop_service_job_price']),
 				$workshop_service_date,
 				$active,
 				$status

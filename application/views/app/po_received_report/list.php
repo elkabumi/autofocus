@@ -33,9 +33,10 @@ $(function(){
       		<th>No Klaim</th>
       		<th>Total Biaya Estimasi</th>
             <th>Total Biaya Pengerjaan</th>
-            <th>Laba</th>
+            <th>Laba/Rugi</th>
             <th>Status</th>
-            <th>Config</th>
+            <th>Detail</th>
+            <th>Kwitansi</th>
 		</tr> 
 	</thead> 
 	<tbody> 	

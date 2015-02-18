@@ -2,7 +2,6 @@
 <style>
 body{
 	font-size:11px;
-	
 	font-family:Arial, Helvetica, sans-serif;
 	
 }
@@ -11,14 +10,14 @@ body{
 .header_title{
 	font-size:25px;
 	font-weight:bold;
-	font-family:"MS Serif", "New York", serif;
+	color:#960;
 	letter-spacing:2;
 }
 .judul_title{
-	font-size:15px;
+	font-size:16px;
 	font-weight:bold;
-	font-family:"MS Serif", "New York", serif;
-	letter-spacing:2;
+	color:#960;
+
 }
 .footer{
 	bottom:0px;
@@ -55,11 +54,28 @@ body{
 
 }
 .title_report1{
-	margin-top:4px;
-	margin-bottom:-4px;
+	margin-top:10px;
+	margin-bottom:10px;
 	text-align:center;
 	font-size:13px;
+	text-transform: uppercase;
 
+}
+.hr_total{
+	color:#eee;
+}
+.tanda_tangan{
+	padding-top:100px;
+	margin-left:10px;
+	
+}
+.signature{
+	border-top:1px solid #999;
+	padding-top:5px !important;
+}
+.terbilang{
+	text-transform:uppercase;
+	font-weight:bold;
 }
 </style>
 

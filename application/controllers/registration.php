@@ -43,7 +43,8 @@ class Registration extends CI_Controller
 		$data['spk_date']					= '';
 		$data['spk_no']						= '';
 		$data['pkb_no']						= '';
-		$data['claim_no']						= '';
+		$data['claim_no']					= '';
+		$data['incident_date']				= '';
 	
 		
 		$this->load->helper('form');
@@ -60,11 +61,6 @@ class Registration extends CI_Controller
 		
 		$this->render->add_view('app/registration/transient_list2');
 		$this->render->build('Photo Before');
-		
-	
-		
-		//$this->render->add_view('app/registration/form_end', $data);
-		//$this->render->build('Pembayaran');
 		
 		
 		$this->render->add_js('ajaxfileupload');
@@ -104,6 +100,7 @@ class Registration extends CI_Controller
 		if($this->input->post('i_claim_type') == '1'){
 			$this->form_validation->set_rules('i_own_retention','OR','trim|required|is_numeric');
 		}
+		$this->form_validation->set_rules('i_incident_date','Tanggal Kejadian','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_check_in','Tanggal Masuk','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_registration_estimation_date','Tanggal Estimasi Keluar','trim|required|valid_date|sql_date');
 		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required');
@@ -142,7 +139,7 @@ class Registration extends CI_Controller
 		}
 	
 		
-		
+		$data['incident_date'] 				= $this->input->post('i_incident_date');
 		$data['check_in'] 					= $this->input->post('i_check_in');
 		$data['registration_estimation_date'] 					= $this->input->post('i_registration_estimation_date');
 		$data['check_out'] 					= "";

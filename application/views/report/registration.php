@@ -54,11 +54,6 @@
     <td>:</td>
     <td><?=($check_in)?></td>
   </tr>
-    <tr>
-    <td>Check-out Date</td>
-    <td>:</td>
-    <td><?=($check_out)?></td>
-  </tr>
 </table>
 </div>
 <div class="table_content"><b>Sperpart</b></div>

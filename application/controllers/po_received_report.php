@@ -1,15 +1,15 @@
 <?php
 	if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-			class Po_received_report extends CI_Controller{
-			function __construct(){
+	class Po_received_report extends CI_Controller{
+		function __construct(){
 			parent::__construct();
 			$this->load->library('render');
 			$this->load->model('po_received_report_model');
 			$this->load->library('access');
 			$this->access->set_module('transaction.payment');
 			$this->access->user_page();
-			}
-			function index(){
+		}
+		function index(){
 			$this->render->add_view('app/po_received_report/list');
 			$this->render->build('Detail Per Mobil');
 			$this->render->show('Detail Per Mobil');
@@ -360,7 +360,7 @@
 			}
 		}
 		
-		function report($id = 0){
+	function report($id = 0){
 	
 	if($id){
 	   $this->load->model('global_model');
@@ -374,7 +374,11 @@
 				$data['car_nopol'] = $result['car_nopol'];
 				$data['insurance_pph'] = $result['insurance_pph'];	
 				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
-				
+				$data['check_in'] = format_new_date($data['check_in']);
+				$data['check_out'] = format_new_date($data['check_out']);
+				$data['registration_date'] = format_new_date($data['registration_date']);
+				$data['incident_date'] = format_new_date($data['incident_date']);
+				$data['claim_type_name'] = ($data['claim_type'] == 1) ? "Asuransi" : "Pribadi";
 			}
 		//$data='';
 			
@@ -383,8 +387,41 @@
 		$data_jasa = $this->po_received_report_model->get_data_jasa($id);
 		$data_cat = $this->po_received_report_model->get_data_cat($id);
 	   
-	   $this->global_model->create_report_detail_mobil('Laporan Detail Per Mobil', 'report/po_received_report.php', $data, $data_detail,$data_sperpart,$data_jasa,$data_cat,'header.php');
-			}
+	   $this->global_model->create_report_detail_mobil('LAPORAN DETAIL PER MOBIL', 'report/po_received_report.php', $data, $data_detail,$data_sperpart,$data_jasa,$data_cat,'header.php');
 		}
 	}
+
+	function report_kwitansi($id = 0){
+	
+	if($id){
+	   $this->load->model('global_model');
+	   
+	   $result = $this->po_received_report_model->read_id($id);
+			
+			if ($result) // cek dulu apakah data ditemukan 
+			{
+				$data = $result;
+				$data['row_id'] = $id;		
+				$data['car_nopol'] = $result['car_nopol'];
+				$data['insurance_pph'] = $result['insurance_pph'];	
+				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
+				$data['check_in'] = format_new_date($data['check_in']);
+				$data['check_out'] = format_new_date($data['check_out']);
+				$data['registration_date'] = format_new_date($data['registration_date']);
+				$data['incident_date'] = format_new_date($data['incident_date']);
+				$data['claim_type_name'] = ($data['claim_type'] == 1) ? "Asuransi" : "Pribadi";
+			}
+		//$data='';
+			
+		$data_detail = $this->po_received_report_model->get_data_detail($id);
+		$data_sperpart = $this->po_received_report_model->get_data_sperpart($id);
+		$data_jasa = $this->po_received_report_model->get_data_jasa($id);
+		$data_cat = $this->po_received_report_model->get_data_cat($id);
+	   
+	   $this->po_received_report_model->create_report_kwitansi('KWITANSI PERBAIKAN', 'report/report_kwitansi.php', $data, $data_detail,$data_sperpart,$data_jasa,$data_cat,'header.php');
+		}
+	}
+
+
+}
 			

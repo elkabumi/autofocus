@@ -1,4 +1,4 @@
-e<script type="text/javascript">	
+<script type="text/javascript">	
 $(function(){
 
 	createForm({
@@ -254,7 +254,11 @@ $(function(){
           <td width="82%"><input type="text" id="i_own_retention" name="i_own_retention" value="<?=$own_retention?>"  /></td>
             </tr>
       </table></td>
-     
+       <tr>
+      <td>Tanggal Kejadian   	  </td>
+      <td>:</td>
+      <td><input type="text" name="i_incident_date" class="date_input" size="15" value="<?=$incident_date?>" /></td>
+    </tr>
         <tr>
       <td>Tanggal Masuk   	  </td>
       <td>:</td>

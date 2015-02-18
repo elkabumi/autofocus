@@ -41,7 +41,8 @@ class Po_received_report_model extends CI_Model
 		$order_by_column[] = 'registration_total';
 		$order_by_column[] = 'total_transaction';
 		$order_by_column[] = 'total_transaction';
-		$order_by_column[] = 'status_registration_id';
+		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_id';
 		
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
@@ -115,7 +116,8 @@ class Po_received_report_model extends CI_Model
 
 			$link_detail = "<a href=".site_url('po_received_report/form/'.$row['registration_id'])." class='link_input'> Detail </a>";
 			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input'> Download</a>";		
-
+			$link_kwitansi = "<a href=".site_url('po_received_report/report_kwitansi/'.$row['registration_id'])." class='link_input'> Download</a>";		
+			 
 			
 			$data[] = array(
 				$row['registration_id'], 
@@ -129,7 +131,8 @@ class Po_received_report_model extends CI_Model
 				tool_money_format($total_biaya_pengerjaan),
 				tool_money_format($laba),
 				$status,
-				$link_report
+				$link_report,
+				$link_kwitansi
 			); 
 		}
 		
@@ -457,5 +460,30 @@ class Po_received_report_model extends CI_Model
         }
         return $data;
     }
+
+    function create_report_kwitansi($title, $content, $data = '', $data_detail = '',$data_sperpart ='',$data_jasa ='',$data_cat ='', $header){
+		
+	    $this->load->library('html2pdf');
+	    $this->html2pdf->folder('report_new/');
+	    
+	    //Set the filename to save/download as
+	    $this->html2pdf->filename($title.'.pdf');
+	    
+	    //Set the paper defaults
+	    $this->html2pdf->paper( 'A4', 'Portrait');
+	    
+	   	
+
+	    $mydata = $this->load->view($header,$data,TRUE) ;
+	    $mydata .= $this->load->view($content, array('data' => $data, 'data_detail' => $data_detail,'data_sperpart' => $data_sperpart,'data_jasa' =>$data_jasa,'data_cat' => $data_cat, 'title' => $title) ,TRUE) ;
+	    $mydata .= $this->load->view('footer.php',$data,TRUE) ;
+	    //Load html view
+	    $this->html2pdf->html($mydata);
+	    
+	    if($this->html2pdf->create('save')) {
+	    	header('Content-type: application/pdf');
+			readfile('report_new/'.$title.'.pdf');
+	    }
+	}
 }
 #
