@@ -72,20 +72,14 @@ class Salary_report_detail extends CI_Controller
 
 	
 	
-	function report($i_date_1,$i_date_2 ){
-		
-		$where = "WHERE a.registration_date between '".$i_date_1."'  AND '".$i_date_2."'";
+	function report($i_date_1,$i_date_2,$employee_group_id){
 
 
-		$date1 = explode("-", $i_date_1);
-		$date2 = explode("-", $i_date_2);
-
-			$data['detail'] = $this->salary_report_detail->report($where);
-			$data['title'] = "Laporan Summary tanggal ".$date1[2]."/".$date1[1]."/".$date1[0]." sampai ".$date2[2]."/".$date2[1]."/".$date2[0]; 
+			$data['detail'] = $this->salary_report_detail_model->report($i_date_1, $i_date_2,$employee_group_id);
 	
-		$this->load->model('global_model');
-	  	$this->global_model->create_report('salary_report_detail', 'report/salary_report_detail.php', $data);
-		
+			$this->load->model('global_model');
+			$this->global_model->create_report('Laporan_Gaji_Harian_tanggal_'.$i_date_1.'_sampai_'.$i_date_2.'', 'report/salary_report_detail.php', $data);
+			
 
 	}
 }

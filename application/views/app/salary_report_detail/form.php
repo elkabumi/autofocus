@@ -54,13 +54,15 @@ $(function(){
 				
 			var date_1 		= ($('input[name="i_date_1"]').val()) ? $('input[name="i_date_1"]').val() : "0";
 			var date_2 		= ($('input[name="i_date_2"]').val()) ? $('input[name="i_date_2"]').val() : "0";
+			var employee_group_id = ($('input[name="i_employee_group_id"]').val()) ? $('input[name="i_employee_group_id"]').val() : "0";
+		
 			if(date_1 == 0){
 				alert('Tanggal Mulai tidak boleh kosong');
 			}
 			if(date_2 == 0){
 					alert('Tanggal Sampai tidak boleh kosong');
 			}else{
-				if(confirm("Download  Summary Report ?") == true){
+				if(confirm("Download  Laporan Gaji Harian ?") == true){
 					var explode_1  = date_1.split('/');
 					var new_date_1  = explode_1[2]+"-"+explode_1[1]+"-"+explode_1[0];
 				
@@ -70,7 +72,7 @@ $(function(){
 				
 				
 			
-			location.href  = site_url + "salary_report_detail/report/"+new_date_1+"/"+new_date_2;
+			location.href  = site_url + "salary_report_detail/report/"+new_date_1+"/"+new_date_2+"/"+employee_group_id;
 			}
 		}
 	});

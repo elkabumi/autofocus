@@ -46,7 +46,7 @@ $(function(){
 			if(date_2 == 0){
 					alert('Tanggal Sampai tidak boleh kosong');
 			}else{
-				if(confirm("Download  Summary Report ?") == true){
+				if(confirm("Download  laporan Summary Gaji?") == true){
 					var explode_1  = date_1.split('/');
 					var new_date_1  = explode_1[2]+"-"+explode_1[1]+"-"+explode_1[0];
 				

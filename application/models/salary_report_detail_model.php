@@ -33,17 +33,23 @@ class Salary_report_detail_model extends CI_Model{
 		}
 		return $result;
 	}
-	function report($where)
+	function report($date_1,$date_2,$employee_group_id)
 	{		
 		
-		$query = "
-				select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.*
-				from registrations a
-				left join customers c on a.customer_id = c.customer_id
-				left join cars d on a.car_id = d.car_id
-				left join insurances e on a.insurance_id = e.insurance_id
-				left join transactions f on a.registration_id = f.registration_id
-				".$where."";
+		$result = array(); 	
+		$where='';
+		if($date_1 != 0 and $date_2 !=0){$where .= "WHERE d.registration_date between '".$date_1."'  AND '".$date_2."'";}
+		if($employee_group_id !=0){$where .= "AND c.employee_group_id= '".$employee_group_id."'";}
+			
+			
+			$query = "
+				select  a.transaction_total,c.employee_group_name, d.registration_date 
+				from transactions a 
+				JOIN employee_groups c ON c.employee_group_id = a.employee_group_id
+				JOIN registrations d ON d.registration_id = a.registration_id
+				".$where."  ORDER BY registration_date";
+		
+		
 		
 		$query = $this->db->query($query);		
 	   	if ($query->num_rows() == 0)
