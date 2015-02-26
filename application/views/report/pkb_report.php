@@ -24,15 +24,15 @@
 <div class="pkb">
 <table width="100%" cellpadding="0" style="padding-top:50px;">
 <tr>
-<td width="8%">No PKB</td>
-<td width="1%">:</td>
-<td width="27%"><?=$pkb_no?></td>
-<td width="10%">Status Mobil</td>
-<td width="1%">:</td>
-<td width="26%"><? echo 'Masuk'?></td>
-<td width="5%">Area</td>
-<td width="1%">:</td>
-<td width="21%"><?=$stand_address?></td>
+<td width="8%" valign="top">No PKB</td>
+<td width="1%" valign="top">:</td>
+<td width="27%" valign="top"><?=$pkb_no?></td>
+<td width="10%" valign="top">Status Mobil</td>
+<td width="1%" valign="top">:</td>
+<td width="26%" valign="top"><? echo 'Masuk'?></td>
+<td width="5%" valign="top">Area</td>
+<td width="1%" valign="top">:</td>
+<td width="21%" valign="top"><?=$stand_address?></td>
 </tr>
 </table>
 </div>
@@ -40,26 +40,26 @@
 <div class="table_content">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td width="71">NOPOL</td>
-    <td width="10" >:</td>
-    <td width="108"><?=$car_nopol?></td>
-    <td width="52">Asuransi</td>
-    <td width="10">:</td>
-    <td width="105"><?=$insurance_name ?></td>
-    <td width="84">Tgl Masuk</td>
-    <td width="10">:</td>
-    <td width="528"><?=$check_in?></td>
+    <td width="71" valign="top">NOPOL</td>
+    <td width="10" valign="top" >:</td>
+    <td width="108" valign="top"><?=$car_nopol?></td>
+    <td width="52" valign="top">Asuransi</td>
+    <td width="10" valign="top">:</td>
+    <td width="105" valign="top"><?=$insurance_name ?></td>
+    <td width="84" valign="top">Tgl Masuk</td>
+    <td width="10" valign="top">:</td>
+    <td width="528" valign="top"><?=$check_in?></td>
   </tr>
   <tr>
-    <td>Tipe Kendaraan</td>
-    <td>:</td>
-    <td><?=$car_model_name?></td>
-    <td>No Chek list</td>
-    <td>:</td>
-    <td><? ?></td>
-    <td>Tgl Selesai</td>
-    <td>:</td>
-    <td><?=$check_out?></td>
+    <td valign="top">Tipe Kendaraan</td>
+    <td valign="top">:</td>
+    <td valign="top"><?=$car_model_name?></td>
+    <td valign="top">No Chek list</td>
+    <td valign="top">:</td>
+    <td valign="top"><? ?></td>
+    <td valign="top">Tgl Selesai</td>
+    <td valign="top">:</td>
+    <td valign="top"><?=$check_out?></td>
   </tr>
 </table>
 </div>
@@ -74,7 +74,7 @@
     <td width="15%">Qty</td>
     <td width="30%">Part No</td>
     <td width="45%">Nama Part</td>
-	<td width="60%" align="right">Jumlah</td>
+	
   </tr>
   </table>
   </div>
@@ -90,7 +90,7 @@
     <td width="15%"><?=$item['rs_qty']?></td>
     <td width="30%"><?=$item['rs_part_number']?></td>
     <td width="45%"><?=$item['rs_name']?></td>
-    <td width="60%" align="right"><?=number_format($item['rs_repair'], 0)?></td>
+    
   </tr>
   <?php 
   $total_sperpart = $total_sperpart + $item['rs_repair'];
@@ -108,8 +108,7 @@
    
     <td width="5%">No</td>
     <td width="15%">Nama jasa</td>
-    <td width="40%" align="right">Jumlah</td>
-  </tr>
+      </tr>
   </table>
   </div>
   <div class="">
@@ -122,7 +121,7 @@
    
     <td width="5%"><?=$no?></td>
     <td width="15%"><?=$item['product_name']?></td>
-    <td width="40%" align="right"><?=number_format($item['detail_registration_price'], 0)?></td>
+    
   </tr>
   <?php 
   $total_transaction = $total_transaction + $item['detail_registration_price'];

@@ -5,7 +5,7 @@ $(function(){
 		id 				: "#id_form_nya", 
 		actionTarget	: "insurance/form_action",
 		backPage		: "insurance",
-		nextPage		: "insurance/form"
+		nextPage		: "insurance"
 	});
 
 	$('#enable').click(function(){

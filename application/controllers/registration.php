@@ -42,7 +42,7 @@ class Registration extends CI_Controller
 		$data['pic_asuransi']				= '';
 		$data['spk_date']					= '';
 		$data['spk_no']						= '';
-		$data['pkb_no']						= '';
+		$data['pkb_no']						= format_code('registrations','pkb_no','',5);
 		$data['claim_no']					= '';
 		$data['incident_date']				= '';
 	
@@ -59,8 +59,8 @@ class Registration extends CI_Controller
 		$this->render->add_view('app/registration/transient_list3');
 		$this->render->build('SpareParts');
 		
-		$this->render->add_view('app/registration/transient_list2');
-		$this->render->build('Photo Before');
+		//$this->render->add_view('app/registration/transient_list2');
+		//$this->render->build('Photo Before');
 		
 		
 		$this->render->add_js('ajaxfileupload');
@@ -157,9 +157,10 @@ class Registration extends CI_Controller
 		$list_registration_detail_price	 	= $this->input->post('transient_registration_detail_price');
 
 		
-		
+		/*
 		$list_registration_photo_name	 	= $this->input->post('transient_photo_name');
 		$list_registration_photo	= $this->input->post('transient_photo');
+		*/
 		
 		$list_rs_part_number	 	= $this->input->post('transient_rs_part_number');
 		$list_rs_qty		= $this->input->post('transient_rs_qty');
@@ -215,6 +216,7 @@ class Registration extends CI_Controller
 		$date=date('ymdhis');
 		
 		$item2 = array();
+		/*
 		if($list_registration_photo_name){
 		foreach($list_registration_photo_name as $key => $value)
 		{
@@ -232,6 +234,7 @@ class Registration extends CI_Controller
 			
 		}
 		}
+		*/
 
 		
 		$total_rs_repair=0;

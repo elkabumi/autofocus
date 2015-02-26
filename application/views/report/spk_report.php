@@ -15,6 +15,9 @@
 	border-bottom:1px solid #999;
 	padding-top:5px;
 	}
+	.title_category
+	{
+		padding-bottom:10px;}
 </style>
 <table width="100%">
 <tr>
@@ -79,30 +82,26 @@
     <td>:</td>
     <td><?=$car_no_machine?></td>
   </tr>
-    <tr>
-    <td>OR</td>
-    <td>:</td>
-    <td><?=$check_out?></td>
-  </tr>
+ 
 </table>
 </div>
 <p><b>Detail Kerugian</b></p>
 <div style="padding-top:50px" class="">
-<div class=""><b>Sperpart</b></div>
-<div class="">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<div class="title_category"><b>SPAREPART</b></div>
+<div class="" style="border-bottom:1px solid #ccc;">
+<table width="100%" border="0" cellspacing="0" cellpadding="2" >
   <tr style="border-bottom-style:solid">
    
     <td width="5%">No</td>
     <td width="15%">Qty</td>
     <td width="30%">Part No</td>
     <td width="45%">Nama Part</td>
-	<td width="60%" align="right">Jumlah</td>
+	
   </tr>
   </table>
-  </div>
+</div>
   <div class="">
- <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <table width="100%" border="0" cellspacing="0" cellpadding="2" > 
   <?php 
   $no = 1;
    $total_sperpart= 0;
@@ -113,7 +112,7 @@
     <td width="15%"><?=$item['rs_qty']?></td>
     <td width="30%"><?=$item['rs_part_number']?></td>
     <td width="45%"><?=$item['rs_name']?></td>
-    <td width="60%" align="right"><?=number_format($item['rs_repair'], 0)?></td>
+   
   </tr>
   <?php 
   $total_sperpart = $total_sperpart + $item['rs_repair'];
@@ -123,20 +122,20 @@
   ?>
   </table>
   </div>
-<div style="padding-top:10px">
-<div class=""><b>Jasa</b></div>
-<div class="">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<div style="padding-top:20px">
+<div class="title_category"><b>PANEL</b></div>
+<div class="" style="border-bottom:1px solid #ccc;">
+<table width="100%" border="0" cellspacing="0" cellpadding="2">
   <tr>
    
     <td width="5%">No</td>
     <td width="15%">Nama jasa</td>
-    <td width="40%" align="right">Jumlah</td>
+   
   </tr>
   </table>
   </div>
   <div class="">
- <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <table width="100%" border="0" cellspacing="0" cellpadding="2">
   <?php 
   $no = 1;
    $total_transaction= 0;
@@ -145,7 +144,7 @@
    
     <td width="5%"><?=$no?></td>
     <td width="15%"><?=$item['product_name']?></td>
-    <td width="40%" align="right"><?=number_format($item['detail_registration_price'], 0)?></td>
+   
   </tr>
   <?php 
   $total_transaction = $total_transaction + $item['detail_registration_price'];

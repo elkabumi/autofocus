@@ -174,12 +174,12 @@ class insurance extends CI_Controller{
 			$data['inactive_by_id'] 			= 0;
 			$data['insurance_date'] 				= date("Y-m-d");
 			$error = $this->insurance_model->create($data, $items,$item2);
-			send_json_action($error, "Data telah ditambah", "Data gagal ditambah", $this->insurance_model->insert_id);
+			send_json_action($error, "Data telah ditambah", "Data gagal ditambah");
 		}
 		else // id disebutkan, lakukan proses UPDATE
 		{
 			$error = $this->insurance_model->update($id, $data, $items,$item2);
-			send_json_action($error, "Data telah direvisi", "Data gagal direvisi", $id);
+			send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
 		}		
 	}
 	
@@ -284,7 +284,7 @@ class insurance extends CI_Controller{
 	{		
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('i_product_type_name', 'Material', 'trim|max_length[100]');
-		$this->form_validation->set_rules('i_product_type_desc','Description', 'trim|required');
+		//$this->form_validation->set_rules('i_product_type_desc','Description', 'trim|required');
 	
 		$index = $this->input->post('i_index');		
 		// cek data berdasarkan kriteria
