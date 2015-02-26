@@ -1,47 +1,85 @@
-<?php
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
 
-class Salary_report extends CI_Controller{
-	function __construct(){
-		parent::__construct();
-		$this->load->library('render');
+class Salary_report extends CI_Controller 
+{	
+	function __construct()
+	{
+		parent::__construct();	
 		$this->load->model('salary_report_model');
-		$this->load->library('access');
-		$this->access->set_module('report.salary');
-	}
-	
-	function index(){
+		$this->load->library('render');
 		
+		// set kode module ini .. misal usr
+		//$this->access->set_module('report.salary_report');
+		// default access adalah User
+		$this->load->library('access');
+		$this->access->user_page();
+	
+	}
+	function index()
+	{
 		$data = array();
-			$data['row_id']					= '';
-			$data['date_1']			= date('d/m/y');
-			$data['date_2']			= date('d/m/y');
-			$data['transaction_type_name'] 		= array('0' => 'Semua', '1' => 'Pembelian', '2' => 'Penjualan');
-								
+		
+			$data['row_id'] = '';
+			$data['date_1'] = '';
+			$data['date_2'] = '';
+			
+		
 		$this->load->helper('form');
-		$this->render->add_form('app/salary_report/form',$data);
-		$this->render->build('Laporan Penggajian');
-		$this->render->show('Laporan Penggajian');
+			
+		$this->render->add_form('app/salary_report/form', $data);
+		$this->render->build('Summary Report');
+		
+		
+		$this->render->add_view('app/salary_report/transient_list');
+		$this->render->build('Detail');
+	
+		
+		$this->render->show('Laporan Gaji Summary');
+		
 	}
 	
-	function report($date1,$date2){
+	function detail_table_loader($type = 0,$date_1 = 0, $date_2= 0) {
+		if($type == 0){
+		
 	
-	  $this->load->model('global_model');
-	  //echo $trans;
-	   $day 	= substr($date1, 0,2); 
-	   $month 	= substr($date1, 2,2);
-	   $year 	= substr($date1, 4,4);
-	   $day2 	= substr($date2, 0,2); 
-	   $month2 	= substr($date2, 2,2);
-	   $year2 	= substr($date2, 4,4);
-	   
-	   $date_1	= $year."/".$month."/".$day;
-	   $date_2	= $year2."/".$month2."/".$day2;
-	   
-	   $data = $this->salary_report_model->read_date($date_1,$date_2);
-	   $total = $this->salary_report_model->get_total($date_1,$date_2);
-	  
-	  	$this->global_model->create_salary_report('Laporan Transaksi','report/salary_report.php', $data,$total,'header.php');
+			 	
+				send_json(make_datatables_list(null));
+			
+		
+		}else{
+			
+			$data = $this->salary_report_model->detail_list_loader2($date_1,$date_2);
+			
+			$sort_id = 0;
+			foreach($data as $key => $value) 
+			{	
+				$data[$key] = array(
+		
+					form_transient_pair('transient_team_name',$value['employee_group_name']),
+					form_transient_pair('transient_team_payment',number_format($value['get_total_payment']),$value['get_total_payment']),
+
+					
+				);
+			}
+		}
+        send_json(make_datatables_list($data));
+    }
+	
+	
+	
+	
+
+	
+	
+	function report($i_date_1,$i_date_2 ){
+
+
+			$data['detail'] = $this->salary_report_model->report($i_date_1, $i_date_2);
+			//$data['title'] = "Laporan Gaji Summary tanggal ".$i_date_1." sampai ".$i_date_2; 
+	
+			$this->load->model('global_model');
+			$this->global_model->create_report('lap_summary_gaji_tanggal_'.$i_date_1.'_sampai_'.$i_date_2.'', 'report/salary_report.php', $data);
+			
+
 	}
-	
 }
