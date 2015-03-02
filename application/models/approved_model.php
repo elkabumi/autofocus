@@ -433,5 +433,21 @@ class Approved_model extends CI_Model
 		foreach ($query->result_array() as $row) $result = format_html($row);
 		return $result;
 	}
+	function report_kwitansi($id)
+	{		
+		
+		$query = "
+				select a.* , c.customer_name
+				FROM registrations a
+				LEFT JOIN customers c ON a.customer_id = c.customer_id
+				WHERE a.registration_id =".$id."";
+		
+		$query = $this->db->query($query);		
+	   //	query();
+		$result = null; // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
+		return $result; 
+	}
+
 }
 #

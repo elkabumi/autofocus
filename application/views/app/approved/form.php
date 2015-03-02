@@ -108,7 +108,12 @@ $(function(){
 		
 				location.href = site_url + 'registration/report/' + $('input[name="row_id"]').val();
 			
-	});
+		});
+		
+		$('#print_kwitansi').click(function(){
+			location.href = site_url + 'approved/report_kwitansi/' + $('input[name="row_id"]').val();
+			
+		});
 	createDatePicker();
 	//updateAll(); 
 });
@@ -185,6 +190,7 @@ $(function(){
     </tr>
 <?php
 		if($claim_type == 1){
+			$kwitansi ='OR';
 ?>
  <tr>
       <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
@@ -228,6 +234,7 @@ $(function(){
       
 <?php } 
 		if($claim_type == 0){
+			$kwitansi ='DP';
 ?>
 				
       </tr>
@@ -291,8 +298,8 @@ $(function(){
 		<input type="button" id="enable" value="Setujui"/>
 	
 		<input type="button" id="cancel" value="Batal"/>
-        
-           <input type="button" id="print_estimasi" value="Cetak Estimasi"  />
+        <input type="button" id="print_estimasi" value="Cetak Estimasi"  />
+        <input type="button" id="print_kwitansi" value="Cetak Kwitansi <?= $kwitansi?>"  />
 	</div>
 </div>
 <!-- table contact -->

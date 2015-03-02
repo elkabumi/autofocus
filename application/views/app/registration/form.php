@@ -5,7 +5,7 @@ $(function(){
 		id 				: "#id_form_nya", 
 		actionTarget	: "registration/form_action",
 		backPage		: "registration",
-		nextPage		: "registration/report"
+		nextPage		: "approved/form_approved"
 	});
 	
 	createLookUp({
