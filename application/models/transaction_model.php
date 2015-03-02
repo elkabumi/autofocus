@@ -69,7 +69,7 @@ class Transaction_model extends CI_Model
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
 		left join transactions f on f.registration_id = a.registration_id
-		WHERE a.status_registration_id ='2' or a.status_registration_id = '3'
+		WHERE (a.status_registration_id ='2' or a.status_registration_id = '3')
 		$where  $order_by
 			
 			";
