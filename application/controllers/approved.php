@@ -456,5 +456,35 @@ class Approved extends CI_Controller{
 		
 		
 	}
+	function report_kwitansi($id = 0){
+		
+		if($id){
+		   $this->load->model('global_model');
+		  
+		   $result = $this->approved_model->report_kwitansi($id);
+				
+				
+				if ($result) // cek dulu apakah data ditemukan 
+				{
+					$data = $result;
+					$data['row_id'] = $id;		
+					
+					$data['own_retention'] = ($result['own_retention'])? $result['own_retention'] : "-";
+					$data['registration_dp'] = ($result['registration_dp']) ? $result['registration_dp'] : "-";
+					
+				
+					if($data['claim_type'] == 1){
+						$title = 'Lap_Kwitansi_OR_'.$id.'';
+					}else if($data['claim_type'] == 0){
+						$title = 'Lap_Kwitansi_DP_'.$id.'';
+					}
+				
+					
+				}
+	
+			//$data='';
+			$this->global_model->create_report_kwitansi($title,'report/kwitansi.php', $data,'header.php');
+		}
+	}
 
 }
