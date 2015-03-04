@@ -82,7 +82,7 @@ class insurance extends CI_Controller{
 			$id = $this->input->post('row_id');
 			
 			$check_used = $this->insurance_model->check_insurance($id);
-			$fail = "PO Received tidak dapat dinonaktifkan karena ada Reservasi";
+			$fail = "Insurance tidak dapat dinonaktifkan";
 			if($check_used){
 				$is_process_error = FALSE;
 				

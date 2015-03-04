@@ -7,7 +7,7 @@ class Employee_position extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('access');
-		$this->access->set_module('master.employee_position');
+		//$this->access->set_module('master.employee_position');
 		$this->access->user_page();
 		$this->load->model('employee_position_model');
 				
@@ -15,13 +15,18 @@ class Employee_position extends CI_Controller
 	
 	function index()
 	{
+		// patokan
 		$this->load->library('render');
+		// menampilkan list.php
 		$this->render->add_view('app/employee_position/list');
+
+		// Nama halaman
 		$this->render->build('Data Jabatan Pegawai');
 	//	$this->access->generate_log_view();
 		$this->render->show('Jabatan Pegawai');
 		
 	}
+
 	function list_loader()
 	{
 		$data = $this->employee_position_model->list_loader();
@@ -32,6 +37,8 @@ class Employee_position extends CI_Controller
 	{
 		$id = $this->input->post('row_id');
 		$data = array();
+		
+		// patokan
 		$this->load->library('render');		
 		if ($id == 0) {
 			
@@ -60,6 +67,8 @@ class Employee_position extends CI_Controller
 	// BUSINESS TYPE LIST FORM ACTION -- action untuk form diatas
 	function form_action($is_delete = 0) // jika 0, berarti insert atau update, bila 1 berarti delete
 	{
+		// patokan validasi
+
 		$this->load->library('form_validation'); // selalu ada di _action()
 		
 		// bila operasinya DELETE -----------------------------------------------------------------------------------------		
@@ -74,7 +83,6 @@ class Employee_position extends CI_Controller
 		
 		// cek dulu data yang masuk
 		$this->form_validation->set_rules('i_name', 'Nama', 'trim|required'); // gunakan selalu trim di awal
-	
 		
 		// cek data berdasarkan kriteria
 		if ($this->form_validation->run() == FALSE) send_json_validate(); // bila input tidak valid, exit dan kirim kesalahan

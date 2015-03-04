@@ -9,7 +9,8 @@ $(function(){
 	<table width="100%" cellpadding="4" class="form_layout">
 	<tr>
 		<td width="150" req="req">Nama</td>
-	    <td><input type="hidden" name="row_id" value="<?=$row_id?>" />	      <input type="text" name="i_name" size="30" value="<?=$i_name?>" /></td>
+	    <td><input type="hidden" name="row_id" value="<?=$row_id?>" />	      
+	    	<input type="text" name="i_name" size="30" value="<?=$i_name?>" /></td>
 	  </tr>
 	<tr>
 		<td width="150" valign="top" req="req">Keterangan</td>

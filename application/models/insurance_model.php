@@ -34,12 +34,17 @@ class insurance_model extends CI_Model
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'insurance_addres';
 		$order_by_column[] = 'insurance_phone';
+		$order_by_column[] = 'insurance_date';
+		$order_by_column[] = 'insurance_active_status';
+		$order_by_column[] = 'inactive_name';
 		
+		
+
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
 			
-				$where = " where ".$columns[$category]." like '%$keyword%'";
+				$where = " and ".$columns[$category]." like '%$keyword%'";
 			
 			
 		}
@@ -53,7 +58,8 @@ class insurance_model extends CI_Model
 		
 		left join employees c on a.created_by_id = c.employee_id
 		left join employees d on a.inactive_by_id = d.employee_id
-		$where  $order_by
+		where insurance_id <> 1
+		$where $order_by
 			
 			";
 
@@ -409,9 +415,9 @@ class insurance_model extends CI_Model
 	
 	
 	
-	function check_po_received($id)
+	function check_insurance($id)
 	{
-		$sql = "select * from transactions where transaction_sent_id = $id
+		$sql = "select * from registrations where insurance_id = $id
 				";
 		
 		$query = $this->db->query($sql);
@@ -427,12 +433,12 @@ class insurance_model extends CI_Model
 		$this->db->trans_start();
 		
 		$this->db->trans_start();
-		$data['transaction_active_status'] = '1';
+		$data['insurance_active_status'] = '1';
 		$data['inactive_by_id'] =  $this->access->info['employee_id'];
-		$this->db->where('transaction_id', $id); // data yg mana yang akan di update
-		$this->db->update('transactions', $data);
+		$this->db->where('insurance_id', $id); // data yg mana yang akan di update
+		$this->db->update('insurances', $data);
 	
-		$this->access->log_update($id, 'PO Received');
+		//$this->access->log_update($id, 'PO Received');
 		$this->db->trans_complete();
 
 		return $this->db->trans_status();
