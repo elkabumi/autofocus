@@ -15,6 +15,7 @@ $(function(){
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 
 	});
+    otable.fnSetColumnVis(0, false, false);
 	
 });
 </script>

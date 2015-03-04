@@ -9,10 +9,10 @@ $(function(){
 		column_id	: 0,
 		
 		filter_by 	: [ 
-		{id : "insurance_name", label : "Insurance Code"}, 
-		{id : "insurance_addres", label : "Insurance Name"},
-		{id : "insurance_phone", label : "Insurance Type"},
-		{id : "insurance_date", label : "Create Date"}],
+            {id : "insurance_name", label : "Nama Asuransi"}, 
+            {id : "insurance_addres", label : "Alamat Asuransi"},
+            {id : "insurance_phone", label : "Telepon Asuransi"},
+        ],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
 	otable.fnSetColumnVis(0, false, false);
@@ -23,12 +23,9 @@ $(function(){
 	<thead>
 		<tr>
 			<th>ID</th>
-            <th>insurance name</th>
-            <th>insuracne phone </th>
-			<th>insurance addres</th>
-            <th>insurance Date</th>
-            <th>Active Status</th>
-            <th>Information</th>
+            <th>Nama Asuransi</th>
+            <th>Alamat Asuransi</th>
+			<th>Telepon Asuransi</th>
 		</tr> 
 	</thead> 
 	<tbody> 	
@@ -36,8 +33,8 @@ $(function(){
 </table>
 <div id="panel" class="command_table">
 	<input type="button" id="edit" value="Edit"/>
-	<input type="button" id="delete" value="Inactive"/>
-    <input type="button" id="active" value="active"/>
+	<!--<input type="button" id="delete" value="Inactive"/>
+    <input type="button" id="active" value="active"/>-->
 	<input type="button" id="refresh" value="Refresh"/>
 </div>
 <div id="editor"></div>
