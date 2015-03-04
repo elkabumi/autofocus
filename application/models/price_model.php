@@ -122,7 +122,7 @@ function list_controller()
 		$data['price_category_active_status'] = '0';
 		$data['inactive_by_id'] =  $this->access->info['employee_id'];
 		$this->db->where('price_category_id', $id); // data yg mana yang akan di update
-		$this->db->update('price_categorys', $data);
+		$this->db->update('product_prices', $data);
 	
 		$this->access->log_delete($id, 'PO Received');
 		$this->db->trans_complete();

@@ -5,7 +5,6 @@ $(function(){
 		listSource 	: "price/table_controller",
 		formTarget 	: "price/form",
 		actionTarget: "price/form_action",
-		activeTarget: "price/active",
 		column_id	: 0,
 		
 		filter_by 	: [ 
@@ -36,8 +35,10 @@ $(function(){
 </table>
 <div id="panel" class="command_table">
 	<input type="button" id="edit" value="Edit"/>
-	<input type="button" id="delete" value="Inactive"/>
+	
+	<!--<input type="button" id="delete" value="Inactive"/>
     <input type="button" id="active" value="active"/>
+-->
 	<input type="button" id="refresh" value="Refresh"/>
 </div>
 <div id="editor"></div>

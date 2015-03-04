@@ -90,6 +90,14 @@ class price extends CI_Controller{
 		$this->load->library('form_validation'); // selalu ada di _action()
 		$id = $this->input->post('row_id');
 		
+		if($is_delete)
+		{
+			
+			$is_process_error = $this->price_model->delete($id);
+			
+			
+			send_json_action($is_process_error, "Data telah dihapus", $fail);
+		}
 		// cek dulu data yang masuk
 		$no = $this->input->post('i_no');
 		
