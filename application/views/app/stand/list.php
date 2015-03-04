@@ -10,8 +10,9 @@ $(function(){
 		filter_by 	: [ 
 		{id : "stand_code", label : "Kode"}, 
 		{id : "stand_name", label : "Nama"}, 
-		{id : "stand_email", label : "Email"},
-		{id : "stand_phone", label : "Telepon"}],
+		{id : "stand_leader", label : "Leader"},
+		{id : "stand_phone", label : "Telepon"},
+        {id : "stand_address", label : "Alamat"}],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
 	otable.fnSetColumnVis(0, false, false);
@@ -26,6 +27,7 @@ $(function(){
             <th>Nama Cabang</th>
 			<th>Leader</th>
             <th>Telepon</th>
+            <th>Alamat</th>
 		</tr> 
 	</thead> 
 	<tbody> 	
