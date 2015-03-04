@@ -9,8 +9,8 @@ $(function(){
 		
 		filter_by 	: [ 
 		{id : "stand_code", label : "Kode"}, 
-		{id : "stand_name", label : "Nama"}, 
-		{id : "stand_email", label : "Email"},
+		{id : "stand_name", label : "Nama Cabang"}, 
+		{id : "stand_email", label : "Leader"},
 		{id : "stand_phone", label : "Telepon"}],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});

@@ -29,10 +29,10 @@ $(function(){
 		<tr>
 			<th>ID</th>
             <th>Kode Transaksi</th>
-            <th>Tanggal</th>
+            <th>Tanggal Registrasi</th>
     		<th>Nopol</th>
             <th>Nama Customer</th>
-            <th>Asuransi</th>
+            <th>Nama Asuransi</th>
       		<th>No Klaim</th>
             <th>Status</th>
             <th>Config</th>

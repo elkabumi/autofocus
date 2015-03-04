@@ -22,9 +22,8 @@ function list_controller()
 		// daftar kolom yang valid
 		
 		$columns['insurance_name'] 			= 'insurance_name';
-		$columns['insurance_addres'] 			= 'insurance_addres';
-		$columns['insurance_phone']	= 'insurance_phone';
-		$columns['insurance_date']			= 'insurance_date';
+		$columns['insurance_addres'] 		= 'insurance_addres';
+		$columns['insurance_phone']       	= 'insurance_phone';
 		
 		
 		$sort_column_index = $params['sort_column'];
@@ -93,10 +92,7 @@ function list_controller()
 				$row['insurance_id'], 
 				$row['insurance_name'],
 				$row['insurance_addres'],
-				$row['insurance_phone'],
-				$insurance_date,
-				$active,
-				$status
+				$row['insurance_phone']
 			); 
 		}
 		

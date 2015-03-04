@@ -21,8 +21,8 @@ class Upload_photo_model extends CI_Model
 		// map value dari combobox ke table
 		// daftar kolom yang valid
 		
-		$columns['code'] 			= 'registration_code';
-		$columns['nopol'] 			= 'car_nopol';
+		$columns['registration_code'] 			= 'registration_code';
+		$columns['car_nopol'] 			= 'car_nopol';
 		$columns['customer_name']	= 'customer_name';
 		$columns['insurance_name'] 	= 'insurance_name';
 		$columns['claim_no'] 		= 'claim_no';
@@ -45,7 +45,13 @@ class Upload_photo_model extends CI_Model
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
 			
-				$where = " and ".$columns[$category]." like '%$keyword%'";
+				if($columns[$category] == "registration_date"){
+					$date = explode("/", $keyword);
+					$new_keyword = $date[2]."-".$date[1]."-".$date[0];
+					$where = " AND ".$columns[$category]." = '$new_keyword'";
+				}else{
+					$where = " AND ".$columns[$category]." like '%$keyword%'";
+				}
 			
 			
 		}
