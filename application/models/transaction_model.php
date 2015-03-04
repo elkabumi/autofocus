@@ -41,6 +41,7 @@ class Transaction_model extends CI_Model
 		$order_by_column[] = 'claim_no';
 		$order_by_column[] = 'registration_id';
 		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_id';
 	
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;

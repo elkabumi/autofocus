@@ -21,10 +21,10 @@ class insurance_model extends CI_Model
 		// map value dari combobox ke table
 		// daftar kolom yang valid
 		
-		$columns['insurance_name'] 			= 'insurance_name';
-		$columns['insurance_addres'] 			= 'insurance_addres';
-		$columns['insurance_phone']	= 'insurance_phone';
-		$columns['insurance_date']			= 'insurance_date';
+		$columns['insurance_name'] 			  = 'insurance_name';
+		$columns['insurance_addres'] 		  = 'insurance_addres';
+		$columns['insurance_phone']	          = 'insurance_phone';
+		$columns['insurance_date']			  = 'insurance_date';
 		
 		
 		$sort_column_index = $params['sort_column'];
