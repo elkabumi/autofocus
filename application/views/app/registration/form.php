@@ -15,7 +15,7 @@ $(function(){
 		dataSource		: "lookup/period_lookup_id",
 		column_id 		: 0,
 		component_id	: "#lookup_period",
-		filter_by		: [{id : "p1", label : "Kode"},{id : "p2", label : "Nama"}]
+		filter_by		: [{id : "p1", label : "Periode"}]
 	});
 	
 	
@@ -46,8 +46,8 @@ $(function(){
 		dataSource		: "lookup/car_lookup_id",
 		column_id 		: 0,
 		component_id	: "#lookup_car",
-		filter_by		: [{id : "p1", label : "Nopol"}, {id : "p2", label : "No Rangka"}, {id : "p3", label : "No Mesin"}]
-	});
+		filter_by		: [{id : "p1", label : "Nopol"}, {id : "p4", label : "Model"}, {id : "p2", label : "No Rangka"}, {id                           : "p3", label : "No Mesin"}]
+	                       });
 	
 	createLookUp({
 		table_id		: "#lookup_table_insurance",

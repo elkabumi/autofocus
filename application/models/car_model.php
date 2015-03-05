@@ -18,8 +18,7 @@ class car_model extends CI_Model{
 		// daftar kolom yang valid
 		
 		$columns['car_nopol'] 			= 'car_nopol';
-		$columns['car_model_merk'] 		= 'car_model_merk';
-		$columns['car_model_name'] 		= 'car_model_name';
+		$columns['car_model'] 		    = 'car_model';
 		$columns['car_no_machine']		= 'car_no_machine';
 		$columns['car_no_rangka']		= 'car_no_rangka';
 		$columns['car_year']			= 'car_year';
@@ -41,8 +40,12 @@ class car_model extends CI_Model{
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
 			
-				$where = " where ".$columns[$category]." like '%$keyword%'";
-			
+                if($columns[$category] == "car_model"){
+					//$where = " where car_model like '%$keyword%'";
+                    $where = " where car_model_merk like '%$keyword%' or car_model_name like '%$keyword%' ";
+				}else{
+					$where = " where ".$columns[$category]." like '%$keyword%'";
+				}
 			
 		}
 		if ($limit > 0) {
@@ -63,7 +66,7 @@ class car_model extends CI_Model{
 		$sql = $sql.$limit;
 		
 		$query = $this->db->query($sql);
-		//query();
+       // query();
 		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row) {
 			

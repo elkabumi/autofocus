@@ -10,8 +10,7 @@ $(function(){
 		
 		filter_by 	: [ 
 		{id : "car_nopol", label : "Nopol"}, 
-		{id : "car_model_merk", label : "Vendor Mobil"},
-		{id : "car_model_name", label : "Model Mobil"},
+		{id : "car_model", label : "Model Mobil"},
 		{id : "car_no_machine", label : "No Mesin"},
 		{id : "car_no_rangka", label : "No Rangka"},
 		{id : "car_year", label : "Tahun"}],
