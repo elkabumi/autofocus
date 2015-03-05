@@ -9,8 +9,7 @@ $(function(){
 		column_id	: 0,
 		
 		filter_by 	: [ 
-		{id : "registration_code", label : "Kode Transaksi"}, 
-		{id : "registration_date", label : "Tanggal"},
+		{id : "registration_code", label : "Kode Transaksi"},
 		{id : "car_nopol", label : "Nopol"},
         {id : "customer_name", label : "Nama Customer"},
         {id : "insurance_name", label : "Nama Asuransi"},

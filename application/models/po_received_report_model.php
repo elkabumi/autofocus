@@ -22,6 +22,7 @@ class Po_received_report_model extends CI_Model
 		// daftar kolom yang valid
 		
 		$columns['code'] 			= 'registration_code';
+        $columns['date']            = 'registration_date';
 		$columns['nopol'] 			= 'car_nopol';
 		$columns['customer_name']	= 'customer_name';
 		$columns['insurance_name'] 	= 'insurance_name';
@@ -38,9 +39,10 @@ class Po_received_report_model extends CI_Model
 		$order_by_column[] = 'customer_name';
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
-		$order_by_column[] = 'registration_total';
-		$order_by_column[] = 'total_transaction';
-		$order_by_column[] = 'total_transaction';
+		$order_by_column[] = 'transaction_total';
+		$order_by_column[] = 'transaction_material_total';
+		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_id';
 		$order_by_column[] = 'registration_id';
 		$order_by_column[] = 'registration_id';
 		
@@ -48,9 +50,13 @@ class Po_received_report_model extends CI_Model
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
-			
-				$where = " where ".$columns[$category]." like '%$keyword%'";
-			
+			if($columns[$category] == "registration_date"){
+					$date = explode("/", $keyword);
+					$new_keyword = $date[2]."-".$date[1]."-".$date[0];
+					$where = " where ".$columns[$category]." = '$new_keyword'";
+				}else{
+					$where = " where ".$columns[$category]." like '%$keyword%'";
+				}
 			
 		}
 		if ($limit > 0) {

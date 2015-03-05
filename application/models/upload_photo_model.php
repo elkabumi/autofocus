@@ -21,7 +21,8 @@ class Upload_photo_model extends CI_Model
 		// map value dari combobox ke table
 		// daftar kolom yang valid
 		
-		$columns['registration_code'] 			= 'registration_code';
+		$columns['registration_code'] 	= 'registration_code';
+		$columns['registration_date'] 	= 'registration_date';
 		$columns['car_nopol'] 			= 'car_nopol';
 		$columns['customer_name']	= 'customer_name';
 		$columns['insurance_name'] 	= 'insurance_name';
