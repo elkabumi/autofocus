@@ -19,8 +19,9 @@ class stand_model extends CI_Model{
 		
 		$columns['stand_code'] 			= 'stand_code';
 		$columns['stand_name'] 			= 'stand_name';
+        $columns['stand_leader']        = 'employee_name';
 		$columns['stand_phone']			= 'stand_phone';
-		$columns['stand_address']		= 'stand_address';
+		$columns['stand_address']	    = 'stand_address';
 		
 		$sort_column_index = $params['sort_column'];
 		$sort_dir = $params['sort_dir'];
@@ -30,7 +31,8 @@ class stand_model extends CI_Model{
 		$order_by_column[] = 'stand_name';
 		$order_by_column[] = 'employee_name';
 		$order_by_column[] = 'stand_phone';
-		
+		$order_by_column[] = 'stand_address';
+        
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
@@ -67,7 +69,8 @@ class stand_model extends CI_Model{
 				$row['stand_code'],
 				$row['stand_name'],
 				$row['employee_name'],
-				$row['stand_phone']
+				$row['stand_phone'],
+                $row['stand_address']
 			); 
 		}
 		

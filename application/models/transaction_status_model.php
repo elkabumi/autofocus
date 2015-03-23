@@ -38,9 +38,9 @@ class Transaction_status_model extends CI_Model
 		$order_by_column[] = 'customer_name';
 		$order_by_column[] = 'insurance_name';
 		$order_by_column[] = 'claim_no';
-		$order_by_column[] = 'registration_total';
-		$order_by_column[] = 'total_transaction';
-		$order_by_column[] = 'total_transaction';
+		$order_by_column[] = 'transaction_total';
+		$order_by_column[] = 'transaction_material_total';
+		$order_by_column[] = 'registration_id';
 		$order_by_column[] = 'status_registration_id';
 		
 		

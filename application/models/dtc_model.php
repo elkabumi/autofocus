@@ -1049,9 +1049,9 @@ class Dtc_model extends CI_Model
 		
 		$order_by_column[] = 'car_id';
 		$order_by_column[] = 'car_nopol';
-		$order_by_column[] = 'car_model';
 		$order_by_column[] = 'car_no_rangka';
 		$order_by_column[] = 'car_no_machine';
+        $order_by_column[] = 'car_model';
 		
 		
 		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
@@ -1059,7 +1059,8 @@ class Dtc_model extends CI_Model
 		
 		$column['p1']			= 'car_nopol';
 		$column['p2']			= 'car_no_rangka';
-		$column['p3']			= 'car_no_machine';
+        $column['p3']           = 'car_no_machine';
+        $column['p4']			= 'car_model';
 	
 		$this->db->start_cache();
 		
@@ -1067,7 +1068,12 @@ class Dtc_model extends CI_Model
 		if (array_key_exists($category, $column) && strlen($keyword) > 0) 
 		{
 			
-				$where = " where ".$column[$category]." like '%$keyword%'";
+				if($column[$category] == "car_model"){
+					//$where = " where car_model like '%$keyword%'";
+                    $where = " where car_model_merk like '%$keyword%' or car_model_name like '%$keyword%' ";
+				}else{
+					$where = " where ".$column[$category]." like '%$keyword%'";
+				}
 			
 			
 		}
@@ -1088,7 +1094,7 @@ class Dtc_model extends CI_Model
 		$sql = $sql.$limit;
 		
 		$query = $this->db->query($sql);
-		
+		//query();
 		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
 		foreach($query->result_array() as $row) {
 			

@@ -69,12 +69,13 @@ class Payment_model extends CI_Model
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
 		left join transactions f on f.registration_id = a.registration_id
-		WHERE a.status_registration_id ='4' or a.status_registration_id = '5'
+		WHERE (a.status_registration_id ='4' or a.status_registration_id = '5')
 		$where  $order_by
 			
 			";
 
 		$query_total = $this->db->query($sql);
+        
 		$total = $query_total->num_rows();
 		
 		$sql = $sql.$limit;

@@ -7,6 +7,7 @@ class car_model_model extends CI_Model{
 	}
 	function list_controller()
 	{		
+		// patokan
 		$where = '';
 		$params 	= get_datatables_control();
 		$limit 		= $params['limit'];
@@ -15,15 +16,17 @@ class car_model_model extends CI_Model{
 		$keyword 	= $params['keyword'];
 		
 		// map value dari combobox ke table
-		// daftar kolom yang valid
+		// daftar search yang valid
 		
 		$columns['car_model_merk'] 			= 'car_model_merk';
 		$columns['car_model_name'] 			= 'car_model_name';
 		$columns['car_model_description'] 			= 'car_model_description';
 		
+		// patokan
 		$sort_column_index = $params['sort_column'];
 		$sort_dir = $params['sort_dir'];
 		
+		// daftar kolom
 		$order_by_column[] = 'car_model_id';
 		$order_by_column[] = 'car_model_merk';
 		$order_by_column[] = 'car_model_name';

@@ -463,7 +463,8 @@ class User_model extends CI_Model
 		$sort_column_index				= $param['sort_column'];
 		$sort_dir						= $param['sort_dir'];
 		
-		$order_by_column[] = 'user_login';
+		$order_by_column[] = 'user_id';
+        $order_by_column[] = 'user_login';
 		$order_by_column[] = 'user_name';
 		$order_by_column[] = 'user_email';
 		$order_by_column[] = 'user_phone';
@@ -477,7 +478,13 @@ class User_model extends CI_Model
 		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
 		{
 			$this->db->start_cache();
-			$this->db->like($columns[$category], $keyword);
+            if($columns[$category] == "expired_date"){
+                $date = explode("/", $keyword);
+					$new_keyword = $date[2]."-".$date[1]."-".$date[0];
+                $this->db->where('expired_date', $new_keyword);
+            }else{
+                $this->db->like($columns[$category], $keyword);
+            }
 			$this->db->stop_cache();
 		}
 
@@ -502,7 +509,7 @@ class User_model extends CI_Model
 		$this->db->order_by($order_by);
 		if ($limit > 0) $this->db->limit($limit, $offset);
 		$query = $this->db->get();
-	 
+	   // query(); 
 		$data = array();
 		foreach($query->result_array() as $row) {
 			

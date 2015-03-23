@@ -41,6 +41,7 @@ class Transaction_model extends CI_Model
 		$order_by_column[] = 'claim_no';
 		$order_by_column[] = 'registration_id';
 		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_id';
 	
 		
 		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
@@ -69,7 +70,7 @@ class Transaction_model extends CI_Model
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
 		left join transactions f on f.registration_id = a.registration_id
-		WHERE a.status_registration_id ='2' or a.status_registration_id = '3'
+		WHERE (a.status_registration_id ='2' or a.status_registration_id = '3')
 		$where  $order_by
 			
 			";

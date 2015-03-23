@@ -10,8 +10,9 @@ $(function(){
 		
 		filter_by 	: [ 
 		{id : "code", label : "Kode Transaksi"}, 
+		{id : "date", label : "Tanggal"},
 		{id : "nopol", label : "Nopol"},
-		{id : "customer_name", label : "Nama Pelanggan"},
+		{id : "customer_name", label : "Nama Customer"},
 		{id : "insurance_name", label : "Asuransi"},
 		{id : "claim_no", label : "No Klaim"}
 		],
@@ -44,7 +45,7 @@ $(function(){
 </table>
 <div id="panel" class="command_table">
   <input type="button" id="refresh" value="Refresh"/>
-  <input type="button" id="edit" value="Lihat Detail"/>
+  <!--<input type="button" id="edit" value="Lihat Detail"/>-->
 </div>
 <div id="editor"></div>
 </div>

@@ -14,6 +14,7 @@ class car_model extends CI_Controller{
 	function index(){
 		
 		$this->render->add_view('app/car_model/list');
+		
 		$this->render->build('Model Mobil');
 		$this->render->show('Model Mobil');
 	}

@@ -7,7 +7,7 @@ $(function(){
 		actionTarget	: "user/user_form_action",
 		submitTarget	: "trial/warehouse_submit",
 		column_id 	: 0,
-		filter_by 	: [ {id : "nama", label : "Full Name"}, {id : "login", label : "User Name"}, {id : "email", label : "Email"}, {id : "phone", label : "Phone"}, {id : "job_title", label : "Job Title"}, {id : "company", label : "Company"}, {id : "expired_date", label : "Expired Date"}]
+		filter_by 	: [ {id : "login", label : "User Name"}, {id : "nama", label : "Full Name"}, {id : "email", label : "Email"}, {id : "phone", label : "Phone"}, {id : "job_title", label : "Job Title"}, {id : "company", label : "Company"}, {id : "expired_date", label : "Expired Date"}]
 	});
 	otable.fnSetColumnVis(0, false, false);
 });

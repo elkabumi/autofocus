@@ -9,10 +9,9 @@ $(function(){
 		column_id	: 0,
 		
 		filter_by 	: [ 
-		{id : "insurance_name", label : "Insurance Code"}, 
-		{id : "insurance_addres", label : "Insurance Name"},
-		{id : "insurance_phone", label : "Insurance Type"},
-		{id : "insurance_date", label : "Create Date"}],
+		{id : "insurance_name", label : "Nama Asuransi"}, 
+		{id : "insurance_addres", label : "Alamat Asuransi"},
+		{id : "insurance_phone", label : "Telepon Asuransi"}],
 		"aLengthMenu"		: [[50, 100, 250, 500], [50, 100, 250, 500]],
 	});
 	otable.fnSetColumnVis(0, false, false);
@@ -24,8 +23,8 @@ $(function(){
 		<tr>
 			<th>ID</th>
             <th>Nama Asuransi</th>
-            <th>Telepon</th>
-			<th>Alamat</th>
+            <th>Alamat</th>
+			<th>Telepon</th>
             <th>Tanggal</th>
             <th>Active Status</th>
             <th>Information</th>
