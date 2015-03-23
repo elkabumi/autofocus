@@ -3,15 +3,17 @@
 body{
 	font-size:11px;
 	font-family:Arial, Helvetica, sans-serif;
+	letter-spacing:7px;
 	
 }
 
 .judul_title_2{
-	font-size:18px;
+	font-size:25px;
 	font-weight:bold;
 	color:#000;
 	margin-top:5px;
 	margin-bottom:5px;
+	letter-spacing:9px;
 	
 
 }
@@ -43,7 +45,7 @@ body{
 	padding:5px;
 	width:96%;
 	margin:auto;
-	font-size:12px;
+	font-size:19px;
 
 }
 .title_report1{
@@ -78,7 +80,7 @@ body{
   }
   ?>
   		<td colspan="3">
-       	<div class="judul_title_2"><b>KWITANSI</b></div>
+       	<div class="judul_title_2"><img src="<?=base_url('images/logout.png')?>" /><b>KWITANSI</b></div>
 		</td>
   </tr>
   <tr>
@@ -110,16 +112,16 @@ body{
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
     	<td width="50%" height="15"><div class="block"><b><?= number_format($jumlah); ?></b></div></td>
-        <td width="20%">&nbsp;</td>
-        <td width="40%" align="right">SURABAYA, ....................................  .......</td>
+        <td width="5%">&nbsp;</td>
+        <td width="45%" align="right">SURABAYA, ........  .......</td>
     </tr>
     <tr>
     	<td>&nbsp;</td>
-    	<td align="right">Penerima,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    	<td align="right">Penerima,&nbsp;&nbsp;</td>
     	<td align="right">Yang Menyerahkan</td>
     </tr>
      <tr>
-    	<td height="40" valign="bottom"><span style="font-size:9px;">Lembar ke 1: Customer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lembar ke 2 : File</span></td>
+    	<td height="40" valign="bottom"><span style="font-size:14px;">Lembar ke 1: Customer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lembar ke 2 : File</span></td>
     	<td align="right" valign="bottom">.......................................</td>
     	<td align="right" valign="bottom">..............................................</td>
     </tr>

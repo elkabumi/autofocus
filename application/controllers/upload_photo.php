@@ -245,6 +245,7 @@
 			 
 			send_json_transient($index, $data);
 		}
+		
 		function do_upload()
 		{		
 			//$this->load->library('blob');
