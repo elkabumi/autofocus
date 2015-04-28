@@ -35,7 +35,7 @@ $(function(){
      <td width="10" >:</td>
      <td width="704" ><input name="i_detail_registration_price" type="text" id="i_detail_registration_price" value="<?=$transient_reg_price ?>" readonly="readonly" />
      
-     <input name="i_detail_registration_id" type="text" id="i_detail_registration_id" value="<?=$transient_detail_registration_id ?>" readonly="readonly" />
+     <input name="i_detail_registration_id" type="hidden" id="i_detail_registration_id" value="<?=$transient_detail_registration_id ?>" readonly="readonly" />
      <input name="i_product_code" type="hidden" id="i_product_code" value="<?=$transient_product_code ?>" readonly="readonly" />
      <input name="i_product_name" type="hidden" id="i_product_name" value="<?=$transient_product_name ?>" readonly="readonly" />
         

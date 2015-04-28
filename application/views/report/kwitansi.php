@@ -3,7 +3,6 @@
 body{
 	font-size:11px;
 	font-family:Arial, Helvetica, sans-serif;
-	letter-spacing:7px;
 	
 }
 
@@ -75,8 +74,11 @@ body{
   <?php
   if($claim_type == '1'){
   	$jumlah = $own_retention;
+  	$catatan_pembayaran = "Pembayaran OR ".$car_model_merk." ".$car_model_name." nopol ".$car_nopol;
   }else if($claim_type == '0'){
   	$jumlah = $registration_dp;
+	$catatan_pembayaran = "Pembayaran DP ".$car_model_merk." ".$car_model_name." nopol ".$car_nopol;
+
   }
   ?>
   		<td colspan="3">
@@ -92,7 +94,7 @@ body{
   <tr>
         <td height="15">Uang sebanyak</td>
         <td>:</td>
-        <td><div class="block"><b><?= "(".Terbilang($jumlah).".Rupiah)" ?></b></div></td>
+        <td><div class="block"><b><?= "(".ucwords(Terbilang($jumlah))." Rupiah)" ?></b></div></td>
   </tr>
 
   <tr>
@@ -102,22 +104,22 @@ body{
   </tr>
 </table>
 
-<table width="100%" border="1" cellspacing="-1" cellpadding="0">
+<table width="100%" border="1" cellspacing="-1" cellpadding="5">
 	<tr>
-    	<td height="60">&nbsp;</td>
+    	<td height="60"><?= $catatan_pembayaran ?></td>
     </tr>
 </table>
 <br>
 <br>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
-    	<td width="50%" height="15"><div class="block"><b><?= number_format($jumlah); ?></b></div></td>
+    	<td width="50%" height="15"><div class="block"><b><?= "Rp. ".number_format($jumlah,0,",",".").",-"; ?></b></div></td>
         <td width="5%">&nbsp;</td>
         <td width="45%" align="right">SURABAYA, ........  .......</td>
     </tr>
     <tr>
     	<td>&nbsp;</td>
-    	<td align="right">Penerima,&nbsp;&nbsp;</td>
+    	<td align="center">Penerima,&nbsp;&nbsp;</td>
     	<td align="right">Yang Menyerahkan</td>
     </tr>
      <tr>

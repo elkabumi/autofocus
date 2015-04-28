@@ -424,7 +424,7 @@ br { clear: left; }
 }
 .form_area table td
 {
-    
+	
 }
 .form_area .date_input, .subform_area .date_input {
     font-family:	'lucida grande', tahoma, verdana, arial, sans-serif;
@@ -1056,8 +1056,7 @@ div.sys_info {
 	border-bottom-right-radius:5px;
 	border-bottom-left-radius:5px;
 	background-color:#fff;
-	border-top:1px solid #eee;
-	border-top:2px solid #999;
+	border-top:3px solid #00c0ef;
 	border-radius:5px;
 } 
 .otcontent div{
@@ -1352,4 +1351,42 @@ margin:0;
 	color: #fff;
 	background:#3F9;
 	padding: 5px;
+}
+
+#add{
+	background-color:#00c0ef;
+	border:none;
+}
+
+#delete{
+	background-color:#dd4b39;
+	border:none;
+}
+#refresh{
+	background-color:#f39c12;
+	border:none;
+	
+}
+
+#edit{
+	background-color:#00a65a;
+	border:none;
+	
+}
+
+.logout_button{
+	height:50px;
+	line-height:50px;
+	font-weight:bold;
+}
+
+.logout_button:hover{
+	color:#fff;
+}
+
+.img-circle{
+	width:100px;
+	margin-left:auto;
+	margin-right:auto;
+	border:5px solid #666;
 }
