@@ -26,7 +26,7 @@ class Home extends CI_Controller
 			$data['last_activity'] = '['.$last_act['log_action_type_name'].'] <a href="'.site_url($last_act['menu_url']).'">'.$last_act['log_data_remark'].'</a>';
 		}
 		$this->render->add_view('common/home', $data);
-		$this->render->build('Informasi');
+		$this->render->build_home('Informasi');
 
 		$this->render->show('Home', 'Home');
 

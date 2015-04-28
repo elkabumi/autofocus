@@ -43,7 +43,7 @@ $(function(){
 </table>
 <div id="panel" class="command_table">
   <input type="button" id="refresh" value="Refresh"/>
-  <input type="button" id="delete" value="Delete"/>
+  <!--<input type="button" id="delete" value="Delete"/>-->
 </div>
 <div id="editor"></div>
 </div>

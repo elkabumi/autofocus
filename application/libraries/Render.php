@@ -154,8 +154,10 @@ class Render
 	function add_view($content, $params = null)
 	{
 		$ci = & get_instance();
-		$this->content_buffer .= '<div class="block_table">'.$ci->load->view($content, $params, true).'</div>';
+		$this->content_buffer .= ''.$ci->load->view($content, $params, true).'';
 	}
+	
+
 	
 	function add_view_dashboard($content, $params = null)
 	{
@@ -181,6 +183,15 @@ class Render
 	}
 	
 	function build($title = 'Undefined Title. Please specify.', $frame = "win2", $ico = '')
+	{
+		$data['title'] = ucwords($title);
+		$data['content1'] = $this->content_buffer;
+		$data['ico'] = $ico;
+		$this->block['content'] .= $this->ci->load->view('layout/default/' . $frame, $data, true);
+		$this->content_buffer = "";$this->content_form_transient = "";
+	}	
+	
+	function build_home($title = 'Undefined Title. Please specify.', $frame = "win_home", $ico = '')
 	{
 		$data['title'] = ucwords($title);
 		$data['content1'] = $this->content_buffer;

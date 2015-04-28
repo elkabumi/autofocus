@@ -38,15 +38,8 @@ $(function(){
 	</tbody>
     
 </table>
-<div class="command_table" style="text-align:left;">
- <table align="right">
-          <tr>
-            <td><span class="summary_total"> Total</span></td>
-            <td><input id="tm_total" value="<?= $transaction_material_total?>" type="text" readonly="readonly" class="format_money" size="50" />
-           </td>
-          </tr>
-        </table>
-      
+<div class="command_table" style="text-align:right; padding:5px;">
+      <span class="summary_total"> Total</span> <input id="tm_total" value="<?= $transaction_material_total?>" type="text" readonly="readonly" class="format_money" size="50" />
    
 </div>
 <div id="editor"></div>

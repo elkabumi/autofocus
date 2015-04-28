@@ -110,7 +110,7 @@ body.fixed .wrapper {
 /* Content */
 .content {
   padding: 20px 15px;
-  background: #F3F5F9;
+  background: #ecf0f5;
 }
 /* Utility */
 /* H1 - H6 font */
@@ -397,18 +397,19 @@ body > .header .navbar .nav > li > a:hover > .label {
 }
 body > .header .logo {
   float: left;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   padding: 2px 10px;
   width: 200px;
-  font-weight: 500;
+  font-weight: bold;
   height: 50px;
   display: block;
+  padding-top:8px;
 }
 .little_logo{
 	font-size:11px;
 	margin-top:-2px;
-	color:#fff;
+	color:#93d0e5;
 }
 body > .header .logo .icon {
   margin-right: 10px;
@@ -2439,11 +2440,11 @@ Component: timeline
     ---------
 */
 .skin-blue{
-	background-color:#f3f5f9;
+	background-color:#ecf0f5;
 }
 /* skin-blue navbar */
 .skin-blue .navbar {
-  background-color: #1CBB9B;
+  background-color: #3c8dbc;
 }
 .skin-blue .navbar .nav a {
   color: #acd0e5;
@@ -2465,15 +2466,16 @@ Component: timeline
 }
 /* skin-blue logo */
 .skin-blue .logo {
-  background-color: #0e9e81;
+  background-color: #354052;
   color: #fff;
+
   text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
 }
 .skin-blue .logo > a {
   color: #fff;
 }
 .skin-blue .logo:hover {
-  background: #0e9e81;
+  background: #354052;
 }
 /* Skin-blue user panel */
 .skin-blue .user-panel > .image > img {

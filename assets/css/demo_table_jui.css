@@ -293,7 +293,7 @@ table.display tr.even.gradeU {
 
 
 tr.odd {
-	background-color: #F9F9F9;
+	background-color: #f3f5f7;
 	border-bottom:1px solid #e8e8e8;
 }
 tr.odd:hover{
@@ -399,17 +399,17 @@ td.details {
 }
 
 .paging_full_numbers span.paginate_active {
-	background-color: #99B3FF;
+	background-color: #00c0ef;
 }
 
 table.display tr.even.row_selected td {
-	background-color:#0E9E81;
+	background-color:#00c0ef;
 	color:#FFF;
 	font-weight:bold;
 }
 
 table.display tr.odd.row_selected td {
-	background-color:#0E9E81;
+	background-color:#00c0ef;
 	color:#FFF;
 	font-weight:bold;
 }

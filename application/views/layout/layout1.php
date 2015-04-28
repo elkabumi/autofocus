@@ -82,23 +82,27 @@ var crud_mode = "<?=$access?>";
         <header class="header">
             <a href="<?=base_url()?>" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                Auto focus
+               AUTOFOCUS
               <div class="little_logo">sevice and body repair</div></a>
                 
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top" role="navigation">
                 <!-- Sidebar toggle button-->
                 <a class="navbar-btn sidebar-toggle" role="button" data-toggle="offcanvas" href="#">
-<span class="sr-only">Toggle navigation</span>
-<span class="icon-bar"></span>
-<span class="icon-bar"></span>
-<span class="icon-bar"></span>
-</a>
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </a>
                 <div class="navbar-right">
                     <ul class="nav navbar-nav">
-                        
-                       
-                      
+                    
+                     
+                            <a href="<?=base_url()?>login/logout/1" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-share text-success" style="color:#93d0e5"></i>
+                                <span class="logout_button">Sign out </span>
+                            </a>
+                          
                        
                     </ul>
                 </div>
@@ -112,7 +116,7 @@ var crud_mode = "<?=$access?>";
 							   
 						   ?>
 						   
-						   style="background-color:#f3f5f9 !important"<?php
+						  <?php
                            }
                            ?>>
             <!-- Left side column. contains the logo and sidebar -->

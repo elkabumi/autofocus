@@ -437,9 +437,11 @@ class Approved_model extends CI_Model
 	{		
 		
 		$query = "
-				select a.* , c.customer_name
+				select a.* , c.customer_name, d.car_nopol, e.car_model_merk, e.car_model_name
 				FROM registrations a
 				LEFT JOIN customers c ON a.customer_id = c.customer_id
+				LEFT JOIN cars d ON d.car_id = a.car_id
+				LEFT JOIN car_models e ON e.car_model_id = d.car_model_id
 				WHERE a.registration_id =".$id."";
 		
 		$query = $this->db->query($query);		
