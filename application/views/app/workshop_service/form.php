@@ -40,6 +40,15 @@ $(function(){
      <td>Harga Borongan</td> 
        <td><input name="i_job_price" type="text" id="i_job_price" value="<?=$workshop_service_job_price ?>" size="10"/></td>
      </tr>
+     
+      <tr>
+     <td>Tipe Pengerjaan</td> 
+     
+       <td><select name="i_type">
+       <option value="1" <?php if($workshop_service_type == 1){ ?> selected="selected"<?php }?>>Gabungan</option>
+       <option value="2" <?php if($workshop_service_type == 2){ ?> selected="selected"<?php }?>>Las</option>
+       </select></td>
+     </tr>
    
   <tr>
     <td width="189" valign="top">Keterangan</td>

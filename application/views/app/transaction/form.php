@@ -27,6 +27,16 @@ $(function(){
 		filter_by		: [{id : "p1", label : "Kode"},{id : "p2", label : "Nama"}]
 	});
 	
+	createLookUp({
+		table_id		: "#lookup_table_employee_group2",
+		table_width		: 400,
+		listSource 		: "lookup/employee_group_table_control",
+		dataSource		: "lookup/employee_group_lookup_id",
+		column_id 		: 0,
+		component_id	: "#lookup_employee_group2",
+		filter_by		: [{id : "p1", label : "Kode"},{id : "p2", label : "Nama"}]
+	});
+	
 	
 	createLookUp({
 		table_id		: "#lookup_table_stand",
@@ -124,7 +134,7 @@ $(function(){
 <div class="form_area_frame">
 		<table width="100%" cellpadding="4" class="form_layout">
 	<tr>
-			<td width="17%">Periode
+			<td width="23%">Periode
                
             </td>
 			<td width="1%" >:</td>
@@ -194,7 +204,7 @@ $(function(){
  <tr>
       <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
         <tr>
-          <td width="17%">Asuransi</td>
+          <td width="23%">Asuransi</td>
           <td width="1%">:</td>
           <td width="82%"><span class="lookup" id="lookup_insurance">
 				<input type="hidden" name="i_insurance_id" class="com_id" value="<?=$insurance_id?>" />
@@ -213,7 +223,7 @@ $(function(){
       <tr>
      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="no_klaim" style="width:100%;">
         <tr>
-          <td width="17%">No Klaim</td>
+          <td width="23%">No Klaim</td>
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_claim_no" name="i_claim_no" value="<?=$claim_no?>"/></td>
         </tr>
@@ -225,7 +235,7 @@ $(function(){
        <tr>
      <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" id="pph" style="width:100%;">
         <tr>
-          <td width="17%">PPh %</td>
+          <td width="23%">PPh %</td>
           <td width="1%">:</td>
           <td width="82%"><input type="text" id="i_insurance_pph" name="i_insurance_pph" value="<?=$insurance_pph?>" readonly="readonly" /></td>
         </tr>
@@ -293,7 +303,7 @@ $(function(){
 <div class="form_category">Data Pengerjaan</div>
 	<table width="100%" cellpadding="4" class="form_layout">
     <tr>
-      <td width="23%">Tim Kerja</td>
+      <td width="20%">Tim Kerja Gabungan</td>
       <td width="1%">:</td>
       <td width="76%"> <span class="lookup" id="lookup_employee_group">
 				<input type="hidden" name="i_employee_group_id" class="com_id" value="<?=$employee_group_id?>" />
@@ -304,6 +314,27 @@ $(function(){
                     <span class="com_desc"></span>
 				</span></td>
     </tr>
+    <tr>
+      <td width="23%">Tim Kerja Las</td>
+      <td width="1%">:</td>
+      <td width="76%"> <span class="lookup" id="lookup_employee_group2">
+				<input type="hidden" name="i_employee_group_id2" class="com_id" value="<?=$employee_group_id2?>" />
+              
+				<input type="text" class="com_input" />
+				  <div class="iconic_base iconic_search com_popup"></div>
+                    <span class="com_desc"></span>
+				</span></td>
+    </tr>
+        <tr>
+          <td width="17%">Diskon Gabungan lain-lain</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_gabungan_lain" name="i_gabungan_lain"  value="<?=$transaction_gabungan_lain?>" /></td>
+        </tr>
+           <tr>
+          <td width="17%">Diskon Las lain-lain</td>
+          <td width="1%">:</td>
+          <td width="82%"><input type="text" id="i_las_lain" name="i_las_lain"  value="<?=$transaction_las_lain?>" /></td>
+        </tr>
 	<tr>
    <td>Tanggal awal plain</td>
          <td>:</td>
@@ -444,6 +475,25 @@ $(function(){
 
 <div id="">
 	<table id="lookup_table_employee_group" cellpadding="0" cellspacing="0" border="0" class="display" > 
+		<thead>
+			<tr>
+			<th>ID</th>
+				<th>Nama</th>
+				<th>Keterangan</th>
+			</tr> 
+		</thead> 
+		<tbody> 	
+		</tbody>
+	</table>
+	<div id="panel">
+		<input type="button" id="choose" value="Pilih Data"/>
+		<input type="button" id="refresh" value="Refresh"/>
+		<input type="button" id="cancel" value="Cancel" />
+	</div>	
+</div>
+
+<div id="">
+	<table id="lookup_table_employee_group2" cellpadding="0" cellspacing="0" border="0" class="display" > 
 		<thead>
 			<tr>
 			<th>ID</th>

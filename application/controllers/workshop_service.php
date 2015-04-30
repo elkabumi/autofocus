@@ -33,6 +33,7 @@ class Workshop_service extends CI_Controller{
 			$data['workshop_service_description']	= '';
 			$data['workshop_service_price']			= '';
 			$data['workshop_service_date']			= date('d/m/Y');
+			$data['workshop_service_type']			= 1;
 		}else{
 			$result = $this->workshop_service_model->read_id($id);
 			if($result){
@@ -74,11 +75,11 @@ class Workshop_service extends CI_Controller{
 		
 		
 		$data['workshop_service_price'] 			= $this->input->post('i_price');
-		$data['workshop_service_job_price'] 			= $this->input->post('i_job_price');
+		$data['workshop_service_job_price'] 		= $this->input->post('i_job_price');
 		$data['workshop_service_name'] 				= $this->input->post('i_name');
-		
 		$data['workshop_service_description'] 		= $this->input->post('i_description');
 		$data['workshop_service_date'] 				= date("Y-m-d");//$this->input->post('i_date');
+		$data['workshop_service_type'] 				= $this->input->post('i_type');
 		
 		
 		if(empty($id)){
