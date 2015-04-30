@@ -376,6 +376,9 @@ function createTable(args) {
 			
 			return;
 		}
+		
+		
+		
 		$.ajax({
 			url : site_url + params.formSource, 
 			dataType : "html",
@@ -1392,6 +1395,7 @@ function createTableFormTransient(args) {
 				if (!params.onOpenForm('add')) return;
 			}
 			break;
+			
 		case 'print':
 			if (isNaN(parseInt(selectedRow))) {
 				alert('Pilih Data yang akan di print');
@@ -1400,6 +1404,7 @@ function createTableFormTransient(args) {
 			
 			window.location.href=(site_url + params.printTarget + '/' + selectedRow);
 			break;	
+	
 		case 'edit':
 		
 			if (params.onOpenForm != null) {
@@ -1414,8 +1419,9 @@ function createTableFormTransient(args) {
 			}
 			
 			ajaxData = $('input, select, textarea', selectedNode).serialize() + '&transient_index=' + selectedRow;
-			
+				
 			break;
+			
 			
 		case 'delete':
 			var candel = $(selectedNode).find('.nodel');

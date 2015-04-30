@@ -512,7 +512,28 @@ class Dtc
 		else send_json_error_feedback();
 	}
 	
+	# lookup data registration 
+	function registration_control($id=0)
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->registration_control(get_datatables_control(), $id);
+		send_json($data); 
+	}
 	
+	function registration_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->registration_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['registration_id'], $result['registration_code'], $result['registration_code'], $result['registration_code']);
+		}
+		else send_json_error_feedback();
+	}
 	
 	
 	

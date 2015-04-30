@@ -229,6 +229,21 @@ class Lookup extends CI_Controller
 		$this->dtc->period_get();
 	}
 	
+	
+	# lookup data registration
+	function registration_table_control($type = 0)
+	{
+		$this->load->library('dtc');
+		$this->dtc->registration_control($type);
+	}
+	
+	function registration_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->registration_get();
+	}
+	
+	
 	# lookup data coa
 	function coa_table_control($kredit = 0)
 	{

@@ -1829,6 +1829,119 @@ class Dtc_model extends CI_Model
 		return $result;
 	}
 	
+	
+	
+	
+	
+	
+	## Data registration
+	
+	function registration_control($param, $type = 0)
+	{
+		$where = '';
+		$params 	= get_datatables_control();
+		$limit 		= $params['limit'];
+		$offset 	= $params['offset'];
+		$category 	= $params['category'];
+		$keyword 	= $params['keyword'];
+		
+		// map value dari combobox ke table
+		// daftar kolom yang valid
+		
+		$columns['p1'] 			= 'registration_code';
+		$columns['p2'] 			= 'car_nopol';
+		$columns['p3']			= 'insurance_name';
+		
+		$sort_column_index = $params['sort_column'];
+		$sort_dir = $params['sort_dir'];
+		
+		$order_by_column[] = 'registration_id';
+		$order_by_column[] = 'registration_code';
+		$order_by_column[] = 'car_nopol';
+		$order_by_column[] = 'insurance_name';
+		
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
+		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
+		{
+			
+				$where = " and ".$columns[$category]." like '%$keyword%'";
+			
+			
+		}
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
+		
+		if($type == 2){
+			$where .= " and status_registration_id = 2 ";
+		}
+
+		$sql = "
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name
+		from registrations a
+		
+		left join customers c on a.customer_id = c.customer_id
+		left join cars d on a.car_id = d.car_id
+		left join insurances e on a.insurance_id = e.insurance_id
+		where status_registration_id = 2 $where $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
+		
+		$sql = $sql.$limit;
+		
+		$query = $this->db->query($sql);
+		//query();
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			$row = format_html($row);
+			$data[] = array(
+				$row['registration_id'], 
+				$row['registration_code'],
+				$row['car_nopol'],
+				$row['insurance_name'],
+				$row['customer_name']
+			); 
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($params, $data, $total);
+	}
+	
+	function registration_get($id, $mode)
+	{
+		if (!$id) return NULL;
+		
+		$id = trim($id);
+		if (empty($id)) return NULL;
+		if ($mode == 1)
+			$query = $this->db->get_where('registrations', array('registration_id' => $id), 1);
+		else
+			$query = $this->db->get_where('registrations', array('registration_code' => $id), 1);
+		
+		$result = NULL;		
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	## Data Cabang
 	function market_control($param, $id)
 	{
@@ -1892,6 +2005,14 @@ class Dtc_model extends CI_Model
 		// kembalikan nilai dalam format datatables_control
 		return make_datatables_control($param, $data, $total);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	function market_get($id, $mode)
 	{

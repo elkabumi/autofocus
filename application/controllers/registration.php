@@ -250,7 +250,8 @@ class Registration extends CI_Controller
 				'rs_part_number'  => $list_rs_part_number[$key],
 				'rs_name'  => $list_rs_name[$key],
 				'rs_repair'  => $list_rs_repair[$key],
-				'rs_approved_repair'  => $list_rs_repair[$key]
+				'rs_approved_repair'  => $list_rs_repair[$key],
+				'rs_status_id'  => 0
 			);
 			
 		

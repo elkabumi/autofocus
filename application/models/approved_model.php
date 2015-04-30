@@ -106,6 +106,7 @@ class Approved_model extends CI_Model
 				$link = "<a href=".site_url('approved/form_report/'.$row['registration_id'])." class='link_input'> Cetak Laporan </a>";		
 			}else{
 				$link = "<a href=".site_url('approved/form_report/'.$row['registration_id'])." class='link_input'> Cetak Laporan </a>";	
+				
 			}
 			
 			$data[] = array(
