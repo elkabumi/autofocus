@@ -147,11 +147,11 @@ class Global_model extends CI_Model
 		}
 		return $data;
 	}
-	function get_type_photo()
+	
+	function get_type_photo($param)
 	{		
 		$this->db->select('photo_type_id,photo_type_name');
-		$this->db->where('photo_type_id', 3);
-		$this->db->or_where('photo_type_id', 4);
+		$this->db->where('photo_type_cat', $param);
 		$query = $this->db->get('photo_types');		
 		$data = array();
 		foreach($query->result_array() as $row)
@@ -160,6 +160,7 @@ class Global_model extends CI_Model
 		}
 		return $data;
 	}
+	
 	
 	function get_stand()
 	{		

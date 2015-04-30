@@ -382,7 +382,19 @@ class Transaction_model extends CI_Model
 		return $query;
 	}
 
-
+	function get_photo_type_name($id)
+	{
+		$sql = "select photo_type_name
+				from photo_types
+				where photo_type_id = '$id'
+				";
+		
+		$query = $this->db->query($sql);
+	//	query();
+		$result = null;
+		foreach ($query->result_array() as $row) $result = format_html($row);
+		return $result['photo_type_name'];
+	}
 	
 	
 	

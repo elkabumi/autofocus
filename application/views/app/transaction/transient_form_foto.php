@@ -67,7 +67,7 @@ function ajaxFileUpload()
      <td width="633" >
     <input name="i_photo_type" type="hidden" id="i_photo_type" value="<?=$photo_type ?>" />
      <input name="i_photo_edit" type="hidden" id="i_photo_edit" value="<?=$photo_edit ?>" />
-    <input name="i_photo_type_name" type="text" id="i_photo_type_name" value="<?=$photo_type_name ?>" style="width:300px !important;"  />
+   <?php echo  form_dropdown('i_photo_type_id', $cbo_photo_type_id,$photo_type_id)  ?>
       </td>
     </tr>
 	<tr>

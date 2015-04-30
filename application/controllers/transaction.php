@@ -34,6 +34,7 @@
 				$data['transaction_plain_last_date'] = $result['transaction_plain_last_date'];
 				$data['transaction_actual_date'] = $result['transaction_actual_date'];
 				$data['transaction_target_date'] = $result['transaction_target_date'];
+				
 			}
 				
 			$this->load->helper('form');
@@ -98,7 +99,10 @@
 				$data['transaction_plain_last_date'] = $this->input->post('i_last_date');
 				$data['transaction_actual_date'] = $this->input->post('i_actual_date');
 				$data['transaction_target_date'] = $this->input->post('i_target_date');
-
+				$data['employee_group_id2'] = $this->input->post('i_employee_group_id2');
+				$data['transaction_gabungan_lain'] = $this->input->post('i_gabungan_lain');
+				$data['transaction_las_lain'] = $this->input->post('i_las_lain');
+				
 				// simpan transient jasa
 				$list_transaction_detail_date		= $this->input->post('transient_transaction_detail_date');
 				$list_workshop_service_id			= $this->input->post('transient_workshop_service_id');
@@ -241,6 +245,7 @@
 					$data['workshop_service_name'] = '';
 					$data['workshop_service_job_price'] = '';
 					$data['transaction_detail_progress'] = '';
+				
 				} else {
 					$data['index'] = $index;
 					//$data['workshop_service_name'] = array_shift($this->input->post('transient_workshop_service_name'));
@@ -250,7 +255,10 @@
 					$data['workshop_service_price'] = array_shift($this->input->post('transient_workshop_service_price'));
 					$data['workshop_service_job_price'] = array_shift($this->input->post('transient_workshop_service_job_price'));
 					$data['transaction_detail_progress'] = array_shift($this->input->post('transient_transaction_detail_progress'));
+					
 				}
+				
+				
 					$this->load->helper('form');
 					$this->render->add_form('app/transaction/transient_form', $data);
 					$this->render->show_buffer();
@@ -383,7 +391,7 @@
 		$data[$key] = array(
 				form_transient_pair('transient_photo_name', $value['photo_name'],$value['photo_name'],
 					array(
-											'transient_photo_type_name' => $value['photo_type_name'],
+											'transient_photo_type_id' => $value['photo_type_id'],
 											'transient_photo_file' => $value['photo_file'],
 											'transient_photo_edit' => 0
 											)
@@ -423,6 +431,7 @@
 			$data['tm_price'] 	= array_shift($this->input->post('transient_tm_price'));
 		
 		}		
+			
 		$this->render->add_form('app/transaction/transient_form_cat', $data);
 		$this->render->show_buffer();
 	}
@@ -464,6 +473,7 @@
 	{		
 		$this->load->library('render');
 		$index = $this->input->post('transient_index');
+		$this->load->model('global_model');
 		if (strlen(trim($index)) == 0) {
 					
 			// TRANSIENT CREATE - isi form dengan nilai default / kosong
@@ -472,7 +482,7 @@
 			$data['photo_name']	= '';
 			$data['photo_type']	= '2';
 			$data['photo_edit']	= '1';	
-			$data['photo_type_name'] = "Foto Pengerjaan";
+			$data['photo_type_id'] = "";
 			$data['photo_file'] = '';
 		} else {
 			
@@ -480,12 +490,14 @@
 			$data['registration_id'] 				= $registration_id;
 			$data['photo_name'] = array_shift($this->input->post('transient_photo_name'));
 			$data['photo_type'] = array_shift($this->input->post('transient_photo_type'));
-			$data['photo_type_name'] = array_shift($this->input->post('transient_photo_type_name'));
+			$data['photo_type_id'] = array_shift($this->input->post('transient_photo_type'));
 			$data['photo_file'] = array_shift($this->input->post('transient_photo_file'));
 			$data['photo_edit'] = array_shift($this->input->post('transient_photo_edit'));
 
 			
 		}		
+		$data['cbo_photo_type_id'] 		= $this->global_model->get_type_photo(2);
+		$this->load->helper('form');
 		$this->render->add_form('app/transaction/transient_form_foto', $data);
 		
 		$this->render->show_buffer();
@@ -505,9 +517,11 @@
 		
 		$photo_name	= $this->input->post('i_photo_name');
 		$photo_type	= $this->input->post('i_photo_type');
-		$photo_type_name	= $this->input->post('i_photo_type_name');
+		$photo_type_id	= $this->input->post('i_photo_type_id');
 		$photo_file	= $this->input->post('i_photo_file');
 		$photo_edit	= $this->input->post('i_photo_edit');
+		
+		$photo_type_name = $this->transaction_model->get_photo_type_name($photo_type_id);
 		
 		
 		$foto='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.form_transient_pair('transient_photo', $photo_file,$photo_file).'';
@@ -521,7 +535,7 @@
 											'transient_photo_edit' => $photo_edit
 											)
 				),
-				form_transient_pair('transient_photo_type', $photo_type_name, $photo_type),
+				form_transient_pair('transient_photo_type', $photo_type_name, $photo_type_id),
 				form_transient_pair('transient_photo',	$foto, $photo_file),
 				
 					

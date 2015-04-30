@@ -199,7 +199,7 @@
 					$data['transient_photo_file']			= array_shift($this->input->post('transient_photo_file'));
 					$data['transient_photo_edit']			= array_shift($this->input->post('transient_photo_edit'));
 			}		
-			$data['photo_type_id'] 		= $this->global_model->get_type_photo();
+			$data['photo_type_id'] 		= $this->global_model->get_type_photo(3);
 			$this->load->helper('form');
 			
 		
