@@ -21,7 +21,7 @@ $(function(){
 			<th>Kode</th>
             <th>Jenis Perbaikan</th>
             <th>Harga</th>
-            <th>Harga Approved</th>
+           <!--<th>Harga Approved</th>-->
 		</tr> 
 	</thead> 
 	<tbody> 	
@@ -37,10 +37,10 @@ $(function(){
 <br />
 <span class="summary_total"> Total Setalah Diskon</span> <input id="rs_total_disc" value="<?= $approved_disc_panel_total?>" type="text" readonly="readonly" class="format_money" size="50" />
 
-<!--<div align="left">     --<input type="button" id="add" value="Tambah"/>-->
+<!--<div align="left">     --<input type="button" id="add" value="Tambah"/>
 	<input type="button" id="edit" value="Revisi"/>
-     <!--<input type="button" id="delete" value="Hapus"/>-->
-    </div>
+     <!--<input type="button" id="delete" value="Hapus"/>
+    </div>-->
 </div>
 <div id="editor"></div>
 </form>

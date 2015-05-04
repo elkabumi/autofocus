@@ -110,8 +110,8 @@ class Approved extends CI_Controller{
 											'transient_detail_registration_id' =>$value['detail_registration_id'])),
 											
 						form_transient_pair('transient_product_name', $value['product_name']." (".$value['product_type_name']." - ".$value['pst_name'].")", $value['product_name']),
-						form_transient_pair('transient_reg_price',	tool_money_format($value['detail_registration_price']),$value['detail_registration_price']),
-						form_transient_pair('transient_reg_aproved_price',	tool_money_format($value['detail_registration_approved_price']),$value['detail_registration_approved_price'])
+						form_transient_pair('transient_reg_price',	tool_money_format($value['detail_registration_price']),$value['detail_registration_price'])
+						//form_transient_pair('transient_reg_aproved_price',	tool_money_format($value['detail_registration_approved_price']),$value['detail_registration_approved_price'])
 						
 				);
 		
@@ -120,29 +120,7 @@ class Approved extends CI_Controller{
 		}		
 		send_json(make_datatables_list($data)); 
 		}
-	function detail_list_loader2($registration_id=0)
-	{
-		if($registration_id == 0)
-		
-		send_json(make_datatables_list(null)); 
-				
-		$data = $this->approved_model->detail_list_loader2($registration_id);
-		
-		$sort_id = 0;
-		foreach($data as $key => $value) 
-		{	
-		$foto='<img   width="50px;" height="50px;" src='.base_url().'storage/img_mobil/'.form_transient_pair('transient_photo', $value['photo_file']).'';
-		$data[$key] = array(
-				form_transient_pair('transient_photo_name', $value['photo_name']),
-				$foto
-				
-		);
-		
-		
-	
-		}		
-		send_json(make_datatables_list($data)); 
-	}	
+
 	function detail_list_loader3($registration_id=0)
 	{
 		if($registration_id == 0)send_json(make_datatables_list(null)); 
@@ -158,8 +136,8 @@ class Approved extends CI_Controller{
 				),
 				form_transient_pair('transient_rs_name', $value['rs_name']),
 				form_transient_pair('transient_rs_qty',$value['rs_qty']),
-				form_transient_pair('transient_rs_repair', tool_money_format($value['rs_repair']), $value['rs_repair']),
-				form_transient_pair('transient_rs_approved_repair',	tool_money_format($value['rs_approved_repair']),$value['rs_approved_repair'])
+				form_transient_pair('transient_rs_repair', tool_money_format($value['rs_repair']), $value['rs_repair'])
+				//form_transient_pair('transient_rs_approved_repair',	tool_money_format($value['rs_approved_repair']),$value['rs_approved_repair'])
 				
 		);
 		
