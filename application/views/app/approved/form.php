@@ -84,6 +84,16 @@ $(function(){
 		}
 		
 	});
+	$('input[name="i_disc_panel"]').change(function(){
+		if($(this).val() > 100){
+			alert('diskon Panel Tidak boleh lebih dari 100%');
+		}
+	});
+	$('input[name="i_disc_parts"]').change(function(){
+		if($(this).val() > 100){
+			alert('diskon Spareparts Tidak boleh lebih dari 100%');
+		}
+	});
 	function load_insurance_pph()
 	{
 		var id 	= $('input[name="i_insurance_id"]').val();
@@ -288,14 +298,26 @@ $(function(){
     <td width="10" valign="top">:</td>
     <td width="745" valign="top"><textarea name="i_registration_description" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
     </tr>
-   
+   <tr>
+   <td colspan="3"></td>
+   </tr>
+     <tr>
+      <td>Diskon Panel %</td>
+      <td>:</td>
+      <td><input type="text" name="i_disc_panel" id="i_disc_panel"  value="<?=$approved_disc_panel?>" /></td>
+    </tr>
+     <tr>
+      <td>Diskon Spareparts	%  </td>
+      <td>:</td>
+      <td><input type="text" name="i_disc_parts" id="i_disc_parts"   value="<?=$approved_disc_sparepart?>" /></td>
+    </tr>
    
      </table>
      </div>
 	
 	<div class="command_bar">
-		<input type="button" id="submit" value="Simpan Registrasi"/>
-		<input type="button" id="enable" value="Setujui"/>
+		<input type="button" id="submit" value="Setujui"/>
+		<input type="button" id="enable" value="Diskon"/>
 	
 		<input type="button" id="cancel" value="Batal"/>
         <input type="button" id="print_estimasi" value="Cetak Estimasi"  />

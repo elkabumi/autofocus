@@ -152,8 +152,8 @@ class Registration extends CI_Controller
 		$data['spk_no']						= $this->input->post('i_spk_no');
 		$data['pkb_no']						= $this->input->post('i_pkb_no');
 		
-		$data['registration_disc_panel']	= 0;
-		$data['registration_disc_part']		= 0;
+		$data['approved_disc_panel']	= 0;
+		$data['approved_disc_sparepart']		= 0;
 		
 		$list_product_id		= $this->input->post('transient_product_id');
 		$list_product_price_id		= $this->input->post('transient_product_price_id');
@@ -216,6 +216,8 @@ class Registration extends CI_Controller
 		$data['total_registration'] = $total_price;
 		$data['approved_total_registration'] = $total_price;
 		
+		$data['approved_disc_panel_total'] = $total_price;
+		
 		$date=date('ymdhis');
 		
 		$item2 = array();
@@ -265,6 +267,8 @@ class Registration extends CI_Controller
 		
 		$data['sparepart_total_registration'] = $total_rs_repair;
 		$data['approved_sparepart_total_registration'] = $total_rs_repair;
+		
+		$data['approved_disc_sparepart_total'] = $total_rs_repair;
 		
 		
 		if(empty($id)) // jika tidak ada id maka create

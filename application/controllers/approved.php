@@ -461,6 +461,9 @@ class Approved extends CI_Controller{
 		$this->form_validation->set_rules('i_spk_no','No SPK','trim|required');
 		$this->form_validation->set_rules('i_pkb_no','No PKB','trim|required');
 		$this->form_validation->set_rules('i_spk_date','Tanggal SPK','trim|required|valid_date|sql_date');
+		
+		$this->form_validation->set_rules('i_disc_panel','Diskon Panel','max_value[100]');
+			$this->form_validation->set_rules('i_disc_parts','Diskon SpareParts','max_value[100]');
 		//$this->form_validation->set_rules('i_registration_description','Keterangan','trim|required');
 		
 		// cek data berdasarkan kriteria
@@ -491,6 +494,9 @@ class Approved extends CI_Controller{
 		$data['spk_date']					= $this->input->post('i_spk_date');
 		$data['spk_no']						= $this->input->post('i_spk_no');
 		$data['pkb_no']						= $this->input->post('i_pkb_no');
+		$data['approved_disc_panel']	= $this->input->post('i_disc_panel');
+		$data['approved_disc_sparepart']		= $this->input->post('i_disc_parts');
+		
 		
 		$list_detail_registration_id	 	= $this->input->post('transient_detail_registration_id');
 		$list_product_price_id				= $this->input->post('transient_product_price_id');
@@ -564,8 +570,8 @@ class Approved extends CI_Controller{
 		
 		$data['total_registration'] = $total_price;
 		$data['approved_total_registration'] = $approved_total_price;
-		
-		
+		$total_diskon_panel = ($data['approved_total_registration'] / 100) * $data['approved_disc_panel'];
+		$data['approved_disc_panel_total'] = $data['approved_total_registration'] - $total_diskon_panel ;
 		
 		$total_rs_repair =0;
 		$approved_rs_repair =0;
@@ -593,11 +599,13 @@ class Approved extends CI_Controller{
 		
 		$data['sparepart_total_registration'] = $total_rs_repair;
 		$data['approved_sparepart_total_registration'] = $approved_rs_repair;
-
+		$total_diskon_parts =($data['approved_sparepart_total_registration'] / 100) * $data['approved_disc_sparepart'];
+		$data['approved_disc_sparepart_total'] = $data['approved_sparepart_total_registration'] - $total_diskon_parts ;
 		
 		
 			$error = $this->approved_model->update($id, $data, $items,$item2,$items_foto);
 			send_json_action($error, "Data telah desetujui", "Data gagal direvisi");
+
 			
 		
 		

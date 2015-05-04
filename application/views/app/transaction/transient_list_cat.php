@@ -42,7 +42,7 @@ $(function(){
  <table align="right">
           <tr>
             <td><span class="summary_total"> Total</span></td>
-            <td><input id="tm_total" value="<?= $transaction_material_total?>" type="text" readonly="readonly" class="format_money" size="50" />
+            <td><input id="tm_total" value="" type="text" readonly="readonly" class="format_money" size="50" />
            </td>
           </tr>
         </table>

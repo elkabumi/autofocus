@@ -28,14 +28,20 @@ $(function(){
 	</tbody>
     
 </table>
+<div class="command_table" style="text-align:right;">
 
-<div class="command_table" style="text-align:left;">
- <!--  <input type="button" id="add" value="Tambah"/>-->
+<span class="summary_total"> Total</span> <input id="rs_total" value="<?= $approved_total_registration?>" type="text" readonly="readonly" class="format_money" size="50" />
+<br />
+
+<span class="summary_total">Diskon</span> <input id="rs_total_disc" value="<?= $approved_disc_panel?>" type="text" readonly="readonly" class="format_money" size="50" />
+<br />
+<span class="summary_total"> Total Setalah Diskon</span> <input id="rs_total_disc" value="<?= $approved_disc_panel_total?>" type="text" readonly="readonly" class="format_money" size="50" />
+
+<!--<div align="left">     --<input type="button" id="add" value="Tambah"/>-->
 	<input type="button" id="edit" value="Revisi"/>
-  <!--   <input type="button" id="delete" value="Hapus"/>-->
-   
+     <!--<input type="button" id="delete" value="Hapus"/>-->
+    </div>
 </div>
-
 <div id="editor"></div>
 </form>
 </div>

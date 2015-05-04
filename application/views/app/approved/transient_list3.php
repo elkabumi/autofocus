@@ -18,6 +18,12 @@ $(function(){
 			rs_total += parseFloat($(this).val());
 		});
 		$('input#rs_total').val(formatMoney(rs_total));
+		var rs_total_disc = 0;
+		$('input[name="transient_rs_repair[]"]').each(function()
+		{
+			rs_total_disc += parseFloat($(this).val());
+		});
+		$('input#rs_total_disc').val(formatMoney(rs_total_disc));
 		
 	}
 });</script>
@@ -43,6 +49,12 @@ $(function(){
 <div class="command_table" style="text-align:right;">
 
 <span class="summary_total"> Total</span> <input id="rs_total" value="<?= $sparepart_total_registration?>" type="text" readonly="readonly" class="format_money" size="50" />
+<br />
+
+<span class="summary_total">Diskon</span> <input id="rs_total_disc" value="<?= $approved_disc_sparepart?> %"  type="text" readonly="readonly" class="format_money" size="50" />
+<br />
+<span class="summary_total"> Total Setalah Diskon</span> <input id="rs_total_disc" value="<?= $approved_disc_sparepart_total?>" type="text" readonly="readonly" class="format_money" size="50" />
+
 <div align="left">     <!--<input type="button" id="add" value="Tambah"/>-->
 	<input type="button" id="edit" value="Revisi"/>
      <!--<input type="button" id="delete" value="Hapus"/>-->
