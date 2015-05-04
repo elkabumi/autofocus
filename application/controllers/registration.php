@@ -152,6 +152,9 @@ class Registration extends CI_Controller
 		$data['spk_no']						= $this->input->post('i_spk_no');
 		$data['pkb_no']						= $this->input->post('i_pkb_no');
 		
+		$data['registration_disc_panel']	= 0;
+		$data['registration_disc_part']		= 0;
+		
 		$list_product_id		= $this->input->post('transient_product_id');
 		$list_product_price_id		= $this->input->post('transient_product_price_id');
 		$list_registration_detail_price	 	= $this->input->post('transient_registration_detail_price');
