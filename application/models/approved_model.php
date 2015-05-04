@@ -149,7 +149,7 @@ class Approved_model extends CI_Model
 		return $this->db->trans_status();
 	}
 	
-	function update($id, $data, $items, $item2)
+	function update($id, $data, $items, $item2,$items_foto)
 	{
 		$this->db->trans_start();
 		$this->db->where('registration_id', $id); // data yg mana yang akan di update
@@ -168,7 +168,7 @@ class Approved_model extends CI_Model
 		}
 		
 		
-				//Insert items
+		//Insert items
 		$this->db->where('registration_id ', $id);
 		$this->db->delete('registration_spareparts');
 		$index2 = 0;
@@ -179,6 +179,15 @@ class Approved_model extends CI_Model
 			$index2++;
 		}
 		
+		// foto
+		$index_foto = 0;
+		foreach($items_foto as $row_foto)
+		{			
+			$row_foto['registration_id'] = $row['registration_id'];
+			
+			$this->db->insert('photos', $row_foto);
+			$index_foto++;
+		}
 	
 		$this->access->log_update($id, 'Approved');
 		$this->db->trans_complete();
@@ -359,6 +368,7 @@ class Approved_model extends CI_Model
 		return $result;
 	}
 	
+	
 		function detail_list_loader3($id)
 	{
 		// buat array kosong
@@ -376,6 +386,26 @@ class Approved_model extends CI_Model
 		return $result;
 	}
 	
+	function detail_list_loader_foto($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('b.*,c.photo_type_name', 1);
+		$this->db->from('registrations a');
+		$this->db->join('photos b', 'b.registration_id = a.registration_id');
+		$this->db->join('photo_types c', 'c.photo_type_id = b.photo_type_id');
+		
+		$this->db->where('a.registration_id', $id);
+		$this->db->where('b.photo_type_id ',1);
+		$query = $this->db->get(); 
+		debug();
+		//query();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
 	
 	function approved($id)
 	{
@@ -451,6 +481,18 @@ class Approved_model extends CI_Model
 		foreach($query->result_array() as $row)	$result = format_html($row); // render dulu dunk!
 		return $result; 
 	}
-
+	function get_photo_type_name($id)
+	{
+		$sql = "select photo_type_name
+				from photo_types
+				where photo_type_id = '$id'
+				";
+		
+		$query = $this->db->query($sql);
+	//	query();
+		$result = null;
+		foreach ($query->result_array() as $row) $result = format_html($row);
+		return $result['photo_type_name'];
+	}
 }
 #

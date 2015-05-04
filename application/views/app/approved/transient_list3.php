@@ -4,10 +4,22 @@ $(function(){
 		id 				: "#transient_contact3",
 		listSource 		: "approved/detail_list_loader3/<?=$row_id?>",
 		formSource 		: "approved/detail_form3/<?=$row_id?>",
-		controlTarget	: "approved/detail_form_action3"
+		controlTarget	: "approved/detail_form_action3",
+			
+		onAdd		: function (){perhitungan();},	
+		onTargetLoad: function (){perhitungan();} 
 	});
 	
-	
+	function perhitungan()
+	{
+		var rs_total = 0;
+		$('input[name="transient_rs_repair[]"]').each(function()
+		{
+			rs_total += parseFloat($(this).val());
+		});
+		$('input#rs_total').val(formatMoney(rs_total));
+		
+	}
 });</script>
 <div class="transient_category">Data Sparepart</div>
 
@@ -28,14 +40,13 @@ $(function(){
 	</tbody>
     
 </table>
-<div class="command_table" style="text-align:left;">
- <table align="right">
-        
-        </table>
-      <!--<input type="button" id="add" value="Tambah"/>-->
+<div class="command_table" style="text-align:right;">
+
+<span class="summary_total"> Total</span> <input id="rs_total" value="<?= $sparepart_total_registration?>" type="text" readonly="readonly" class="format_money" size="50" />
+<div align="left">     <!--<input type="button" id="add" value="Tambah"/>-->
 	<input type="button" id="edit" value="Revisi"/>
      <!--<input type="button" id="delete" value="Hapus"/>-->
-   
+    </div>
 </div>
 <div id="editor"></div>
 </form>
