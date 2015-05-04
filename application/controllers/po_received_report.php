@@ -421,6 +421,37 @@
 	   $this->po_received_report_model->create_report_kwitansi('KWITANSI PERBAIKAN', 'report/report_kwitansi.php', $data, $data_detail,$data_sperpart,$data_jasa,$data_cat,'header.php');
 		}
 	}
+	
+	function salary_report($id = 0){
+	
+	if($id){
+	   $this->load->model('global_model');
+	   
+	   $result = $this->po_received_report_model->read_id($id);
+			
+			if ($result) // cek dulu apakah data ditemukan 
+			{
+				$data = $result;
+				$data['row_id'] = $id;		
+				$data['car_nopol'] = $result['car_nopol'];
+				$data['insurance_pph'] = $result['insurance_pph'];	
+				$data['customer_name'] = ($result['customer_name']) ? $result['customer_name'] : "-";
+				$data['check_in'] = format_new_date($data['check_in']);
+				$data['check_out'] = format_new_date($data['check_out']);
+				$data['registration_date'] = format_new_date($data['registration_date']);
+				$data['incident_date'] = format_new_date($data['incident_date']);
+				$data['claim_type_name'] = ($data['claim_type'] == 1) ? "Asuransi" : "Pribadi";
+			}
+		//$data='';
+			
+		$data_detail = $this->po_received_report_model->get_data_detail($id);
+		$data_sperpart = $this->po_received_report_model->get_data_sperpart($id);
+		$data_jasa = $this->po_received_report_model->get_data_jasa($id);
+		$data_cat = $this->po_received_report_model->get_data_cat($id);
+	   
+	   $this->global_model->create_report_detail_mobil('LAPORAN DETAIL GAJI PER MOBIL', 'report/salary_car_report.php', $data, $data_detail,$data_sperpart,$data_jasa,$data_cat,'header.php');
+		}
+	}
 
 
 }

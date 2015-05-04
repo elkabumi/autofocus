@@ -4,9 +4,9 @@
 	<thead>
 		<tr>
 			<th>Tanggal</th>
-            <th>Nama Team</th>
-            <th>Total Gaji</th>
-           
+            <th>Nopol</th>
+            <th>Total Gabungan</th>
+            <th>Total Last</th>
 		</tr> 
 	</thead> 
 	<tbody> 	

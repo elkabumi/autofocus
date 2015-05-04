@@ -38,6 +38,7 @@ $(function(){
             <th>Status</th>
             <th>Detail</th>
             <th>Kwitansi</th>
+            <th>Gaji</th>
 		</tr> 
 	</thead> 
 	<tbody> 	

@@ -53,14 +53,30 @@ class Salary_report_detail extends CI_Controller
 			$sort_id = 0;
 			foreach($data as $key => $value) 
 			{	
+			$total_last = $value['total_last'] + $value['transaction_las_lain'];
+			$total_gabungan = $value['total_gabungan'] + $value['transaction_gabungan_lain'];
+				if($total_last == ''){
+					 $last = 0 ;
+					 }else{ 
+					 $last = $total_last;
+					 }
+				
+				if($total_gabungan == ''){
+					 $gabungan = 0 ;
+					 }else{ 
+					 $gabungan = $total_gabungan;
+					 }
 				$data[$key] = array(
 		
 					form_transient_pair('transient_registration_date',format_new_date($value['registration_date']),$value['registration_date']),
-					form_transient_pair('transient_team_name',$value['employee_group_name']),
-					form_transient_pair('transient_team_payment',number_format($value['transaction_total']),$value['transaction_total']),
+					form_transient_pair('transient_car_nopol',$value['car_nopol']),
+					form_transient_pair('transient_total_gabungan',number_format($gabungan),$gabungan),
+					form_transient_pair('transient_total_last',number_format($last),$last),
 
 					
 				);
+				$last += $last;
+				$gabungan += $gabungan;
 			}
 		}
         send_json(make_datatables_list($data));

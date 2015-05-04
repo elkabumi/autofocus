@@ -120,9 +120,14 @@ class Po_received_report_model extends CI_Model
 			}
 			
 
-			$link_detail = "<a href=".site_url('po_received_report/form/'.$row['registration_id'])." class='link_input'> Detail </a>";
-			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input'> Download</a>";		
-			$link_kwitansi = "<a href=".site_url('po_received_report/report_kwitansi/'.$row['registration_id'])." class='link_input'> Download</a>";		
+			$link_detail = "<a href=".site_url('po_received_report/form/'.$row['registration_id'])." class='link_input' target='_blank'> Detail </a>";
+			$link_report = "<a href=".site_url('po_received_report/report/'.$row['registration_id'])." class='link_input' target='_blank'> Download</a>";		
+			$link_kwitansi = "<a href=".site_url('po_received_report/report_kwitansi/'.$row['registration_id'])." class='link_input' target='_blank'> Download</a>";
+			if($row['status_registration_id'] >= 3){
+			$link_salary_report = "<a href=".site_url('po_received_report/salary_report/'.$row['registration_id'])." class='link_input' target='_blank'> Download</a>";
+			}else{
+			$link_salary_report = "";
+			}
 			 
 			
 			$data[] = array(
@@ -138,7 +143,8 @@ class Po_received_report_model extends CI_Model
 				tool_money_format($laba),
 				$status,
 				$link_report,
-				$link_kwitansi
+				$link_kwitansi,
+				$link_salary_report
 			); 
 		}
 		
@@ -445,14 +451,22 @@ class Po_received_report_model extends CI_Model
 	
 	function get_data_jasa($id) {
 		
-		$query = "SELECT a.*, f.workshop_service_name
-					FROM transaction_details a
-					JOIN transactions e on e.transaction_id = a.transaction_id
-					JOIN workshop_services f on f.workshop_service_id = a.workshop_service_id
-					WHERE registration_id = '$id'
-					ORDER BY a.transaction_detail_id asc
-					"
-					;
+		$query = "select  a.transaction_total,c.employee_group_name, d.registration_date,transaction_gabungan_lain,													transaction_las_lain,e.car_nopol,g.*,f.*,
+				(SELECT sum( z.workshop_service_job_price )
+					FROM transaction_details z
+					LEFT JOIN workshop_services b ON b.workshop_service_id = z.workshop_service_id
+					where workshop_service_type = 1 and z.transaction_id = a.transaction_id) as total_gabungan,
+				(SELECT sum( z.workshop_service_job_price )
+					FROM transaction_details z
+					LEFT JOIN workshop_services b ON b.workshop_service_id = z.workshop_service_id
+					where workshop_service_type = 2 and z.transaction_id = a.transaction_id) as total_last,(select employee_group_name from employee_groups x where x.employee_group_id = a.employee_group_id2 ) as team_last
+				from transactions a 
+				JOIN employee_groups c ON c.employee_group_id = a.employee_group_id
+				JOIN registrations d ON d.registration_id = a.registration_id
+				JOIN cars e ON e.car_id = d.car_id
+				JOIN transaction_details f on f.transaction_id = a.transaction_id
+				JOIN workshop_services g on g.workshop_service_id = f.workshop_service_id
+				where d.registration_id = '$id'";
 		
         $query = $this->db->query($query);
        // query();
