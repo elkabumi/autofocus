@@ -328,12 +328,12 @@ $(function(){
         <tr>
           <td width="17%">Gabungan lain-lain</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_gabungan_lain" name="i_gabungan_lain"  value="<?=$transaction_gabungan_lain?>" /></td>
+          <td width="82%"><input type="text" id="i_gabungan_lain" name="i_gabungan_lain"  value="<?=$transaction_gabungan_lain?>" />  </td>
         </tr>
            <tr>
           <td width="17%">Las lain-lain</td>
           <td width="1%">:</td>
-          <td width="82%"><input type="text" id="i_las_lain" name="i_las_lain"  value="<?=$transaction_las_lain?>" /></td>
+          <td width="82%"><input type="text" id="i_las_lain" name="i_las_lain"  value="<?=$transaction_las_lain?>" />  </td>
         </tr>
 	<tr>
    <td>Tanggal awal plain</td>
