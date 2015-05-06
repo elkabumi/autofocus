@@ -107,7 +107,12 @@ class Approved extends CI_Controller{
 						form_transient_pair('transient_product_code', $value['product_code'],$value['product_code'],
 									array(
 											'transient_product_price_id' => $value['product_price_id'],
-											'transient_detail_registration_id' =>$value['detail_registration_id'])),
+											'transient_detail_registration_id' =>$value['detail_registration_id'],
+											'transient_reg_aproved_price' => $value['detail_registration_approved_price']
+											)
+											),
+											
+											
 											
 						form_transient_pair('transient_product_name', $value['product_name']." (".$value['product_type_name']." - ".$value['pst_name'].")", $value['product_name']),
 						form_transient_pair('transient_reg_price',	tool_money_format($value['detail_registration_price']),$value['detail_registration_price'])
@@ -132,7 +137,9 @@ class Approved extends CI_Controller{
 		
 		$data[$key] = array(
 				form_transient_pair('transient_rs_part_number', $value['rs_part_number'], $value['rs_part_number'],
-								array('transient_rs_id'=> $value['rs_id'])
+								array('transient_rs_id'=> $value['rs_id'],
+										'transient_rs_approved_repair' =>$value['rs_approved_repair']
+								)
 				),
 				form_transient_pair('transient_rs_name', $value['rs_name']),
 				form_transient_pair('transient_rs_qty',$value['rs_qty']),

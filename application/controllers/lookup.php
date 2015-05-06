@@ -268,7 +268,19 @@ class Lookup extends CI_Controller
 		$this->dtc->coa_account_type_get();
 	}
 	
-		# lookup data cabang
+	# lookup data Sub account
+	function sub_account_table_control($coa_account_type = 0)
+	{
+		$this->load->library('dtc');
+		$this->dtc->sub_account_control($coa_account_type);
+	}
+	
+	function sub_account_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->sub_account_get();
+	}
+	# lookup data cabang
 	function market_table_control($id=0)
 	{
 		$this->load->library('dtc');

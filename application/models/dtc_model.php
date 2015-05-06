@@ -2896,6 +2896,92 @@ class Dtc_model extends CI_Model
 		
 		return $result;
 	}
+	## Data Sub account
+	function sub_account_control($param, $coa_account_type)
+	{
+		// map parameter ke variable biasa agar mudah digunakan
+		$limit 		= $param['limit'];
+		$offset	 	= $param['offset'];
+		$category 	= $param['category'];
+		$keyword 	= $param['keyword'];
+		
+		# order define columns start
+		$sort_column_index				= $param['sort_column'];
+		$sort_dir						= $param['sort_dir'];
+		
+		$order_by_column[] = 'coa_hierarchy';
+		$order_by_column[] = 'coa_hierarchy';
+		$order_by_column[] = 'coa_name';
+		
+		$order_by = $order_by_column[$sort_column_index] . $sort_dir;
+		# order define column end
+		
+		$column['p1']			= 'coa_hierarchy';
+		$column['p2']			= 'coa_name';
+		
+		$this->db->start_cache();
+		
+		
+		if(array_key_exists($category, $column) && strlen($keyword) > 0)
+		{
+			$this->db->like($column[$category], $keyword);
+		}// end if
+		$this->db->stop_cache();
+		
+		// hitung total record
+		$this->db->select('COUNT(1) AS total', 1); // pastikan ada AS total nya, 1 bila isinya adalah function (dalam hal ini COUNT)
+		
+		if($coa_account_type){
+			$this->db->where('coa_account_type', $coa_account_type);
+		}else{
+			$this->db->where('coa_code', "NOTHING");
+		}
+		$query	= $this->db->get('coas'); 
+		$row 	= $query->row_array(); // fungsi ci untuk mengambil 1 row saja dari query
+		$total 	= $row['total'];	
+				
+		
+		// proses query sesuai dengan parameter
+		$this->db->select('*', 1); // ambil seluruh data	
+		if($coa_account_type){
+			$this->db->where('coa_account_type', $coa_account_type);
+		}else{
+			$this->db->where('coa_code', "NOTHING");
+		}		
+		$this->db->order_by($order_by);
+		$query = $this->db->get('coas', $limit, $offset);
+		
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			
+			$row = format_html($row);
+			
+			$data[] = array(
+				$row['coa_id'], 
+				$row['coa_hierarchy'], 
+				$row['coa_name']
+			); 
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($param, $data, $total);
+	}
+	
+	function sub_account_get($id, $mode)
+	{
+		if (empty($id) || !$id || !$mode) return NULL;
+		
+		$result = NULL;
+		
+		if ($mode == 1)
+			$query = $this->db->get_where('coas', array('coa_id' => $id), 1);
+		else
+			$query = $this->db->get_where('coas', array('coa_code' => $id), 1);
+			
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
 }
 
 #

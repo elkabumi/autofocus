@@ -51,7 +51,7 @@ $(function(){
 <span class="summary_total"> Total</span> <input id="rs_total" value="<?= $sparepart_total_registration?>" type="text" readonly="readonly" class="format_money" size="50" />
 <br />
 
-<span class="summary_total">Diskon</span> <input id="rs_total_disc" value="<?= $approved_disc_sparepart?> %"  type="text" readonly="readonly" class="format_money" size="50" />
+<span class="summary_total">Diskon</span> <input id="rs_total_disc" value="<?= $approved_disc_sparepart?>"  type="text" readonly="readonly" class="format_money" size="50" />
 <br />
 <span class="summary_total"> Total Setalah Diskon</span> <input id="rs_total_disc" value="<?= $approved_disc_sparepart_total?>" type="text" readonly="readonly" class="format_money" size="50" />
 

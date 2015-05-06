@@ -114,8 +114,31 @@ class Dtc
 		
 		if ($result) 
 		{ 
-			send_json_lookup_feedback($result['coa_id'], $result['coa_name'], $result['coa_name']);
+			send_json_lookup_feedback($result['coa_id'], $result['coa_hierarchy'], $result['coa_name']);
 
+		}
+		else send_json_error_feedback();
+	}
+	# lookup data sub account
+	function sub_account_control($coa_account_type = 0)
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->sub_account_control(get_datatables_control(), $coa_account_type);
+		send_json($data); 
+	}
+	
+	function sub_account_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->sub_account_get($data, $mode);
+		
+		if ($result) 
+		{ 
+		
+			send_json_lookup_feedback($result['coa_id'], $result['coa_hierarchy'], $result['coa_name']);
 		}
 		else send_json_error_feedback();
 	}

@@ -170,7 +170,7 @@ class Create_po extends CI_Controller{
 			foreach($data as $key => $value) 
 			{	
 		
-				$status="tidak di order";
+				$status="Belum di order";
 			$data[$key] = array(
 					form_transient_pair('transient_rs_part_number', $value['rs_part_number'], $value['rs_part_number'],
 										array('transient_rs_id'=> $value['rs_id'])
