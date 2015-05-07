@@ -333,6 +333,7 @@ class Transaction_model extends CI_Model
 		$this->db->join('photos b', 'b.registration_id = a.registration_id');
 		$this->db->join('photo_types c', 'c.photo_type_id = b.photo_type_id');
 		$this->db->where('a.registration_id', $id);
+		$this->db->where('c.photo_type_cat', 2);
 		$this->db->order_by('b.photo_id asc');
 		$query = $this->db->get(); debug();
 		//query();
