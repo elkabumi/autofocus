@@ -447,6 +447,21 @@ class Global_model extends CI_Model
 			readfile('report_new/'.$title.'.pdf');
 	    }
 	}
+	
+	function get_period()
+	{
+		$this->db->select('period_id,period_month,period_year');
+		$this->db->where('period_closed','FALSE');
+		$this->db->order_by('period_year,period_month','ASC');
+		$query = $this->db->get('periods');	
+
+		$data = array();
+		foreach($query->result_array() as $row)
+		{
+			$data[$row['period_id']] = $row['period_month']." / ".$row['period_year'];
+		}
+		return $data;
+	}
 
 
 }
