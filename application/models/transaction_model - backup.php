@@ -1,4 +1,4 @@
-<?php
+<em></em><?php
 class Transaction_model extends CI_Model 
 {
 	var $trans_type = 5;
