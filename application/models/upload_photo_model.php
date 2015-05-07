@@ -61,7 +61,7 @@ class Upload_photo_model extends CI_Model
 		};	
 
 		$sql = "
-		select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.transaction_id
+		select a.* , c.customer_name, d.car_nopol, e.insurance_name,f.transaction_id, f.transaction_car_status
 		from registrations a
 		
 		left join customers c on a.customer_id = c.customer_id
@@ -89,9 +89,16 @@ class Upload_photo_model extends CI_Model
 			
 			$registration_date = format_new_date($row['registration_date']);
 			$status = show_checkbox_status($row['status_registration_id']);
+
+			switch($row['transaction_car_status']){
+				case 0: $car_status = "Belum keluar"; break;
+				case 1: $car_status = 'Outstanding'; break;
+				case 2:  $car_status = 'Finish'; break;
+			}
+
 			switch($row['status_registration_id']){
-				case 3: $status = "<div class='registration_status3'>Progress Pengerjaan 100%</div>"; break;
-				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
+				case 3: $status = "<div class='registration_status3'>Progress Pengerjaan 100% : ".$car_status."</div>"; break;
+				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai : ".$car_status."</div>"; break;
 			}
 			if($row['status_registration_id'] == 3){	
 				$link = "<a href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Proses </a>";
