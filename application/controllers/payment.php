@@ -102,8 +102,8 @@
 				$data['payment_date'] = $this->input->post('i_payment_date');
 
 				if($this->input->post('i_claim_type') == 1){
-					$data['own_retention_dibayar'] = $this->input->post('i_own_retention_dibayar');
-					$data['own_retention_sisa'] = $this->input->post('i_own_retention_sisa');
+					$data['own_retention_dibayar'] = 0;//$this->input->post('i_own_retention_dibayar');
+					$data['own_retention_sisa'] = 0;//$this->input->post('i_own_retention_sisa');
 
 					$data['pembayaran_dibayar'] = $this->input->post('i_pembayaran_dibayar');
 					$data['pembayaran_sisa'] = $this->input->post('i_pembayaran_sisa');

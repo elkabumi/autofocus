@@ -281,7 +281,18 @@ $(function(){
     <td width="10" valign="top">:</td>
     <td width="745" valign="top"><textarea name="i_registration_description" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
     </tr>
-   
+   <tr>
+      <td>Status Mobil</td>
+      <td>:</td>
+      <td><label>
+         <input type="radio" name="i_car_status" value="1" id="i_car_status" <?php if($transaction_car_status == 1){ ?> checked="checked"<?php } ?> />
+         Outstanding</label>
+     <br />
+       <label>
+         <input name="i_car_status" type="radio" id="i_car_status" value="2" <?php if($transaction_car_status == 2){ ?> checked="checked"<?php } ?>/>
+         Finish
+       </label></td>
+    </tr>
    
      </table>
      </div>

@@ -41,7 +41,7 @@ $(function(){
 </table>
 <div class="command_table" style="text-align:right; padding:5px;">
 
-	<span class="summary_total"> Total</span> <input id="rs_total" value="" type="text" readonly="readonly" class="format_money" size="50" />
+	<span class="summary_total"> Total</span> <input id="rs_total" value="<?= $sparepart_total_registration?>" type="text" readonly="readonly" class="format_money" size="50" />
 
    
 </div>

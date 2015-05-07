@@ -141,7 +141,7 @@ $(function(){
 			var or_sisa 	= $('input[name="i_own_retention_sisa"]').val();
 			var pembayaran_sisa 	= $('input[name="i_pembayaran_sisa"]').val();
 
-			if(or_sisa == 0 && or_sisa != ""){
+			//if(or_sisa == 0 && or_sisa != ""){
 				if(pembayaran_sisa == 0 && pembayaran_sisa != ""){
 					$('input[name="i_status"]').val("1");
 					$('input[name="i_status_name"]').val("LUNAS");
@@ -149,10 +149,10 @@ $(function(){
 					$('input[name="i_status"]').val("0");
 					$('input[name="i_status_name"]').val("BELUM LUNAS");
 				}
-			}else{
-				$('input[name="i_status"]').val("0");
-				$('input[name="i_status_name"]').val("BELUM LUNAS");
-			}
+			//}else{
+				//$('input[name="i_status"]').val("0");
+				//$('input[name="i_status_name"]').val("BELUM LUNAS");
+			//}
 		}else{
 			var pembayaran_sisa 	= $('input[name="i_pembayaran_sisa"]').val();
 			if(pembayaran_sisa == 0 && pembayaran_sisa != ""){
@@ -490,6 +490,7 @@ $(function(){
          <td width="1%">:</td>
        <td width="76%"><input name="i_own_retention" readonly="readonly" type="text" id="i_own_retention" value="<?=$own_retention?>" /></td>
      </tr>
+     <!--
       <tr>
    <td>Dibayar</td>
          <td>:</td>
@@ -500,7 +501,7 @@ $(function(){
          <td>:</td>
        <td><input name="i_own_retention_sisa" readonly="readonly" type="text" id="i_own_retention_sisa" value="<?=$own_retention_sisa?>" /></td>
      </tr>
-   
+   -->
       </table>	
       <div class="form_category">Pembayaran Asuransi</div>
 	<table width="800" cellpadding="4" class="form_layout">

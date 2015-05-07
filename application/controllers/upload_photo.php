@@ -12,8 +12,8 @@
 		}
 		function index(){
 			$this->render->add_view('app/upload_photo/list');
-			$this->render->build('Data Upload Foto');
-			$this->render->show('Data Upload Foto');
+			$this->render->build('Finishing');
+			$this->render->show('Finishing');
 		}
 		function table_controller(){
 			$data = $this->upload_photo_model->list_controller();
@@ -40,7 +40,7 @@
 			$this->render->build('Foto');
 			
 			$this->render->add_js('ajaxfileupload');
-			$this->render->show('Upload Foto');
+			$this->render->show('Finishing');
 		}
 		
 		
@@ -57,7 +57,11 @@
 				send_json_action($is_process_error, "Data telah dihapus", "Data gagal dihapus");
 			}
 				$id 			=$this->input->post('row_id');	
+				
 				$data['status_registration_id']	 = 4;	
+				
+				$data_transaction['transaction_car_status'] =  $this->input->post('i_car_status');
+				
 				
 				$list_photo_id		= $this->input->post('transient_photo_id');
 				$list_photo_name	= $this->input->post('transient_photo_name');
@@ -97,7 +101,7 @@
 				}
 				
 				
-				$error = $this->upload_photo_model->create($id,$data, $items);
+				$error = $this->upload_photo_model->create($id,$data, $data_transaction, $items);
 				send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
 			
 				
@@ -228,7 +232,7 @@
 			$i_photo_file	= $this->input->post('i_photo_file');
 			$i_photo_edit	= $this->input->post('i_photo_edit');
 			
-			if($i_photo_type_id == '3'){$photo_type_name = 'foto mobil keluar';}else if($i_photo_type_id == '4') {$photo_type_name = 'foto mobil Perbandingan';}
+			if($i_photo_type_id == '5'){$photo_type_name = 'foto finishing';}
 		
 			$foto='<img   width="50px;" height="50px;" src='.base_url().'tmp/'.$i_photo_file.'';
 	

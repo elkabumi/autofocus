@@ -94,10 +94,10 @@ class Upload_photo_model extends CI_Model
 				case 4: $status = "<div class='registration_status4'>Pengerjaan Selesai</div>"; break;
 			}
 			if($row['status_registration_id'] == 3){	
-				$link = "<a href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Upload Foto </a>";
+				$link = "<a href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Proses </a>";
 			}
 			else if($row['status_registration_id'] == 4){	
-				$link = "<a  href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Edit Foto</a>";
+				$link = "<a  href=".site_url('upload_photo/form/'.$row['registration_id'])." class='link_input'> Proses</a>";
 			}
 			
 			$data[] = array(
@@ -154,11 +154,14 @@ class Upload_photo_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($id,$data, $items)
+	function create($id,$data, $data_transaction, $items)
 	{
 		$this->db->trans_start();
 		$this->db->where('registration_id', $id); // data yg mana yang akan di update
 		$this->db->update('registrations', $data);
+		
+		$this->db->where('registration_id', $id); // data yg mana yang akan di update
+		$this->db->update('transactions', $data_transaction);
 		
 		//insert tim kerja
 		
