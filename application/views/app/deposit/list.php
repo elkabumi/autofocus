@@ -33,6 +33,8 @@ $(function(){
             <th>Jumlah Order</th>
     		<th>Jumlah Received</th>
             <th>Jumlah Terpasang</th>
+            
+            <th>Jumlah Stock</th>
             <th>Nopol Mobil</th>
       		   <th>Config</th>
 		</tr> 

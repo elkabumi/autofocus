@@ -149,7 +149,7 @@ class Transaction_model extends CI_Model
 
 		return $this->db->trans_status();
 	}
-	function create($data, $items, $items_material, $items_foto)
+	function create($data, $items, $items_material, $items_foto,$items_sparepats)
 	{
 		$this->db->trans_start();
 
@@ -187,7 +187,30 @@ class Transaction_model extends CI_Model
 			$this->db->insert('photos', $row_foto);
 			$index_foto++;
 		}
+		//spareparts
+		$index_spareparts = 0;
+		foreach($items_sparepats as $row_sparepats)
+		{			
 		
+			if($row_sparepats['tpd_id'] != '0'){
+			$data_install['tpd_detail_install'] = $row_sparepats['tpd_detail_install'];
+			$this->db->where('tpd_id',$row_sparepats['tpd_id']);
+			$this->db->update('transaction_po_details',$data_install);
+			//update status parts	
+		
+				//create history parts
+				$data_history['tpd_id']		 =	$row_sparepats['tpd_id'];
+				$data_history['tpdh_type'] =	$row_sparepats['tpdh_type'];
+				$data_history['tpdh_qty']  = 	$row_sparepats['tpdh_qty'];	
+				$data_history['tpdh_date'] =	$row_sparepats['tpdh_date'];
+				$data_history['tpdh_desc']  = 	$row_sparepats['tpdh_desc'];	
+				
+				$this->db->trans_start();
+				$this->db->insert('transaction_po_details_history', $data_history);
+			}
+			$index_spareparts++;
+			
+		}
 		$this->insert_id = $data['registration_id'];//create registration
 	//	$this->insert_registration($id, $data);
 
@@ -197,7 +220,7 @@ class Transaction_model extends CI_Model
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}// end of function 
-	function update($id, $data, $items, $items_material, $items_foto)
+	function update($id, $data, $items, $items_material, $items_foto,$items_sparepats)
 	{
 		$this->db->trans_start();
 
@@ -243,7 +266,32 @@ class Transaction_model extends CI_Model
 			$this->db->insert('photos', $row_foto);
 			$index_foto++;
 		}
-
+		//spareparts
+		$index_spareparts = 0;
+		foreach($items_sparepats as $row_sparepats)
+		{			
+			
+		if($row_sparepats['tpd_id'] != 0){
+			$data_install['tpd_detail_install'] = $row_sparepats['tpd_detail_install'];
+			
+			$this->db->where('tpd_id',$row_sparepats['tpd_id']);
+			$this->db->update('transaction_po_details',$data_install);
+			//query();
+			//update status parts	
+		
+				//create history parts
+				$data_history['tpd_id']		 =	$row_sparepats['tpd_id'];
+				$data_history['tpdh_type'] =	$row_sparepats['tpdh_type'];
+				$data_history['tpdh_qty']  = 	$row_sparepats['tpdh_qty'];	
+				$data_history['tpdh_date'] =	$row_sparepats['tpdh_date'];
+				$data_history['tpdh_desc']  = 	$row_sparepats['tpdh_desc'];	
+				
+				$this->db->trans_start();
+				$this->db->insert('transaction_po_details_history', $data_history);
+			}	
+			$index_spareparts++;
+			
+		}
 		$this->access->log_update($id, 'Transaksi');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
@@ -274,11 +322,14 @@ class Transaction_model extends CI_Model
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('a.*', 1);
+		$this->db->select('a.*,c.*', 1);
 		$this->db->from('registration_spareparts a');
+		$this->db->join('transaction_po b', 'b.registration_id= a.registration_id','LEFT');
+		$this->db->join('transaction_po_details c', 'c.tp_id = b.tp_id','LEFT');
+		
 		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get(); 
-		debug();
+		//debug();
 		//query();
 		foreach($query->result_array() as $row)
 		{

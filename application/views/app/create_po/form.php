@@ -11,7 +11,7 @@ $(function(){
 	createLookUp({
 		table_id		: "#lookup_table_registration",
 		table_width		: 400,
-		listSource 		: "lookup/registration_table_control/2",
+		listSource 		: "lookup/registration_table_control/0",
 		dataSource		: "lookup/registration_lookup_id",
 		column_id 		: 0,
 		component_id	: "#lookup_registration",

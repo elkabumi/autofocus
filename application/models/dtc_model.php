@@ -1874,7 +1874,7 @@ class Dtc_model extends CI_Model
 		};	
 		
 		if($type == 2){
-			$where .= " and status_registration_id = 2 ";
+			$where .= " WHERE status_registration_id = 2 ";
 		}
 
 		$sql = "
@@ -1884,7 +1884,7 @@ class Dtc_model extends CI_Model
 		left join customers c on a.customer_id = c.customer_id
 		left join cars d on a.car_id = d.car_id
 		left join insurances e on a.insurance_id = e.insurance_id
-		where status_registration_id = 2 $where $order_by
+		$where $order_by
 			
 			";
 

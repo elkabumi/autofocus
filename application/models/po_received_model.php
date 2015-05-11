@@ -253,9 +253,10 @@ class po_received_model extends CI_Model
 		$this->db->join('registration_spareparts b', 'b.registration_id = a.registration_id');
 		
 		$this->db->where('a.registration_id', $id);
-		$this->db->where('b.rs_status_id', 0);
+		$this->db->where('b.rs_status_id', 1);
 		$query = $this->db->get(); 
-		debug();
+		query();
+		//debug();
 		foreach($query->result_array() as $row)
 		{
 			$result[] = format_html($row);
@@ -273,7 +274,10 @@ class po_received_model extends CI_Model
 		
 		$this->db->join('registration_spareparts c','c.rs_id = b.rs_id');
 		$this->db->where('a.tp_id', $id);
-		$query = $this->db->get(); debug();
+		$query = $this->db->get(); 
+		
+		//debug();
+		
 		foreach($query->result_array() as $row)
 		{
 			$result[] = format_html($row);

@@ -136,30 +136,7 @@ class po_received extends CI_Controller{
 	function detail_table_loader($registration_id = 0, $id = 0) {
         if ($registration_id == 0)
             send_json(make_datatables_list(null));
-		
-		if(!$id){
-		
-			$data = $this->create_po_model->detail_list_loader($registration_id);
-			$sort_id = 0;
-			foreach($data as $key => $value) 
-			{	
-		
-				$status="tidak di order";
-			$data[$key] = array(
-					form_transient_pair('transient_rs_part_number', $value['rs_part_number'], $value['rs_part_number'],
-										array('transient_tpd_id'=> $value['tpd_id'])
-					),
-					form_transient_pair('transient_rs_name', $value['rs_name']),
-					form_transient_pair('transient_rs_qty',$value['rs_qty']),
-					form_transient_pair('transient_rs_qty_order', 0),
-					form_transient_pair('transient_rs_status',$status),
-					
-			
-								
-			);
-			}
-		
-		}else{
+
 			$data = $this->po_received_model->detail_list_loader2($id);
 			$sort_id = 0;
 			foreach($data as $key => $value) 
@@ -197,7 +174,7 @@ class po_received extends CI_Controller{
 			
 			}
 
-		}
+		
         send_json(make_datatables_list($data));
     }
 	

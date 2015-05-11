@@ -149,7 +149,7 @@ class Approved_model extends CI_Model
 		return $this->db->trans_status();
 	}
 	
-	function update($id, $data, $items, $item2,$items_foto)
+	function update($id, $data, $items, $item2)
 	{
 		$this->db->trans_start();
 		$this->db->where('registration_id', $id); // data yg mana yang akan di update
@@ -179,7 +179,8 @@ class Approved_model extends CI_Model
 			$index2++;
 		}
 		
-		// foto
+		
+		/*// foto
 		$index_foto = 0;
 		foreach($items_foto as $row_foto)
 		{			
@@ -187,7 +188,7 @@ class Approved_model extends CI_Model
 			
 			$this->db->insert('photos', $row_foto);
 			$index_foto++;
-		}
+		}*/
 	
 		$this->access->log_update($id, 'Approved');
 		$this->db->trans_complete();

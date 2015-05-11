@@ -79,7 +79,7 @@ class deposit_model extends CI_Model
 			
 			$row = format_html($row);
 			$link = "<a href=".site_url('deposit/form/'.$row['tpd_id'])." class='link_input'> detail </a>";	
-		
+			$stock = $row['tpd_detail_qty'] - $row['tpd_detail_install']; 
 		$data[] = array(
 				$row['tp_id'], 
 				$row['tp_code'], 

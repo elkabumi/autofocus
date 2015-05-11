@@ -522,6 +522,7 @@ class Approved extends CI_Controller{
 		}
 		}
 		
+		/*
 				$list_registration_photo_name	 	= $this->input->post('transient_photo_name');
 				$list_registration_photo_type_id	= $this->input->post('transient_photo_type_id');
 				$list_registration_photo_file		= $this->input->post('transient_photo_file');
@@ -552,6 +553,7 @@ class Approved extends CI_Controller{
 					
 				}
 				}
+		*/
 		
 		$data['total_registration'] = $total_price;
 		$data['approved_total_registration'] = $approved_total_price;
@@ -588,7 +590,7 @@ class Approved extends CI_Controller{
 		$data['approved_disc_sparepart_total'] = $data['approved_sparepart_total_registration'] - $total_diskon_parts ;
 		
 		
-			$error = $this->approved_model->update($id, $data, $items,$item2,$items_foto);
+			$error = $this->approved_model->update($id, $data, $items,$item2);
 			send_json_action($error, "Data telah desetujui", "Data gagal direvisi");
 
 			

@@ -6,7 +6,7 @@
 			<th>Tanggal</th>
             <th>Nopol</th>
             <th>Total Gabungan</th>
-            <th>Total Last</th>
+            <th>Total Las</th>
 		</tr> 
 	</thead> 
 	<tbody> 	

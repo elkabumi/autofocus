@@ -95,10 +95,16 @@ $(function(){
          <td width="1%">:</td>
          <td><input name="i_date_1" type="text" id="i_date_1" value="<?=$date_1 ?>" class="date_input" size="10"/></td>
      </tr>
+     
      <tr>
    		<td>Sampai</td>
    		<td width="1%">:</td>
        	<td><input name="i_date_2" type="text" id="i_date_2" value="<?=$date_1 ?>" class="date_input" size="10"/></td>
+     </tr>
+     <tr>
+         <td>Tgl gaji dibayar</td>
+         <td width="1%">:</td>
+         <td><input name="i_date_1" type="text" id="i_date_1" value="<?=$date_1 ?>" class="date_input" size="10"/></td>
      </tr>
      <tr>
           <td width="23%">Tim Kerja</td>

@@ -2,9 +2,9 @@
 $(function(){
 	createTableFormTransient({
 		id 				: "#transient_contact4",
-		listSource 		: "approved/detail_list_foto/<?=$row_id?>",
-		formSource 		: "approved/detail_form_foto/<?=$row_id?>",
-		controlTarget	: "approved/detail_form_foto_action",
+		listSource 		: "upload_photo_before/detail_list_foto/<?=$row_id?>",
+		formSource 		: "upload_photo_before/detail_form_foto/<?=$row_id?>",
+		controlTarget	: "upload_photo_before/detail_form_foto_action",
 		
 	});
 	
@@ -27,7 +27,7 @@ $(function(){
 	</tbody>
     
 </table>
-<!--<div class="command_table" style="text-align:left;">
+<div class="command_table" style="text-align:left;">
  <table align="right">
         
         </table>
@@ -35,7 +35,7 @@ $(function(){
 	<input type="button" id="edit" value="Edit"/>
     <input type="button" id="delete" value="Hapus"/>
    
-</div>-->
+</div>
 <div id="editor"></div>
 </form>
 </div>

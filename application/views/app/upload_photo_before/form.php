@@ -3,9 +3,9 @@ $(function(){
 
 	createForm({
 		id 				: "#id_form_nya", 
-		actionTarget	: "upload_photo/form_action",
-		backPage		: "upload_photo",
-		nextPage		: "upload_photo"
+		actionTarget	: "upload_photo_before/form_action",
+		backPage		: "upload_photo_before",
+		nextPage		: "upload_photo_before"
 	});
 	createLookUp({
 		table_id		: "#lookup_table_period",
@@ -84,6 +84,16 @@ $(function(){
 		}
 		
 	});
+	$('input[name="i_disc_panel"]').change(function(){
+		if($(this).val() > 100){
+			alert('diskon Panel Tidak boleh lebih dari 100%');
+		}
+	});
+	$('input[name="i_disc_parts"]').change(function(){
+		if($(this).val() > 100){
+			alert('diskon Spareparts Tidak boleh lebih dari 100%');
+		}
+	});
 	function load_insurance_pph()
 	{
 		var id 	= $('input[name="i_insurance_id"]').val();
@@ -108,9 +118,10 @@ $(function(){
 		
 				location.href = site_url + 'registration/report/' + $('input[name="row_id"]').val();
 			
-	});
-	$('#print_kwitansi').click(function(){
-			location.href = site_url + 'approved/report_kwitansi/' + $('input[name="row_id"]').val();
+		});
+		
+		$('#print_kwitansi').click(function(){
+			location.href = site_url + 'upload_photo_before/report_kwitansi/' + $('input[name="row_id"]').val();
 			
 		});
 	createDatePicker();
@@ -189,6 +200,7 @@ $(function(){
     </tr>
 <?php
 		if($claim_type == 1){
+			$kwitansi ='OR';
 ?>
  <tr>
       <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="4" id="asuransi" style="width:100%;">
@@ -259,7 +271,6 @@ $(function(){
         </tr>
         <?php
 		if($claim_type == 1){
-			$kwitansi ='OR';
 ?>
           <tr>
           <td width="17%">Own Retention (OR)</td>
@@ -287,133 +298,8 @@ $(function(){
     <td width="10" valign="top">:</td>
     <td width="745" valign="top"><textarea name="i_registration_description" id="i_registration_description" cols="45" rows="5"><?=$registration_description?></textarea></td>
     </tr>
-   <tr>
-      <td>Status Mobil</td>
-      <td>:</td>
-      <td><label>
-         <input type="radio" name="i_car_status" value="1" id="i_car_status" <?php if($transaction_car_status == 1){ ?> checked="checked"<?php } ?> />
-         Outstanding</label>
-     <br />
-       <label>
-         <input name="i_car_status" type="radio" id="i_car_status" value="2" <?php if($transaction_car_status == 2){ ?> checked="checked"<?php } ?>/>
-         Finish
-       </label></td>
-    </tr>
-   
      </table>
-     </div>
-	
-	<div class="command_bar">
-		<input type="button" id="submit" value="Simpan"/>
-		<input type="button" id="enable" value="Edit"/>
-	
-		<input type="button" id="cancel" value="Batal"/>
-        <input type="button" id="print_kwitansi" value="Cetak Kwitansi <?= $kwitansi?>"  />
-	
-        
-	</div>
-</div>
-<!-- table contact -->
-
-</form>
-
-
-<div id="">
-	<table id="lookup_table_customer" cellpadding="0" cellspacing="0" border="0" class="display" > 
-		<thead>
-			<tr>
-			<th>ID</th>
-            <th>Nomor</th>
-				<th>Nama</th>
-            
-			</tr> 
-		</thead> 
-		<tbody> 	
-		</tbody>
-	</table>
-	<div id="panel">
-		<input type="button" id="choose" value="Pilih Data"/>
-		<input type="button" id="refresh" value="Refresh"/>
-		<input type="button" id="cancel" value="Cancel" />
-	</div>	
-</div>
-
-
-<div id="">
-	<table id="lookup_table_car" cellpadding="0" cellspacing="0" border="0" class="display" > 
-		<thead>
-			<tr>
-			<th>ID</th>
-            <th>Nopol</th>
-			<th>Model</th>
-            <th>No Rangka</th>
-            <th>No Mesin</th>
-			</tr> 
-		</thead> 
-		<tbody> 	
-		</tbody>
-	</table>
-	<div id="panel">
-		<input type="button" id="choose" value="Pilih Data"/>
-		<input type="button" id="refresh" value="Refresh"/>
-		<input type="button" id="cancel" value="Cancel" />
-	</div>	
-</div>
-
-<div id="">
-	<table id="lookup_table_insurance" cellpadding="0" cellspacing="0" border="0" class="display" > 
-		<thead>
-			<tr>
-			<th>ID</th>
-				<th>Nama</th>
-            
-			</tr> 
-		</thead> 
-		<tbody> 	
-		</tbody>
-	</table>
-	<div id="panel">
-		<input type="button" id="choose" value="Pilih Data"/>
-		<input type="button" id="refresh" value="Refresh"/>
-		<input type="button" id="cancel" value="Cancel" />
-	</div>	
-</div>
-
-<div id="">
-	<table id="lookup_table_stand" cellpadding="0" cellspacing="0" border="0" class="display" > 
-		<thead>
-			<tr>
-			<th>ID</th>
-				<th>Nama</th>
-            
-			</tr> 
-		</thead> 
-		<tbody> 	
-		</tbody>
-	</table>
-	<div id="panel">
-		<input type="button" id="choose" value="Pilih Data"/>
-		<input type="button" id="refresh" value="Refresh"/>
-		<input type="button" id="cancel" value="Cancel" />
-	</div>	
-</div>
-
-
-<div id="">
-	<table id="lookup_table_period" cellpadding="0" cellspacing="0" border="0" class="display" > 
-		<thead>
-			<tr>
-			<th>ID</th>
-				<th>Periode</th>
-				<th>Status</th>
-			</tr> 
-		</thead> 
-		<tbody> 	
-		</tbody>
-	</table>
-	<div id="panel">
-		<input type="button" id="choose" value="Pilih Data"/>
-		<input type="button" id="refresh" value="Refresh"/>
-		<input type="button" id="cancel" value="Cancel" />
-	</div>	
-</div>
+    <table width="100%" cellpadding="2">
+    <tr>
+    <td>
+   

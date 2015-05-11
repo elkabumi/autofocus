@@ -75,8 +75,10 @@ $(function(){
        <td><input name="i_workshop_service_job_price" type="text" id="i_workshop_service_job_price" value="<?=$workshop_service_job_price ?>" readonly="readonly" size="10"/></td>
      </tr>
      <tr>
-     <td>Progress</td> 
-       <td><input name="i_transaction_detail_progress" type="text" id="i_transaction_detail_progress" value="<?=$transaction_detail_progress ?>" size="10"/> &nbsp;%</td>
+     <td>Progress </td> 
+     <td>
+     <?php echo  form_dropdown('i_transaction_detail_progress', $progress,$transaction_detail_progress)  ?>
+       <!--<input name="i_transaction_detail_progress" type="text" id="i_transaction_detail_progress" value="<?//=$transaction_detail_progress ?>" size="10"/> &nbsp;%--></td>
      </tr>
 
 </table>

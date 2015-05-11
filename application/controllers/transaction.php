@@ -156,7 +156,58 @@
 
 					}
 				}
-
+				//simpan transient spareparts
+				$list_rs_part_number	= ($this->input->post('transient_rs_part_number'));	
+				$list_rs_qty_received 	= ($this->input->post('transient_rs_qty_received'));	
+				$list_rs_qty_install_form= ($this->input->post('transient_rs_qty_install_form'));
+				$list_rs_tpd_id				= ($this->input->post('transient_tpd_id'));
+			
+				$list_rs_name			= ($this->input->post('transient_rs_name'));
+				$list_rs_qty 			= ($this->input->post('transient_rs_qty'));	
+				$list_rs_qty_install 	= ($this->input->post('transient_rs_qty_install'));
+				$list_rs_qty_stock 	= ($this->input->post('transient_rs_qty_stock'));
+				$list_rs_qty_stock_form 	= ($this->input->post('transient_rs_qty_stock_form'));
+				$list_rs_repair 	= ($this->input->post('transient_rs_repair'));
+				$list_rs_install_date 	= ($this->input->post('transient_install_date'));
+				$list_rs_install_desc	= ($this->input->post('transient_install_desc'));
+		
+				
+				
+				if($list_rs_name){
+					foreach($list_rs_name as $key => $value)
+					{
+					if($list_rs_qty_install_form  > '0'){
+							$items_sparepats[] = array(
+							'tpd_detail_install'  =>$list_rs_qty_install[$key] + $list_rs_qty_install_form[$key],
+							'tpd_id'  => $list_rs_tpd_id[$key],
+							'tpdh_type'  => 3,
+							'tpdh_date'  => $list_rs_install_date[$key],
+							'tpdh_qty'  => $list_rs_qty_install_form[$key],
+							'tpdh_desc'  => $list_rs_install_desc[$key]
+							);
+					}else{
+						$items_sparepats[] = array(
+							'tpd_detail_install'  => 0,
+							'tpd_id'  => 0,
+							'tpdh_type'  => 0,
+							'tpdh_date'  => 0,
+							'tpdh_qty'  =>0,
+							'tpdh_desc'  =>''
+							
+						);
+					}
+					}
+				}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				// simpan transient foto
 				$list_registration_photo_name	 	= $this->input->post('transient_photo_name');
 				$list_registration_photo_type	 	= $this->input->post('transient_photo_type');
@@ -197,12 +248,12 @@
 				if(empty($transaction_id)) // jika tidak ada id maka create
 				{
 			//$data['registration_code'] = format_code('registrations','registration_code','PU',7);
-				$error = $this->transaction_model->create($data, $items, $items_material, $items_foto);
+				$error = $this->transaction_model->create($data, $items, $items_material, $items_foto,$items_sparepats);
 				send_json_action($error, "Data telah ditambah", "Data gagal ditambah");
 				}
 				else // id disebutkan, lakukan proses UPDATE
 				{
-					$error = $this->transaction_model->update($transaction_id, $data, $items, $items_material, $items_foto);
+					$error = $this->transaction_model->update($transaction_id, $data, $items,$items_material, $items_foto,$items_sparepats);
 					send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
 				}
 			}
@@ -245,7 +296,6 @@
 					$data['workshop_service_name'] = '';
 					$data['workshop_service_job_price'] = '';
 					$data['transaction_detail_progress'] = '';
-				
 				} else {
 					$data['index'] = $index;
 					//$data['workshop_service_name'] = array_shift($this->input->post('transient_workshop_service_name'));
@@ -257,7 +307,7 @@
 					$data['transaction_detail_progress'] = array_shift($this->input->post('transient_transaction_detail_progress'));
 					
 				}
-				
+				$data['progress']=array('25'=>'25%','50'=>'50%','70'=>'70%','90'=>'90%','100'=>'100%');
 				
 					$this->load->helper('form');
 					$this->render->add_form('app/transaction/transient_form', $data);
@@ -306,14 +356,25 @@
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
-		
+		$value['tpd_detail_install'] = $value['tpd_detail_install']?$value['tpd_detail_install'] :0;
+		$value['tpd_detail_received'] = $value['tpd_detail_received']?$value['tpd_detail_received'] :0;
+		$stock = $value['tpd_detail_received']- $value['tpd_detail_install'];
 		$data[$key] = array(
-				form_transient_pair('transient_rs_part_number', $value['rs_part_number'], $value['rs_part_number']
+				form_transient_pair('transient_rs_part_number', $value['rs_part_number'], $value['rs_part_number'],
+									array('transient_rs_qty_received'=>$value['tpd_detail_received'],
+										  'transient_rs_qty_install_form'=>'0',
+										  'transient_tpd_id'=>$value['tpd_id'],
+										  'transient_install_date'=>'',
+										  'transient_install_desc'=>'',
+										  'transient_rs_qty_stock'=>$stock,
+										  )
 				),
 				form_transient_pair('transient_rs_name', $value['rs_name']),
 				form_transient_pair('transient_rs_qty',$value['rs_qty']),
-				form_transient_pair('transient_rs_repair', tool_money_format($value['rs_repair']), $value['rs_repair']),
-				form_transient_pair('transient_rs_approved_repair', tool_money_format($value['rs_approved_repair']), $value['rs_approved_repair'])
+				form_transient_pair('transient_rs_qty_install',$value['tpd_detail_install']),
+				form_transient_pair('transient_rs_qty_stock_form',$stock),
+				form_transient_pair('transient_rs_repair', tool_money_format($value['rs_repair']), $value['rs_repair'])
+				//,form_transient_pair('transient_rs_approved_repair', tool_money_format($value['rs_approved_repair']), $value['rs_approved_repair'])
 		);
 		
 		
@@ -321,7 +382,7 @@
 		}		
 		send_json(make_datatables_list($data)); 
 	}
-
+	
 	function detail_list_loader_panel($row_id=0)
 			{
 				if($row_id == 0)
@@ -339,8 +400,8 @@
 											'transient_detail_registration_id' =>$value['detail_registration_id'])),
 											
 						form_transient_pair('transient_product_name', $value['product_name']." (".$value['product_type_name']." - ".$value['pst_name'].")", $value['product_name']),
-						form_transient_pair('transient_reg_price',	$value['detail_registration_price'],$value['detail_registration_price']),
-						form_transient_pair('transient_reg_aproved_price',	$value['detail_registration_approved_price'],$value['detail_registration_approved_price'])
+						form_transient_pair('transient_reg_price',	$value['detail_registration_price'],$value['detail_registration_price'])
+						//,form_transient_pair('transient_reg_aproved_price',	$value['detail_registration_approved_price'],$value['detail_registration_approved_price'])
 						
 				);
 		
@@ -406,7 +467,103 @@
 		}		
 		send_json(make_datatables_list($data)); 
 	}
-
+	function detail_form_sparepart()
+	{		
+		$this->load->library('render');
+		$index = $this->input->post('transient_index');
+		
+		if (strlen(trim($index)) == 0) {
+		
+			// TRANSIENT CREATE - isi form dengan nilai default / kosong
+			$data['index']			= '';
+			$data['rs_part_number']	= '';	
+			$data['rs_qty_received'] = '';
+			$data['rs_qty_install_form'] = '';	
+			$data['rs_name']	= '';
+			$data['rs_qty'] = '';	
+			$data['rs_qty_install'] = '';			
+			$data['rs_qty_stock'] 	= '';
+					
+			$data['rs_qty_stock_form'] 	= '';
+			$data['rs_repair'] 	= '';
+			$data['rs_install_date'] 	= '';
+			$data['rs_install_desc'] 	= '';	
+			
+		} else {
+			
+			$data['index']				= $index;
+			$data['rs_part_number']		= array_shift($this->input->post('transient_rs_part_number'));	
+			$data['rs_qty_received'] 	= array_shift($this->input->post('transient_rs_qty_received'));	
+			$data['rs_qty_install_form']= array_shift($this->input->post('transient_rs_qty_install_form'));
+			$data['tpd_id']				= array_shift($this->input->post('transient_tpd_id'));
+			
+			$data['rs_name']			= array_shift($this->input->post('transient_rs_name'));
+			$data['rs_qty'] 			= array_shift($this->input->post('transient_rs_qty'));	
+			$data['rs_qty_install'] 	= array_shift($this->input->post('transient_rs_qty_install'));
+			$data['rs_qty_stock'] 		= array_shift($this->input->post('transient_rs_qty_stock'));
+			$data['rs_qty_stock_form'] 	= array_shift($this->input->post('transient_rs_qty_stock_form'));
+		
+			$data['rs_repair'] 			= array_shift($this->input->post('transient_rs_repair'));
+			
+			$data['rs_install_date'] 	= array_shift($this->input->post('transient_install_date'));
+			$data['rs_install_desc'] 	= array_shift($this->input->post('transient_install_desc'));
+		}		
+			
+		$this->render->add_form('app/transaction/transient_form_sparepart', $data);
+		$this->render->show_buffer();
+	}
+	function detail_form_action_sparepart()
+	{		
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('i_rs_install_form', 'Jumlah Pemasangan', 'trim|required|numeric|min_value[1]');
+		$this->form_validation->set_rules('i_rs_install_date','Tanggal Pemasangan','trim|required|valid_date|sql_date');
+		
+		$index = $this->input->post('i_index');		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+		
+		$this->load->model('global_model');	
+		
+		$no 		= $this->input->post('i_index');
+		$rs_part_number 	= $this->input->post('i_rs_no');
+		$rs_qty_received 	= $this->input->post('i_rs_qty_received');
+		$rs_qty_install_form= $this->input->post('i_rs_install_form');
+		$tpd_id 				= $this->input->post('i_tpd_id');
+		$rs_name 			= $this->input->post('i_rs_name');
+		$rs_qty 			= $this->input->post('i_rs_qty');
+		$rs_qty_install 	= $this->input->post('i_rs_qty_install');
+		$rs_qty_stock		= $this->input->post('i_rs_stock');	
+		$rs_qty_stock_form	= $this->input->post('i_rs_qty_stock_form');
+		$rs_repair			= $this->input->post('i_rs_repair');
+		$rs_install_date 	= $this->input->post('i_rs_install_date');
+		$rs_install_desc 	= $this->input->post('i_rs_install_desc');
+		
+		//send_json_error($no);
+		if($rs_qty_stock < $rs_qty_install_form){
+				send_json_error("Jumlah Pemasangan tidak Boleh melebihi Jumlah Stock");
+		}
+		$install = $rs_qty_install + $rs_qty_install_form;
+		$stock = $rs_qty_stock -  $rs_qty_install_form;
+		$data = array(
+				form_transient_pair('transient_rs_part_number',$rs_part_number,$rs_part_number,
+									array('transient_rs_qty_received'=> $rs_qty_received,
+										  'transient_rs_qty_install_form'=> $rs_qty_install_form,
+										  'transient_tpd_id'=> $tpd_id ,
+										  'transient_install_date'=> $rs_install_date,
+										  'transient_install_desc'=> $rs_install_desc,
+										  'transient_rs_qty_stock'=> $rs_qty_stock)
+				),
+				form_transient_pair('transient_rs_name', $rs_name),
+				form_transient_pair('transient_rs_qty',$rs_qty),
+				form_transient_pair('transient_rs_qty_install',$install,$rs_qty_install),
+				form_transient_pair('transient_rs_qty_stock_form',$stock),
+				form_transient_pair('transient_rs_repair', tool_money_format($rs_repair), $rs_repair)
+				);
+		 
+		send_json_transient($index, $data);
+	}
+	
+	
 	function detail_form_cat($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
 	{		
 		$this->load->library('render');

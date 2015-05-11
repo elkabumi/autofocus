@@ -90,7 +90,7 @@ $(function(){
             </td>
 			<td width="1%" >:</td>
 			<td  width="82%" > <span class="lookup" id="lookup_registration">
-         <input type="hidden" id="i_registration_id" name="i_registration_id" class="com_id" value="<?=$period_id?>" />
+         <input type="hidden" id="i_registration_id" name="i_registration_id" class="com_id" value="<?=$registration_id?>" />
          <input type="text" class="com_input" size="6" /> 
          <div class="iconic_base iconic_search com_popup"></div>
        </span></td> 
