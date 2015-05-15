@@ -222,7 +222,7 @@ class po_received extends CI_Controller{
 		function detail_form_action()
 		{		
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('i_qty_received_form', 'Qty Received', 'trim|required|numeric');
+			$this->form_validation->set_rules('i_qty_received_form', 'Qty Received', 'trim|required|numeric|min_value[1]');
 			$this->form_validation->set_rules('i_date','Tanggal received','trim|required|valid_date|sql_date');
 		
 			$index = $this->input->post('i_index');		

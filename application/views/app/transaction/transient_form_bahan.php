@@ -1,10 +1,10 @@
 <script type="text/javascript">	
 $(function(){
 createLookUp({
-		table_id		: "#lookup_table_paint_stock",
-		listSource 		: "lookup/material_stock_table_control/2/" + $('input[name="i_stand_id"]').val(),
+		table_id		: "#lookup_table_material_stock",
+		listSource 		: "lookup/material_stock_table_control/1/" + $('input[name="i_stand_id"]').val(),
 		dataSource		: "lookup/material_stock_lookup_id",
-		component_id	: "#lookup_paint_stock",
+		component_id	: "#lookup_material_stock",
 		filter_by		: [{id : "p1", label : "Cabang"}, {id : "p2", label : "Nama Cat"}, {id : "p3", label : "Stock"}, {id : "p4", label : "Satuan"}],
 		onSelect		: load_satuan
 	});
@@ -42,16 +42,16 @@ createLookUp({
  	<tr>
 		<td width="199" >Nama Bahan</td>
         <td width="10" >:</td>
-		<td width="704" req="req"> <span class="lookup" id="lookup_paint_stock">
-         <input type="hidden" name="i_material_stock_id" class="com_id" value="<?=$cat_stock_id?>" />
+		<td width="704" req="req"> <span class="lookup" id="lookup_material_stock">
+         <input type="hidden" name="i_material_stock_id" class="com_id" value="<?=$bahan_stock_id?>" />
          <div class="iconic_base iconic_search com_popup" ></div>
          <span class="com_desc"></span>
         <input type="text" class="com_input" size="80" name="module" />
         <input type="hidden" name="i_index" value="<?=$index?>" />
         
            <input type="hidden" name="i_tm_id" value="<?=$tm_id?>" />
-          <input type="hidden" name="i_name" value="<?=$cat_name?>" />
-           <input type="hidden" name="i_tm_qty" value="<?=$cat_qty?>" />
+          <input type="hidden" name="i_name" value="<?=$bahan_name?>" />
+           <input type="hidden" name="i_tm_qty" value="<?=$bahan_qty?>" />
            <input type="hidden" name="i_count_tm_id" value="<?=$count_tm_id?>" />
        </span></td>
 	</tr>
@@ -59,37 +59,37 @@ createLookUp({
      <td width="199" >Stock
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input  readonly="readonly"name="i_stock_qty" type="text" id="i_stock_qty" value="<?=$cat_stock_qty ?>" /></td>
+     <td width="704" ><input  readonly="readonly"name="i_stock_qty" type="text" id="i_stock_qty" value="<?=$bahan_stock_qty ?>" /></td>
     </tr>
     <tr>
      <td width="199" >Qty Pemakaian Sebelumnya
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input  readonly="readonly"name="i_qty" type="text" id="i_qty" value="<?=$cat_qty ?>" /></td>
+     <td width="704" ><input  readonly="readonly"name="i_qty" type="text" id="i_qty" value="<?=$bahan_qty ?>" /></td>
     </tr>
     <tr>
      <td width="199" >Qty
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_tm_qty_form" type="text" id="i_tm_qty_form" value="<?=$cat_qty_form?>" /></td>
+     <td width="704" ><input name="i_tm_qty_form" type="text" id="i_tm_qty_form" value="<?=$bahan_qty_form?>" /></td>
     </tr>
       <tr>
           <td width="17%">Satuan</td>
           <td width="1%">:</td>
-          <td width="82%"><input name="i_unit" type="text" id="i_unit" value="<?=$cat_unit_name ?>" readonly="readonly" />
+          <td width="82%"><input name="i_unit" type="text" id="i_unit" value="<?=$bahan_unit_name ?>" readonly="readonly" />
       </td>
       </tr>
     <tr>
      <td width="199" >Keterangan
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_tm_description" type="text" id="i_tm_description" style="width:400px !important;" value="<?=$cat_description ?>" /></td>
+     <td width="704" ><input name="i_tm_description" type="text" id="i_tm_description" style="width:400px !important;" value="<?=$bahan_description ?>" /></td>
     </tr>
     <tr>
      <td width="199" >Harga
      </td>
      <td width="10" >:</td>
-     <td width="704" ><input name="i_tm_price" type="text" id="i_tm_price" value="<?=$cat_price ?>" /></td>
+     <td width="704" ><input name="i_tm_price" type="text" id="i_tm_price" value="<?=$bahan_price ?>" /></td>
     </tr>
 	
 </table>
@@ -101,7 +101,7 @@ createLookUp({
 </div>
 </form>
 <div id="">
-	<table  id="lookup_table_paint_stock" cellpadding="0" cellspacing="0" border="0" class="display" > 
+	<table  id="lookup_table_material_stock" cellpadding="0" cellspacing="0" border="0" class="display" > 
 		<thead>
 			<tr>
 				<th width="10%">ID</th>

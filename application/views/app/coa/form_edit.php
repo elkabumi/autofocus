@@ -105,7 +105,7 @@ $(function(){
       <input type="hidden" name="i_coa_id" class="com_id" value="<?=$coa_id?>" />
       <input type="hidden" name="i_coa_level" value='<?=$coa_level?>' />
       <input type="hidden" name="i_coa_parent" value='<?=$parent_coa_id?>' />
-      <input type="hidden" name="i_coa_group" value='<?=$coa_group?>' />
+      <input type="text" name="i_coa_group" value='<?=$coa_group?>' />
       <input type="hidden" id="i_coa_level" size="1" value="<?=$coa_level?>" readonly="readonly"/>
        <input type="text" name="i_account_type_name" size="50" value='<?=$account_type_name?>' readonly="readonly" />
       </td>

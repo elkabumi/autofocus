@@ -2,9 +2,9 @@
 $(function(){
 	createTableFormTransient({
 		id 				: "#transient_cat",
-		listSource 		: "transaction/detail_list_loader_cat/<?=$row_id?>",
-		formSource 		: "transaction/detail_form_cat/<?=$row_id?>",
-		controlTarget	: "transaction/detail_form_action_cat",
+		listSource 		: "create_po_paint/detail_table_loader/<?=$row_id?>",
+		formSource 		: "create_po_paint/detail_form/<?=$row_id?>",
+		controlTarget	: "create_po_paint/detail_form_action",
 		
 		onAdd		: function (){perhitungan();},	
 		onTargetLoad: function (){perhitungan();} 
@@ -13,7 +13,7 @@ $(function(){
 	function perhitungan()
 	{
 		var tm_total = 0;
-		$('input[name="transient_tm_price[]"]').each(function()
+		$('input[name="transient_materials_price[]"]').each(function()
 		{
 			tm_total += parseFloat($(this).val());
 		});
@@ -28,11 +28,11 @@ $(function(){
 	<thead>
 		<tr>
 			
-			<th>Nama Cat</th>
+			<th>Nama Bahan</th>
             <th>Qty</th>
-            <th>Keterangan</th>
-            <th>Harga</th>
-		</tr> 
+            <th>Harga</th
+            
+		></tr> 
 	</thead> 
 	<tbody> 	
 	</tbody>
@@ -42,7 +42,7 @@ $(function(){
  <table align="right">
           <tr>
             <td><span class="summary_total"> Total</span></td>
-            <td><input id="tm_total" value="<?= $transaction_paint_total?>" type="text" readonly="readonly" class="format_money" size="50" />
+            <td><input id="tm_total" value="<?= $tpm_total_price?>" type="text" readonly="readonly" class="format_money" size="50" />
            </td>
           </tr>
         </table>

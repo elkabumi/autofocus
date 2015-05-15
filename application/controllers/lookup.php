@@ -244,6 +244,31 @@ class Lookup extends CI_Controller
 	}
 	
 	
+	# lookup data material
+	function material_table_control($type = 0)
+	{
+		$this->load->library('dtc');
+		$this->dtc->material_control($type);
+	}
+	
+	function material_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->material_get();
+	}
+	
+	# lookup data material stock
+	function material_stock_table_control($type=0,$id = 0)
+	{
+		$this->load->library('dtc');
+		$this->dtc->material_stock_control($type,$id);
+	}
+	
+	function material_stock_lookup_id()
+	{
+		$this->load->library('dtc');
+		$this->dtc->material_stock_get();
+	}
 	# lookup data coa
 	function coa_table_control($kredit = 0)
 	{

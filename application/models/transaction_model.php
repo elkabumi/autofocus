@@ -126,7 +126,7 @@ class Transaction_model extends CI_Model
 	
 	function read_id($id)
 	{
-		$this->db->select('a.*,b.*', 1); // ambil seluruh data
+		$this->db->select('a.*,b.transaction_paint_total,b.*', 1); // ambil seluruh data
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id','left');
 		$this->db->where('a.registration_id', $id);
 		$query = $this->db->get('registrations a', 1); // parameter limit harus 1
@@ -175,6 +175,8 @@ class Transaction_model extends CI_Model
 		{			
 			$row_material['transaction_id'] = $id;
 			$this->db->insert('transaction_materials', $row_material);
+			$this->kurangi_stock($row_material['tmmaterial_stock_id_qty'],$row_material['tm_qty']);
+			
 			$index_material++;
 		}
 
@@ -219,8 +221,11 @@ class Transaction_model extends CI_Model
 		$this->access->log_insert($id, 'Transaksi');
 		$this->db->trans_complete();
 		return $this->db->trans_status();
-	}// end of function 
-	function update($id, $data, $items, $items_material, $items_foto,$items_sparepats)
+	}// end of function
+	
+
+	 
+	function update($id, $data, $items, $items_material,$items_cat,$items_foto,$items_sparepats)
 	{
 		$this->db->trans_start();
 
@@ -246,14 +251,38 @@ class Transaction_model extends CI_Model
 		// cat / bahan
 		$this->db->where('transaction_id', $id);
 		$this->db->delete('transaction_materials');
+		//bahan
 		$index_material = 0;
 		foreach($items_material as $row_material)
-		{			
-			$row_material['transaction_id'] = $id;
-			$this->db->insert('transaction_materials', $row_material);
-			$index_material++;
+		{	
+				$row_data_material['transaction_id'] = $id;
+				$row_data_material['material_stock_id'] = $row_material['material_stock_id'];
+				$row_data_material['tm_qty'] = $row_material['tm_qty'];
+				$row_data_material['tm_description'] = $row_material['tm_description'];
+				$row_data_material['tm_price'] = $row_material['tm_price'];
+				$this->db->insert('transaction_materials', $row_data_material);
+				//query();
+				$this->kurangi_stock($row_material['material_stock_id'],$row_material['list_bahan_qty_form']);
+		
+				$index_material++;
+			
 		}
-
+		//cat
+		$index_cat= 0;
+		foreach($items_cat as $row_cat)
+		{	
+				$row_data_cat['transaction_id'] = $id;
+				$row_data_cat['material_stock_id'] = $row_cat['material_stock_id'];
+				$row_data_cat['tm_qty'] = $row_cat['tm_qty'];
+				$row_data_cat['tm_description'] = $row_cat['tm_description'];
+				$row_data_cat['tm_price'] = $row_cat['tm_price'];
+				$this->db->insert('transaction_materials', $row_data_cat);
+				//query();
+				$this->kurangi_stock($row_cat['material_stock_id'],$row_cat['list_cat_qty_form']);
+		
+				$index_cat++;
+			
+		}
 
 		// foto
 		$index_foto = 0;
@@ -296,8 +325,20 @@ class Transaction_model extends CI_Model
 		$this->db->trans_complete();
 		return $this->db->trans_status();
 	}
-	
-	
+	function tambah_stock($id,$qty){
+		$sql = "UPDATE material_stock SET material_stock_qty = material_stock_qty + $qty
+				WHERE  material_stock_id = $id
+				";
+		
+		$query = $this->db->query($sql);
+	}
+	function kurangi_stock($id,$qty){
+		$sql = "UPDATE material_stock SET material_stock_qty = material_stock_qty - $qty
+				WHERE  material_stock_id = $id
+				";
+		
+		$query = $this->db->query($sql);
+	}
 	function detail_list_loader($id)
 	{
 		// buat array kosong
@@ -358,15 +399,19 @@ class Transaction_model extends CI_Model
 		return $result;
 	}
 	
-	function detail_list_loader_cat($id)
+	function detail_list_loader_bahan($id)
 	{
 		// buat array kosong
 		$result = array(); 		
-		$this->db->select('c.*', 1);
+		$this->db->select('c.*,d.material_stock_qty,e.material_name,f.unit_name', 1);
 		$this->db->from('registrations a');
 		$this->db->join('transactions b', 'b.registration_id = a.registration_id');
 		$this->db->join('transaction_materials c', 'c.transaction_id = b.transaction_id');
+		$this->db->join('material_stock d', 'c.material_stock_id = d.material_stock_id');
+		$this->db->join('materials e', 'd.material_id = e.material_id');
+		$this->db->join('unit f', 'f.unit_id = e.unit_id');
 		$this->db->where('a.registration_id', $id);
+		$this->db->where('e.material_type_id',1);
 		$query = $this->db->get(); debug();
 		foreach($query->result_array() as $row)
 		{
@@ -374,7 +419,26 @@ class Transaction_model extends CI_Model
 		}
 		return $result;
 	}
-	
+		function detail_list_loader_cat($id)
+	{
+		// buat array kosong
+		$result = array(); 		
+		$this->db->select('c.*,d.material_stock_qty,e.material_name,f.unit_name', 1);
+		$this->db->from('registrations a');
+		$this->db->join('transactions b', 'b.registration_id = a.registration_id');
+		$this->db->join('transaction_materials c', 'c.transaction_id = b.transaction_id');
+		$this->db->join('material_stock d', 'c.material_stock_id = d.material_stock_id');
+		$this->db->join('materials e', 'd.material_id = e.material_id');
+		$this->db->join('unit f', 'f.unit_id = e.unit_id');
+		$this->db->where('a.registration_id', $id);
+		$this->db->where('e.material_type_id',2);
+		$query = $this->db->get(); debug();
+		foreach($query->result_array() as $row)
+		{
+			$result[] = format_html($row);
+		}
+		return $result;
+	}
 	function detail_list_loader_foto($id)
 	{
 		// buat array kosong
@@ -450,5 +514,43 @@ class Transaction_model extends CI_Model
 	
 	
 	
+	function load_detail_material($material_stock_id)
+	{
+		$sql = "
+		select c.unit_name,b.material_name,a.material_stock_qty
+		FROM material_stock a
+		JOIN materials b ON a.material_id = b.material_id 
+		JOIN unit c ON c.unit_id = b.unit_id 
+		WHERE a.material_stock_id = $material_stock_id ";
+		$query = $this->db->query($sql);
+		//query();
+		return $query;
+	}
+	function cek_transaction_material($material_stock_id,$transaction_id)
+	{
+		$sql = "
+		select COUNT(tm_id) as id
+		FROM material_stock a
+		LEFT JOIN transaction_materials d ON a.material_stock_id = d.material_stock_id 
+		WHERE a.material_stock_id = $material_stock_id AND  d.transaction_id =$transaction_id";
+		$query = $this->db->query($sql);
+		//query();
+		foreach ($query->result_array() as $row) $result = format_html($row);
+		return $result['id'];
+	}
+	function get_data_material($id)
+	{
+		$sql = "SELECT a.*,b.*
+		FROM material_stock a
+		JOIN materials b ON a.material_id = b.material_id
+		WHERE material_stock_id = ".$id."
+				";
+		
+		$query = $this->db->query($sql);
+		
+		$result = null;
+		foreach ($query->result_array() as $row) $result = format_html($row);
+		return array($result['material_name']);
+	}
 }
 #

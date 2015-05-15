@@ -308,7 +308,7 @@ $(function(){
       <td width="76%"> <span class="lookup" id="lookup_employee_group">
 				<input type="hidden" name="i_employee_group_id" class="com_id" value="<?=$employee_group_id?>" />
               	<input type="hidden" name="row_id" value="<?=$row_id?>" />
-            	<input type="hidden" name="i_transaction_id" value="<?=$transaction_id?>" />
+            	<input type="text" name="i_transaction_id" value="<?=$transaction_id?>" />
 				<input type="text" class="com_input" />
 				  <div class="iconic_base iconic_search com_popup"></div>
                     <span class="com_desc"></span>

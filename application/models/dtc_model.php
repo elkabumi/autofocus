@@ -1927,6 +1927,7 @@ class Dtc_model extends CI_Model
 		
 		return $result;
 	}
+	 
 	
 	
 	
@@ -1934,8 +1935,198 @@ class Dtc_model extends CI_Model
 	
 	
 	
+	## Data material
+	
+	function material_control($param, $type = 0)
+	{
+		$where = '';
+		$params 	= get_datatables_control();
+		$limit 		= $params['limit'];
+		$offset 	= $params['offset'];
+		$category 	= $params['category'];
+		$keyword 	= $params['keyword'];
+		
+		// map value dari combobox ke table
+		// daftar kolom yang valid
+		
+		$columns['p1'] 			= 'material_name';
+	
+		
+		$sort_column_index = $params['sort_column'];
+		$sort_dir = $params['sort_dir'];
+		
+		$order_by_column[] = 'material_id';
+		$order_by_column[] = 'material_name';
+		$order_by_column[] = 'unit_name';
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
+		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
+		{
+			
+				$where = " and ".$columns[$category]." like '%$keyword%'";
+			
+			
+		}
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
+		
+		if($type != 0){
+			$where .= " WHERE material_type_id = ".$type." ";
+		}
+
+		$sql = "
+		SELECT a.*, b.unit_name  FROM materials a
+		JOIN unit b ON a.unit_id = b.unit_id
+		$where $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
+		
+		$sql = $sql.$limit;
+		
+		$query = $this->db->query($sql);
+		//query();
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			$row = format_html($row);
+			$data[] = array(
+				$row['material_id'], 
+				$row['material_name'],
+				$row['unit_name']
+			); 
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($params, $data, $total);
+	}
+	
+	function material_get($id, $mode)
+	{
+		if (!$id) return NULL;
+		
+		$id = trim($id);
+		if (empty($id)) return NULL;
+		if ($mode == 1)
+			$query = $this->db->get_where('materials', array('material_id' => $id), 1);
+		else
+			$query = $this->db->get_where('materials', array('material_name' => $id), 1);
+		
+		$result = NULL;		
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
 	
 	
+	
+	## Data material stock
+	function material_stock_control($param, $type = 0,$stand_id=0)
+	{
+		$where = '';
+		$params 	= get_datatables_control();
+		$limit 		= $params['limit'];
+		$offset 	= $params['offset'];
+		$category 	= $params['category'];
+		$keyword 	= $params['keyword'];
+		
+		// map value dari combobox ke table
+		// daftar kolom yang valid
+		
+		$columns['p1'] 			= 'stand_name';
+		$columns['p2'] 			= 'material_name';
+		$columns['p3'] 			= 'material_stock_qty';
+		$columns['p4'] 			= 'unit_name';
+	
+		
+		$sort_column_index = $params['sort_column'];
+		$sort_dir = $params['sort_dir'];
+		
+		$order_by_column[] = 'material_stock_id';
+		$order_by_column[] = 'stand_name';
+		$order_by_column[] = 'material_name';
+		$order_by_column[] = 'unit_name';
+		$order_by_column[] = 'material_stock_qty';
+		
+		
+		$order_by = " order by ".$order_by_column[$sort_column_index] . $sort_dir;
+		if (array_key_exists($category, $columns) && strlen($keyword) > 0) 
+		{
+			
+				$where = " and ".$columns[$category]." like '%$keyword%'";
+			
+			
+		}
+		if ($limit > 0) {
+			$limit = " limit $limit offset $offset";
+		};	
+		
+		$where .= " WHERE a.stand_id = ".$stand_id." ";
+		$where .= " AND material_type_id = ".$type.""; 
+
+		$sql = "
+		SELECT a.*,b.material_name,c.*,d.stand_name
+		FROM material_stock a
+		JOIN materials b ON a.material_id = b.material_id
+		JOIN unit c ON b.unit_id = c.unit_id
+		JOIN stands d ON a.stand_id = d.stand_id
+		$where $order_by
+			
+			";
+
+		$query_total = $this->db->query($sql);
+		$total = $query_total->num_rows();
+		
+		$sql = $sql.$limit;
+		
+		$query = $this->db->query($sql);
+		//query();
+		$data = array(); // inisialisasi variabel. biasakanlah, untuk mencegah warning dari php.
+		foreach($query->result_array() as $row) {
+			$row = format_html($row);
+			$data[] = array(
+				$row['material_stock_id'],
+				$row['stand_name'], 
+				$row['material_name'], 
+				$row['material_stock_qty'],
+				$row['unit_name'],
+			); 
+		}
+		
+		// kembalikan nilai dalam format datatables_control
+		return make_datatables_control($params, $data, $total);
+	}
+	
+	function material_stock_get($id, $mode)
+	{
+		if (empty($id) || !$id || !$mode) return NULL;
+		
+		$result = NULL;
+		
+		if ($mode == 1){
+
+			$sql = "
+			SELECT a.*,b.material_name,c.*,d.stand_name
+					FROM material_stock a
+			JOIN materials b ON a.material_id = b.material_id
+			JOIN unit c ON b.unit_id = c.unit_id
+			JOIN stands d ON a.stand_id = d.stand_id
+			where a.material_stock_id = '$id'";
+	
+			
+			
+			$query = $this->db->query($sql);
+		}else{
+			$query = $this->db->get_where('material_stock', array('material_stock_id' => $id), 1);
+		
+		}
+		$result = NULL;		
+		foreach($query->result_array() as $row)	$result = format_html($row);
+		
+		return $result;
+	}
 	
 	
 	

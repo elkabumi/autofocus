@@ -52,10 +52,13 @@
 			// list jasa
 			$this->render->add_view('app/transaction/transient_list', $data);
 			$this->render->build('Data Jasa');
-
+			// list bahan
+			$this->render->add_view('app/transaction/transient_list_bahan', $data);
+			$this->render->build('Data Bahan');
 			// list cat
 			$this->render->add_view('app/transaction/transient_list_cat', $data);
 			$this->render->build('Data Cat');
+			
 
 			// list foto
 			$this->render->add_view('app/transaction/transient_list_foto');
@@ -134,27 +137,61 @@
 					}
 				}
 
-				// simpan transient cat/bahan
-				$list_tm_name			= $this->input->post('transient_tm_name');
-				$list_tm_qty			= $this->input->post('transient_tm_qty');
-				$list_tm_description	= $this->input->post('transient_tm_description');
-				$list_tm_price				= $this->input->post('transient_tm_price');
+				// simpan transient bahan
+				$list_bahan_name	= ($this->input->post('transient_bahan_name'));
+				$list_bahan_qty =  ($this->input->post('transient_bahan_qty'));
+				$list_bahan_qty_form =  ($this->input->post('transient_bahan_qty_form'));
+				$list_bahan_qty_total =  ($this->input->post('transient_bahan_qty_total'));
+				$list_bahan_desc  =  ($this->input->post('transient_bahan_description'));
+				$list_bahan_price	=  ($this->input->post('transient_bahan_price'));
+				$list_bahan_unit_name  	=   ($this->input->post('transient_bahan_unit_name'));
+				$list_bahan_stock_id  	=  ($this->input->post('transient_bahan_stock_id'));
+				$list_bahan_stock_qty 	=   ($this->input->post('transient_bahan_stock_qty'));
 				
 				$total_material = 0;
 				$items_material = array();
-
-				if($list_tm_name){
-					foreach($list_tm_name as $key => $value)
+		
+				if($list_bahan_name){
+					foreach($list_bahan_name as $key => $value)
 					{
 						$items_material[] = array(
-							'tm_name' 			=> ($list_tm_name[$key]),
-							'tm_qty' 			=> $list_tm_qty[$key],
-							'tm_description' 	=> $list_tm_description[$key],
-							'tm_price'			=> $list_tm_price[$key]
-							);
-						$total_material += $list_tm_price[$key];
-
-					}
+							'material_stock_id' => ($list_bahan_stock_id[$key]),
+							'tm_qty' 			=> $list_bahan_qty_total[$key],
+							'tm_description' 	=> $list_bahan_desc[$key],
+							'tm_price'			=> $list_bahan_price[$key],
+							'list_bahan_qty_form'			=> $list_bahan_qty_form[$key],
+						);
+						$total_material += $list_bahan_price[$key];
+						}
+					
+				}
+				// simpan transient cat
+				$list_cat_name	= ($this->input->post('transient_cat_name'));
+				$list_cat_qty =  ($this->input->post('transient_cat_qty'));
+				$list_cat_qty_form =  ($this->input->post('transient_cat_qty_form'));
+				$list_cat_qty_total =  ($this->input->post('transient_cat_qty_total'));
+				$list_cat_desc  =  ($this->input->post('transient_cat_description'));
+				$list_cat_price	=  ($this->input->post('transient_cat_price'));
+				$list_cat_unit_name  	=   ($this->input->post('transient_cat_unit_name'));
+				$list_cat_stock_id  	=  ($this->input->post('transient_cat_stock_id'));
+				$list_cat_stock_qty 	=   ($this->input->post('transient_cat_stock_qty'));
+				
+				$total_cat = 0;
+				$items_cat = array();
+		
+				if($list_cat_name){
+					foreach($list_cat_name as $key => $value)
+					{
+						$items_cat[] = array(
+							'material_stock_id' => ($list_cat_stock_id[$key]),
+							'tm_qty' 			=> $list_cat_qty_total[$key],
+							'tm_description' 	=> $list_cat_desc[$key],
+							'tm_price'			=> $list_cat_price[$key],
+							'list_cat_qty_form'		=> $list_cat_qty_form[$key],
+						);
+						$total_cat += $list_cat_price[$key];
+						}
+					
 				}
 				//simpan transient spareparts
 				$list_rs_part_number	= ($this->input->post('transient_rs_part_number'));	
@@ -198,16 +235,6 @@
 					}
 					}
 				}
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 				// simpan transient foto
 				$list_registration_photo_name	 	= $this->input->post('transient_photo_name');
 				$list_registration_photo_type	 	= $this->input->post('transient_photo_type');
@@ -242,18 +269,19 @@
 
 
 				$data['transaction_material_total'] = $total_material;
+				$data['transaction_paint_total'] = $total_cat;
 				$data['transaction_progress'] = $total_progress / $jumlah_jasa;
 				$data['transaction_total'] = $total_price;
 
 				if(empty($transaction_id)) // jika tidak ada id maka create
 				{
 			//$data['registration_code'] = format_code('registrations','registration_code','PU',7);
-				$error = $this->transaction_model->create($data, $items, $items_material, $items_foto,$items_sparepats);
+				$error = $this->transaction_model->create($data, $items, $items_material, $items_foto,$items_cat,$items_sparepats);
 				send_json_action($error, "Data telah ditambah", "Data gagal ditambah");
 				}
 				else // id disebutkan, lakukan proses UPDATE
 				{
-					$error = $this->transaction_model->update($transaction_id, $data, $items,$items_material, $items_foto,$items_sparepats);
+					$error = $this->transaction_model->update($transaction_id, $data, $items,$items_material,$items_cat, $items_foto,$items_sparepats);
 					send_json_action($error, "Data telah direvisi", "Data gagal direvisi");
 				}
 			}
@@ -410,7 +438,35 @@
 		}		
 		send_json(make_datatables_list($data)); 
 	}
-
+	function detail_list_loader_bahan($registration_id=0)
+	{
+		if($registration_id == 0)send_json(make_datatables_list(null)); 
+				
+		$data = $this->transaction_model->detail_list_loader_bahan($registration_id);
+		$sort_id = 0;
+		foreach($data as $key => $value) 
+		{	
+		
+		$data[$key] = array(
+				form_transient_pair('transient_bahan_name', $value['material_name'], $value['material_name'],
+						array('transient_tm_id' =>$value['tm_id'],
+								'transient_bahan_stock_id'=>$value['material_stock_id'],
+						 		'transient_bahan_unit_name'=>$value['unit_name'],
+								'transient_bahan_stock_qty'=>$value['material_stock_qty'],
+								'transient_bahan_qty_form' =>'0',
+							 	'transient_bahan_qty'=>$value['tm_qty'])
+				),
+				form_transient_pair('transient_bahan_qty_total', $value['tm_qty']),
+				form_transient_pair('transient_bahan_description',$value['tm_description']),
+				form_transient_pair('transient_bahan_price', tool_money_format($value['tm_price']), $value['tm_price'])
+		);
+		
+		
+		
+		}		
+		send_json(make_datatables_list($data)); 
+	}
+	
 	function detail_list_loader_cat($registration_id=0)
 	{
 		if($registration_id == 0)send_json(make_datatables_list(null)); 
@@ -419,18 +475,200 @@
 		$sort_id = 0;
 		foreach($data as $key => $value) 
 		{	
-		
 		$data[$key] = array(
-				form_transient_pair('transient_tm_name', $value['tm_name'], $value['tm_name']),
-				form_transient_pair('transient_tm_qty', $value['tm_qty']),
-				form_transient_pair('transient_tm_description',$value['tm_description']),
-				form_transient_pair('transient_tm_price', tool_money_format($value['tm_price']), $value['tm_price'])
+				form_transient_pair('transient_cat_name', $value['material_name'], $value['material_name'],
+						array('transient_tm_id' =>$value['tm_id'],
+								'transient_cat_stock_id'=>$value['material_stock_id'],
+						 		'transient_cat_unit_name'=>$value['unit_name'],
+								'transient_cat_stock_qty'=>$value['material_stock_qty'],
+								'transient_cat_qty_form' =>'0',
+							 	'transient_cat_qty'=>$value['tm_qty'])
+				),
+				form_transient_pair('transient_cat_qty_total', $value['tm_qty']),
+				form_transient_pair('transient_cat_description',$value['tm_description']),
+				form_transient_pair('transient_cat_price', tool_money_format($value['tm_price']), $value['tm_price'])
 		);
-		
 		
 		
 		}		
 		send_json(make_datatables_list($data)); 
+	}
+	function detail_form_bahan($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
+	{		
+		$this->load->library('render');
+		$index = $this->input->post('transient_index');
+		if (strlen(trim($index)) == 0) {
+					
+			// TRANSIENT CREATE - isi form dengan nilai default / kosong
+			$data['index']			= '';
+			$data['registration_id'] 				= $registration_id;
+			
+			$data['bahan_qty'] = 0;
+			$data['bahan_qty_form'] = 0;
+			$data['bahan_description'] = '';			
+			$data['bahan_price'] 	= '';
+			$data['bahan_unit_name'] 	= '';
+			$data['bahan_name'] 	= '';
+			$data['bahan_stock_id'] 	= '';
+			$data['bahan_stock_qty'] 	= '';
+			$data['count_tm_id'] 	= '';
+			$data['tm_id'] 	= '';
+		
+			
+		
+		} else {
+			
+			$data['index']			= $index;
+			$data['registration_id'] 				= $registration_id;
+			$data['bahan_name']	= array_shift($this->input->post('transient_bahan_name'));
+			$data['bahan_qty'] = array_shift($this->input->post('transient_bahan_qty'));
+			$data['bahan_qty_form'] = array_shift($this->input->post('transient_bahan_qty_form'));
+			$data['bahan_description'] = array_shift($this->input->post('transient_bahan_description'));
+			$data['bahan_price'] 	= array_shift($this->input->post('transient_bahan_price'));
+			$data['bahan_unit_name'] 	=  array_shift($this->input->post('transient_bahan_unit_name'));
+			$data['bahan_stock_id'] 	= array_shift($this->input->post('transient_bahan_stock_id'));
+			$data['bahan_stock_qty'] 	=  array_shift($this->input->post('transient_bahan_stock_qty'));
+			$data['count_tm_id'] 	= '0';
+			$data['tm_id'] 	=  array_shift($this->input->post('transient_tm_id'));
+			
+		}		
+			
+		$this->render->add_form('app/transaction/transient_form_bahan', $data);
+		$this->render->show_buffer();
+	}
+		function detail_form_cat($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
+	{		
+		$this->load->library('render');
+		$index = $this->input->post('transient_index');
+		if (strlen(trim($index)) == 0) {
+					
+			// TRANSIENT CREATE - isi form dengan nilai default / kosong
+			$data['index']			= '';
+			$data['registration_id'] 				= $registration_id;
+			
+			$data['cat_qty'] = 0;
+			$data['cat_qty_form'] = 0;
+			$data['cat_description'] = '';			
+			$data['cat_price'] 	= '';
+			$data['cat_unit_name'] 	= '';
+			$data['cat_name'] 	= '';
+			$data['cat_stock_id'] 	= '';
+			$data['cat_stock_qty'] 	= '';
+			$data['count_tm_id'] 	= '';
+			$data['tm_id'] 	= '';
+		
+		} else {
+			
+			$data['index']			= $index;
+			$data['registration_id'] 				= $registration_id;
+			$data['cat_name']	= array_shift($this->input->post('transient_cat_name'));
+			$data['cat_qty'] = array_shift($this->input->post('transient_cat_qty'));
+			$data['cat_qty_form'] = array_shift($this->input->post('transient_cat_qty_form'));
+			$data['cat_description'] = array_shift($this->input->post('transient_cat_description'));
+			$data['cat_price'] 	= array_shift($this->input->post('transient_cat_price'));
+			$data['cat_unit_name'] 	=  array_shift($this->input->post('transient_cat_unit_name'));
+			$data['cat_stock_id'] 	= array_shift($this->input->post('transient_cat_stock_id'));
+			$data['cat_stock_qty'] 	=  array_shift($this->input->post('transient_cat_stock_qty'));
+			$data['count_tm_id'] 	= '0';
+			$data['tm_id'] 	=  array_shift($this->input->post('transient_tm_id'));
+			}		
+			
+		$this->render->add_form('app/transaction/transient_form_cat', $data);
+		$this->render->show_buffer();
+	}
+	
+
+	
+	function detail_form_action_bahan()
+	{		
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('i_material_stock_id', 'Nama Bahan', 'trim|required');
+		//$this->form_validation->set_rules('i_tm_qty', 'Qty', 'trim|required|numeric|min_value[1]');
+		//$this->form_validation->set_rules('i_tm_description', 'Keterangan', 'trim|required|numeric');
+		$this->form_validation->set_rules('i_tm_price', 'Harga', 'trim|required|numeric');
+		$index = $this->input->post('i_index');		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+		
+		$this->load->model('global_model');	
+		
+		$no 		= $this->input->post('i_index');
+		$bahan_name 	= $this->input->post('i_name');
+		$bahan_qty 	= $this->input->post('i_tm_qty');
+		$bahan_qty_form 	= $this->input->post('i_tm_qty_form');
+		$total_bahan_qty = $bahan_qty_form +$bahan_qty ;
+		$bahan_description = $this->input->post('i_tm_description');
+		$bahan_price 	= $this->input->post('i_tm_price');
+		$bahan_unit_name 	= $this->input->post('i_unit');
+		$bahan_stock_id 	= $this->input->post('i_material_stock_id');
+		$bahan_stock_qty 	= $this->input->post('i_stock_qty');
+		$count_tm_id 	= $this->input->post('i_count_tm_id');
+		$tm_id 	= $this->input->post('i_tm_id');
+		if($tm_id < 1 and $count_tm_id > 0){	send_json_error("Simpan gagal. Bahan item tidak boleh sama [".$bahan_name."]");}
+		if($bahan_stock_qty < $bahan_qty_form){	send_json_error("Qty tidak poleh melebihi Stock Bahan");}
+		//send_json_error($no);
+		
+		$data = array(
+				form_transient_pair('transient_bahan_name', $bahan_name, $bahan_name,
+					array('transient_tm_id' =>$tm_id,
+						  'transient_bahan_stock_id'=>$bahan_stock_id,
+						  'transient_bahan_unit_name'=>$bahan_unit_name,
+					      'transient_bahan_stock_qty'=>$bahan_stock_qty,
+						  'transient_bahan_qty'=>$bahan_qty,
+						  'transient_bahan_qty_form'=>$bahan_qty_form)
+				),
+				form_transient_pair('transient_bahan_qty_total', $total_bahan_qty ),
+				form_transient_pair('transient_bahan_description',$bahan_description),
+				form_transient_pair('transient_bahan_price', tool_money_format($bahan_price), $bahan_price)
+		);
+		 
+		send_json_transient($index, $data);
+	}
+	
+	function detail_form_action_cat()
+	{		
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('i_material_stock_id', 'Nama Bahan', 'trim|required');
+		//$this->form_validation->set_rules('i_tm_qty', 'Qty', 'trim|required|numeric|min_value[1]');
+		//$this->form_validation->set_rules('i_tm_description', 'Keterangan', 'trim|required|numeric');
+		$this->form_validation->set_rules('i_tm_price', 'Harga', 'trim|required|numeric');
+		$index = $this->input->post('i_index');		
+		// cek data berdasarkan kriteria
+		if ($this->form_validation->run() == FALSE) send_json_validate(); 
+		
+		$this->load->model('global_model');	
+		
+		$no 		= $this->input->post('i_index');
+		$cat_name 	= $this->input->post('i_name');
+		$cat_qty 	= $this->input->post('i_tm_qty');
+		$cat_qty_form 	= $this->input->post('i_tm_qty_form');
+		$total_cat_qty = $cat_qty_form +$cat_qty ;
+		$cat_description = $this->input->post('i_tm_description');
+		$cat_price 	= $this->input->post('i_tm_price');
+		$cat_unit_name 	= $this->input->post('i_unit');
+		$cat_stock_id 	= $this->input->post('i_material_stock_id');
+		$cat_stock_qty 	= $this->input->post('i_stock_qty');
+		$count_tm_id 	= $this->input->post('i_count_tm_id');
+		$tm_id 	= $this->input->post('i_tm_id');
+		if($tm_id < 1 and $count_tm_id > 0){	send_json_error("Simpan gagal. Bahan item tidak boleh sama [".$cat_name."]");}
+		if($cat_stock_qty < $cat_qty_form){	send_json_error("Qty tidak poleh melebihi Stock Bahan");}
+		//send_json_error($no);
+		
+		$data = array(
+				form_transient_pair('transient_cat_name', $cat_name, $cat_name,
+					array('transient_tm_id' =>$tm_id,
+						  'transient_cat_stock_id'=>$cat_stock_id,
+						  'transient_cat_unit_name'=>$cat_unit_name,
+					      'transient_cat_stock_qty'=>$cat_stock_qty,
+						  'transient_cat_qty'=>$cat_qty,
+						  'transient_cat_qty_form'=>$cat_qty_form)
+				),
+				form_transient_pair('transient_cat_qty_total', $total_cat_qty ),
+				form_transient_pair('transient_cat_description',$cat_description),
+				form_transient_pair('transient_cat_price', tool_money_format($cat_price), $cat_price)
+		);
+		 
+		send_json_transient($index, $data);
 	}
 
 	function detail_list_loader_foto($registration_id=0)
@@ -564,67 +802,7 @@
 	}
 	
 	
-	function detail_form_cat($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
-	{		
-		$this->load->library('render');
-		$index = $this->input->post('transient_index');
-		if (strlen(trim($index)) == 0) {
-					
-			// TRANSIENT CREATE - isi form dengan nilai default / kosong
-			$data['index']			= '';
-			$data['registration_id'] 				= $registration_id;
-			$data['tm_name']	= '';	
-			$data['tm_qty'] = '';
-			$data['tm_description'] = '';			
-			$data['tm_price'] 	= '';
-		
-		} else {
-			
-			$data['index']			= $index;
-			$data['registration_id'] 				= $registration_id;
-			$data['tm_name']	= array_shift($this->input->post('transient_tm_name'));
-			$data['tm_qty'] = array_shift($this->input->post('transient_tm_qty'));
-			$data['tm_description'] = array_shift($this->input->post('transient_tm_description'));
-			$data['tm_price'] 	= array_shift($this->input->post('transient_tm_price'));
-		
-		}		
-			
-		$this->render->add_form('app/transaction/transient_form_cat', $data);
-		$this->render->show_buffer();
-	}
 	
-	
-	function detail_form_action_cat()
-	{		
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('i_tm_name', 'Nama bahan / cat', 'trim|required');
-		$this->form_validation->set_rules('i_tm_qty', 'Qty', 'trim|required');
-		//$this->form_validation->set_rules('i_tm_description', 'Keterangan', 'trim|required|numeric');
-		$this->form_validation->set_rules('i_tm_price', 'Harga', 'trim|required|numeric');
-		$index = $this->input->post('i_index');		
-		// cek data berdasarkan kriteria
-		if ($this->form_validation->run() == FALSE) send_json_validate(); 
-		
-		$this->load->model('global_model');	
-		
-		$no 		= $this->input->post('i_index');
-		$tm_name 	= $this->input->post('i_tm_name');
-		$tm_qty 	= $this->input->post('i_tm_qty');
-		$tm_description 	= $this->input->post('i_tm_description');
-		$tm_price 	= $this->input->post('i_tm_price');
-	
-		//send_json_error($no);
-		
-	$data = array(
-				form_transient_pair('transient_tm_name', $tm_name, $tm_name
-				),
-				form_transient_pair('transient_tm_qty', $tm_qty),
-				form_transient_pair('transient_tm_description',$tm_description),
-				form_transient_pair('transient_tm_price', tool_money_format($tm_price), $tm_price)
-		);
-		 
-		send_json_transient($index, $data);
-	}
 	
 	function detail_form_foto($registration_id = 0) // jika id tidak diisi maka dianggap create, else dianggap edit
 	{		
@@ -746,5 +924,27 @@
 				//$this->load->view('upload_success', $data);
 			}
 		}
+	function load_detail_material()
+	{
+		$id 	= $this->input->post('id');
+		$id 	= explode("/", $id);
+		$material_stock_id =$id[0];
+		$transaction_id =$id[1];
+		$query = $this->transaction_model->load_detail_material($material_stock_id);
+		$data = array();
+		
+		foreach($query->result_array() as $row)
+		{
+		
+			$data['tm_unit_name'] 	= $row['unit_name'];
+			$data['tm_name'] 		= $row['material_name'];
+			$data['tm_stock_qty'] 	= $row['material_stock_qty'];
+		
+		
+			
+		}
+		$data['tm_id'] = $this->transaction_model->cek_transaction_material($material_stock_id,$transaction_id);
+		send_json_message('detail_material', $data);
+	}
 	}
 			

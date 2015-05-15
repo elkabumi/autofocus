@@ -124,7 +124,7 @@ $(function(){
       <input type="hidden" name="i_coa_id" class="com_id" value="<?=$coa_id?>" />
       <input type="hidden" name="i_coa_level" value='<?=$coa_level?>' />
       <input type="hidden" name="i_coa_parent" value='<?=$parent_coa_id?>' />
-      <input type="hidden" name="i_coa_group" value='<?=$coa_group?>' />
+      <input type="text" name="i_coa_group" value='<?=$coa_group?>' />
       <span class="lookup" id="lookup_coa_account_type">
 		  <input type="hidden" name="i_coa_account_type" class="com_id" value="<?=$coa_account_type?>" />
 				<input type="hidden" id="i_coa_level" size="1" value="<?=$coa_level?>" readonly="readonly"/>

@@ -558,6 +558,50 @@ class Dtc
 		else send_json_error_feedback();
 	}
 	
+	# lookup data material 
+	function material_control($id=0)
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->material_control(get_datatables_control(), $id);
+		send_json($data); 
+	}
+	
+	function material_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->material_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['material_id'], $result['material_name'], $result['material_name']);
+		}
+		else send_json_error_feedback();
+	}
+	# lookup data material  stock
+	function material_stock_control($type=0,$id=0)
+	{
+		$ci = & get_instance();
+		$data = $ci->dtc_model->material_stock_control(get_datatables_control(),$type,$id);
+		send_json($data); 
+	}
+	
+	function material_stock_get()
+	{
+		$ci = & get_instance();
+		$mode = $ci->input->post('mode');
+		$data = $ci->input->post('data');
+
+		$result = $ci->dtc_model->material_stock_get($data, $mode);
+		
+		if ($result) 
+		{ 
+			send_json_lookup_feedback($result['material_stock_id'], $result['material_name'], $result['material_name']);
+		}
+		else send_json_error_feedback();
+	}
 	
 	
 		# lookup data cabang

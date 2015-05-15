@@ -74,7 +74,7 @@ class Global_model extends CI_Model
 		return $data;
 	}
 	
-	
+	/*
 	function get_unit()
 	{
 		$this->db->select('*');
@@ -88,6 +88,7 @@ class Global_model extends CI_Model
 		}
 		return $data;
 	}
+	*/
 	function get_transaction_payment_method()
 	{
 		$this->db->select('*');
@@ -161,6 +162,20 @@ class Global_model extends CI_Model
 		return $data;
 	}
 	
+	function get_unit($type)
+	{		
+		$this->db->select('unit_id,	unit_name');
+		$this->db->where('unit_type', $type);
+		
+		$query = $this->db->get('unit');		
+		//query();
+		$data = array();
+		foreach($query->result_array() as $row)
+		{
+				$data[$row['unit_id']] = $row['unit_name'];
+		}
+		return $data;
+	}
 	
 	function get_stand()
 	{		
